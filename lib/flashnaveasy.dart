@@ -1,0 +1,389 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
+
+class FlashNavEasy extends StatefulWidget {
+  const FlashNavEasy({Key? key}) : super(key: key);
+
+  @override
+  State<FlashNavEasy> createState() => _FlashNavEasyState();
+}
+
+class _FlashNavEasyState extends State<FlashNavEasy> {
+  late ConfettiController _confettiController;
+
+  int currentIndex = 0;
+  int? selectedIndex;
+  bool answered = false;
+  bool isCorrect = false;
+  int _score = 0;
+
+  // This is your full flashcard pool (add at least 20 flashcards here)
+  final List<FlashCard> allFlashCards = [
+    FlashCard(
+      image: 'assets/sun.png',
+      english: 'Sun',
+      options: ['Ulan', 'Dagu-ob', 'Adlaw', 'Gab-i'],
+      correct: 'Adlaw',
+    ),
+    FlashCard(
+      image: 'assets/moon.png',
+      english: 'Moon',
+      options: ['Gab-i', 'Dagu-ob', 'Ulan', 'Adlaw'],
+      correct: 'Gab-i',
+    ),
+    FlashCard(
+      image: 'assets/rain.png',
+      english: 'Rain',
+      options: ['Dagu-ob', 'Adlaw', 'Gab-i', 'Ulan'],
+      correct: 'Ulan',
+    ),
+    FlashCard(
+      image: 'assets/cloud.png',
+      english: 'Cloud',
+      options: ['Ulan', 'Dagu-ob', 'Adlaw', 'Gab-i'],
+      correct: 'Dagu-ob',
+    ),
+    FlashCard(
+      image: 'assets/star.png',
+      english: 'Star',
+      options: ['Adlaw', 'Gab-i', 'Bituon', 'Ulan'],
+      correct: 'Bituon',
+    ),
+    FlashCard(
+      image: 'assets/wind.png',
+      english: 'Wind',
+      options: ['Hangin', 'Ulan', 'Gab-i', 'Adlaw'],
+      correct: 'Hangin',
+    ),
+    FlashCard(
+      image: 'assets/tree.png',
+      english: 'Tree',
+      options: ['Kahoy', 'Adlaw', 'Ulan', 'Dagu-ob'],
+      correct: 'Kahoy',
+    ),
+    FlashCard(
+      image: 'assets/flower.png',
+      english: 'Flower',
+      options: ['Bulak', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Bulak',
+    ),
+    FlashCard(
+      image: 'assets/river.png',
+      english: 'River',
+      options: ['Suba', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Suba',
+    ),
+    FlashCard(
+      image: 'assets/mountain.png',
+      english: 'Mountain',
+      options: ['Bukid', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Bukid',
+    ),
+    FlashCard(
+      image: 'assets/fish.png',
+      english: 'Fish',
+      options: ['Isda', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Isda',
+    ),
+    FlashCard(
+      image: 'assets/bird.png',
+      english: 'Bird',
+      options: ['Langgam', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Langgam',
+    ),
+    FlashCard(
+      image: 'assets/dog.png',
+      english: 'Dog',
+      options: ['Iro', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Iro',
+    ),
+    FlashCard(
+      image: 'assets/cat.png',
+      english: 'Cat',
+      options: ['Iro', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Iro',
+    ),
+    FlashCard(
+      image: 'assets/house.png',
+      english: 'House',
+      options: ['Balay', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Balay',
+    ),
+    FlashCard(
+      image: 'assets/car.png',
+      english: 'Car',
+      options: ['Sakyanan', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Sakyanan',
+    ),
+    FlashCard(
+      image: 'assets/book.png',
+      english: 'Book',
+      options: ['Libro', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Libro',
+    ),
+    FlashCard(
+      image: 'assets/phone.png',
+      english: 'Phone',
+      options: ['Telepono', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Telepono',
+    ),
+    FlashCard(
+      image: 'assets/clock.png',
+      english: 'Clock',
+      options: ['Orasan', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Orasan',
+    ),
+    FlashCard(
+      image: 'assets/food.png',
+      english: 'Food',
+      options: ['Pagkaon', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Pagkaon',
+    ),
+  ];
+
+  late List<FlashCard> flashCards;
+
+  @override
+  void initState() {
+    super.initState();
+    flashCards = _pickRandomFlashCards(allFlashCards, 10);
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _score = 0;
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  List<FlashCard> _pickRandomFlashCards(List<FlashCard> source, int count) {
+    final random = Random();
+    final copy = List<FlashCard>.from(source);
+    copy.shuffle(random);
+    return copy.take(count).toList();
+  }
+
+  void checkAnswer(int index) {
+    setState(() {
+      selectedIndex = index;
+      answered = true;
+      isCorrect = flashCards[currentIndex].options[index] == flashCards[currentIndex].correct;
+      if (isCorrect) {
+        _score++;
+      }
+    });
+  }
+
+  void nextCard() {
+    setState(() {
+      if (currentIndex < flashCards.length - 1) {
+        currentIndex++;
+        selectedIndex = null;
+        answered = false;
+      } else {
+        // Show congratulation dialog instead of popping
+        showCongratulationsDialog();
+      }
+    });
+  }
+
+  void showCongratulationsDialog() {
+    _confettiController.play();
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, _, __) {
+        return GestureDetector(
+          onTap: () {
+            _confettiController.stop();
+            Navigator.of(context, rootNavigator: true)
+                .popUntil((route) => route.isFirst);
+          },
+          child: Material(
+            color: Colors.black54,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  shouldLoop: false,
+                  colors: const [Color(0xFF2A7BE6), Colors.lightBlue, Colors.cyan],
+                  numberOfParticles: 30,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    'Your Score: $_score / ${flashCards.length}',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2A7BE6),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
+          child: child,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final card = flashCards[currentIndex];
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Easy Level',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Center(
+              child: Text(
+                '${currentIndex + 1} / ${flashCards.length}',
+                style: const TextStyle(color: Color(0xFF878282), fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              'Choose the correct match for each flashcard within 10 seconds',
+              style: TextStyle(color: Color(0xFF878282), fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Container(
+            width: 220,
+            height: 250,
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xFF878282)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(card.image, height: 140, width: 140, fit: BoxFit.contain),
+                const SizedBox(height: 16),
+                Text(
+                  card.english,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 28),
+          Wrap(
+            spacing: 16,
+            runSpacing: 12,
+            alignment: WrapAlignment.center,
+            children: List.generate(card.options.length, (index) {
+              final option = card.options[index];
+              final isSelected = selectedIndex == index;
+              final isRight = option == card.correct;
+
+              Color borderColor = const Color(0xFF878282);
+              Color textColor = const Color(0xFF878282);
+
+              if (answered) {
+                if (isRight) {
+                  borderColor = Colors.green;
+                  textColor = Colors.green;
+                } else if (isSelected) {
+                  borderColor = Colors.red;
+                  textColor = Colors.red;
+                }
+              }
+
+              return SizedBox(
+                width: 140,
+                child: OutlinedButton(
+                  onPressed: answered ? null : () => checkAnswer(index),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: borderColor),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: Text(option, style: TextStyle(color: textColor)),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 12),
+          if (answered && !isCorrect)
+            const Text(
+              'Try again',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: answered ? nextCard : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2A7BE6),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text(
+                  'CONTINUE',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 28),
+        ],
+      ),
+    );
+  }
+}
+
+class FlashCard {
+  final String image;
+  final String english;
+  final List<String> options;
+  final String correct;
+
+  FlashCard({
+    required this.image,
+    required this.english,
+    required this.options,
+    required this.correct,
+  });
+}
