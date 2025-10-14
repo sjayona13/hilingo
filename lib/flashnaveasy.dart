@@ -1,7 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'escore.dart'; // ✅ Make sure this import exists
 
 class FlashNavEasy extends StatefulWidget {
   const FlashNavEasy({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
   bool isCorrect = false;
   int _score = 0;
 
-  // This is your full flashcard pool (add at least 20 flashcards here)
+
   final List<FlashCard> allFlashCards = [
     FlashCard(
       image: 'assets/sun.png',
@@ -30,8 +30,8 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/moon.png',
       english: 'Moon',
-      options: ['Gab-i', 'Dagu-ob', 'Ulan', 'Adlaw'],
-      correct: 'Gab-i',
+      options: ['Bulan', 'Dagu-ob', 'Ulan', 'Adlaw'],
+      correct: 'Bulan',
     ),
     FlashCard(
       image: 'assets/rain.png',
@@ -42,8 +42,8 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/cloud.png',
       english: 'Cloud',
-      options: ['Ulan', 'Dagu-ob', 'Adlaw', 'Gab-i'],
-      correct: 'Dagu-ob',
+      options: ['Ulan', 'Panganod', 'Adlaw', 'Gab-i'],
+      correct: 'Panganod',
     ),
     FlashCard(
       image: 'assets/star.png',
@@ -90,20 +90,20 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/bird.png',
       english: 'Bird',
-      options: ['Langgam', 'Gab-i', 'Adlaw', 'Ulan'],
-      correct: 'Langgam',
+      options: ['Pispis', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Pispis',
     ),
     FlashCard(
       image: 'assets/dog.png',
       english: 'Dog',
-      options: ['Iro', 'Gab-i', 'Adlaw', 'Ulan'],
-      correct: 'Iro',
+      options: ['Ido', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Ido',
     ),
     FlashCard(
       image: 'assets/cat.png',
       english: 'Cat',
-      options: ['Iro', 'Gab-i', 'Adlaw', 'Ulan'],
-      correct: 'Iro',
+      options: ['Kuring', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Kuring',
     ),
     FlashCard(
       image: 'assets/house.png',
@@ -114,8 +114,8 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/car.png',
       english: 'Car',
-      options: ['Sakyanan', 'Gab-i', 'Adlaw', 'Ulan'],
-      correct: 'Sakyanan',
+      options: ['Salakyan', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Salakyan',
     ),
     FlashCard(
       image: 'assets/book.png',
@@ -184,67 +184,18 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
         selectedIndex = null;
         answered = false;
       } else {
-        // Show congratulation dialog instead of popping
-        showCongratulationsDialog();
-      }
-    });
-  }
-
-  void showCongratulationsDialog() {
-    _confettiController.play();
-
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, _, __) {
-        return GestureDetector(
-          onTap: () {
-            _confettiController.stop();
-            Navigator.of(context, rootNavigator: true)
-                .popUntil((route) => route.isFirst);
-          },
-          child: Material(
-            color: Colors.black54,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                ConfettiWidget(
-                  confettiController: _confettiController,
-                  blastDirectionality: BlastDirectionality.explosive,
-                  shouldLoop: false,
-                  colors: const [Color(0xFF2A7BE6), Colors.lightBlue, Colors.cyan],
-                  numberOfParticles: 30,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Your Score: $_score / ${flashCards.length}',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2A7BE6),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+        // ✅ Navigate to EscorePage when finished
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EscorePage(
+              score: _score,
+              total: flashCards.length,
             ),
           ),
         );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return ScaleTransition(
-          scale: CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
-          child: child,
-        );
-      },
-    );
+      }
+    });
   }
 
   @override
@@ -342,12 +293,6 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
               );
             }),
           ),
-          const SizedBox(height: 12),
-          if (answered && !isCorrect)
-            const Text(
-              'Try again',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-            ),
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),

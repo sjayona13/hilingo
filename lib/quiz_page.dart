@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/qintermediate.dart';
-import 'qeasy.dart';
-import 'qintermediate.dart';
-import 'qhard.dart';
+import 'qeasy.dart';     // ✅ Easy
+import 'qintermediate.dart';  // ✅ Intermediate
+import 'qhard.dart';    // ✅ Hard
 import 'assessment_intro.dart';
+import 'homepage.dart'; // ✅ Import your homepage (HilingoApp)
 
 class Quizzess extends StatelessWidget {
   const Quizzess({super.key});
@@ -30,9 +30,19 @@ class Quizzess extends StatelessWidget {
           'Quiz',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            // ✅ Always go back to Homepage
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HilingoApp()),
+              (Route<dynamic> route) => false,
+            );
+          },
+        ),
         backgroundColor: Colors.white,
         elevation: 1,
-        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -47,27 +57,30 @@ class Quizzess extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                // ✅ Direct navigation per difficulty
                 if (index == 0) {
+                  // ✅ Easy → Qeasy.dart
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qeasy()),
                   );
                 } else if (index == 1) {
+                  // ✅ Intermediate → Qintermediate.dart
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qintermediate()),
                   );
                 } else if (index == 2) {
+                  // ✅ Hard → Qhard.dart
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qhard()),
                   );
                 } else if (index == 3) {
+                  // ✅ Assessment → AssessmentIntro
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => const AssessmentIntro(timed: true)),
+                        builder: (_) => const AssessmentIntro(timed: false)),
                   );
                 }
               },

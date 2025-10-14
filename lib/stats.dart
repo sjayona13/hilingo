@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homepage.dart';
+import 'dart:async';
 
 class StatsPage extends StatefulWidget {
   final int easyScore;
@@ -24,16 +25,59 @@ class StatsPage extends StatefulWidget {
   State<StatsPage> createState() => _StatsPageState();
 }
 
-class _StatsPageState extends State<StatsPage> with SingleTickerProviderStateMixin {
+class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
   int level = 1;
   double xp = 0.0;
   double xpToNextLevel = 100.0;
-  double animatedXp = 0.0; // For smooth animation
+  double animatedXp = 0.0;
+
+  // Gradient
+  late AnimationController _gradientController;
+  late Animation<Color?> _color1;
+  late Animation<Color?> _color2;
+  late Animation<Color?> _color3;
+
+  // XP Bar pulse
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
     _loadLevelAndXp();
+    _initGradientAnimation();
+    _initPulseAnimation();
+  }
+
+  void _initGradientAnimation() {
+    _gradientController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 6))
+          ..repeat(reverse: true);
+
+    _color1 = ColorTween(begin: const Color(0xFF0D47A1), end: const Color(0xFF1565C0))
+        .animate(_gradientController);
+    _color2 = ColorTween(begin: const Color(0xFF1976D2), end: const Color(0xFF1E88E5))
+        .animate(_gradientController);
+    _color3 = ColorTween(begin: const Color(0xFF0B3D91), end: const Color(0xFF0D47A1))
+        .animate(_gradientController);
+  }
+
+  void _initPulseAnimation() {
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _gradientController.dispose();
+    _pulseController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadLevelAndXp() async {
@@ -42,7 +86,7 @@ class _StatsPageState extends State<StatsPage> with SingleTickerProviderStateMix
       level = prefs.getInt('level') ?? 1;
       xp = prefs.getDouble('xp') ?? 0.0;
       xpToNextLevel = prefs.getDouble('xpToNextLevel') ?? 100.0;
-      animatedXp = xp; // Initialize animated value
+      animatedXp = xp;
     });
     _addXpFromAssessment();
   }
@@ -69,9 +113,20 @@ class _StatsPageState extends State<StatsPage> with SingleTickerProviderStateMix
     await prefs.setDouble('xp', xp);
     await prefs.setDouble('xpToNextLevel', xpToNextLevel);
 
-    // Animate the XP bar and owl together
-    setState(() {
-      animatedXp = xp;
+    // Smooth XP animation
+    double start = animatedXp;
+    double end = xp;
+    int steps = 20;
+    int currentStep = 0;
+    Timer.periodic(const Duration(milliseconds: 20), (timer) {
+      currentStep++;
+      setState(() {
+        animatedXp = start + ((end - start) * currentStep / steps);
+      });
+      if (currentStep >= steps) {
+        animatedXp = end;
+        timer.cancel();
+      }
     });
   }
 
@@ -96,210 +151,257 @@ class _StatsPageState extends State<StatsPage> with SingleTickerProviderStateMix
         widget.mediumTotal.toDouble() +
         widget.hardTotal.toDouble();
     double percent = totalPoints > 0 ? (totalScore / totalPoints) * 100 : 0;
-    double barWidth = MediaQuery.of(context).size.width;
+    double barWidth = MediaQuery.of(context).size.width - 48;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                const Text(
-                  "Your Progress",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Overall Score Section
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEAF2FF),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "OVERALL SCORE",
-                        style: TextStyle(fontSize: 14, color: Colors.black54),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        "${percent.toStringAsFixed(0)}%",
-                        style: const TextStyle(
-                          fontSize: 52,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2A7BE6),
-                        ),
-                      ),
-                      Text(
-                        "${totalScore.toInt()}/${totalPoints.toInt()} Points",
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                // Level Progress Section with Reset Button
-                Row(
+      body: AnimatedBuilder(
+        animation: _gradientController,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [_color1.value!, _color2.value!, _color3.value!, Colors.black],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
                   children: [
-                    const Expanded(
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Your Progress",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Overall Score
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blueAccent.withOpacity(0.4),
+                            blurRadius: 12,
+                            spreadRadius: 1,
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            "OVERALL SCORE",
+                            style: TextStyle(fontSize: 16, color: Colors.white70),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "${percent.toStringAsFixed(0)}%",
+                            style: const TextStyle(
+                              fontSize: 68,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.blueAccent,
+                                  blurRadius: 12,
+                                  offset: Offset(0, 0),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "${totalScore.toInt()}/${totalPoints.toInt()} Points",
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+
+                    // Level Progress Section
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            "LEVEL PROGRESS",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: _resetLevelXp,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2A7BE6),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            minimumSize: const Size(0, 0),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            "Reset",
+                            style: TextStyle(fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // XP Bar with Owl
+                    Stack(
+                      alignment: Alignment.centerLeft,
+                      children: [
+                        Container(
+                          width: barWidth,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.white12,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          width: (animatedXp / xpToNextLevel) * barWidth,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(209, 161, 199, 249),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        Positioned(
+                          left: ((animatedXp / xpToNextLevel) * barWidth) - 20,
+                          child: Transform.scale(
+                            scale: _pulseAnimation.value,
+                            child: Image.asset(
+                              'assets/owl.png',
+                              width: 40,
+                              height: 40,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Level $level • ${xp.toStringAsFixed(0)}/${xpToNextLevel.toStringAsFixed(0)} XP",
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 166, 197, 238),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+
+                    // Performance by Level
+                    const Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
-                        "LEVEL PROGRESS",
+                        "PERFORMANCE BY LEVEL",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: Colors.white,
                           fontSize: 14,
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: _resetLevelXp,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2A7BE6),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        minimumSize: const Size(0, 0),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildLevelBox("EASY", widget.easyScore, widget.easyTotal),
+                        _buildLevelBox("MEDIUM", widget.mediumScore, widget.mediumTotal),
+                        _buildLevelBox("HARD", widget.hardScore, widget.hardTotal),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Congratulations Section
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white12,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blueAccent.withOpacity(0.3),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                          )
+                        ],
                       ),
-                      child: const Text(
-                        "Reset",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFFEAF2FF),
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Congratulations!",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            "You've completed your assessments and earned XP!",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+
+                    // Back to Home button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const HilingoApp()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2A7BE6),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          "Back to Home",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Stack(
-                  children: [
-                    Container(
-                      width: barWidth,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      width: (animatedXp / xpToNextLevel) * barWidth,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2A7BE6),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    AnimatedPositioned(
-                      duration: const Duration(seconds: 1),
-                      left: (animatedXp / xpToNextLevel) * barWidth - 24,
-                      top: 0,
-                      bottom: 0,
-                      child: Image.asset(
-                        'assets/owl.png',
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Level $level • ${xp.toStringAsFixed(0)}/${xpToNextLevel.toStringAsFixed(0)} XP",
-                  style: const TextStyle(
-                    color: Color(0xFF2A7BE6),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                // Performance by Level
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "PERFORMANCE BY LEVEL",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildLevelBox("EASY", widget.easyScore, widget.easyTotal),
-                    _buildLevelBox("MEDIUM", widget.mediumScore, widget.mediumTotal),
-                    _buildLevelBox("HARD", widget.hardScore, widget.hardTotal),
-                  ],
-                ),
-
-                const SizedBox(height: 30),
-
-                const Text(
-                  "Congratulations!",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Color(0xFF2A7BE6),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Text(
-                  "Great job! You have done well",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const HilingoApp()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2A7BE6),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      "Back to Home",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -310,27 +412,25 @@ class _StatsPageState extends State<StatsPage> with SingleTickerProviderStateMix
       width: 90,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade200,
-            spreadRadius: 1,
-            blurRadius: 5,
-          ),
-        ],
+        color: Colors.white12,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white24),
       ),
       child: Column(
         children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          Text(label,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white)),
           const SizedBox(height: 6),
-          Text("$score/$total", style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 12)),
+          Text("$score/$total",
+              style: const TextStyle(
+                  fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white70)),
           const SizedBox(height: 6),
           LinearProgressIndicator(
             value: percent / 100,
             minHeight: 5,
             color: const Color(0xFF2A7BE6),
-            backgroundColor: Colors.grey.shade300,
+            backgroundColor: Colors.white12,
           ),
           const SizedBox(height: 6),
           Text("${percent.toStringAsFixed(0)}%",

@@ -43,30 +43,10 @@ class _FlashcardGameState extends State<FlashcardGame> {
 
   void _loadFlashcards() {
     _flashcards = [
-      Flashcard(
-        englishWord: 'Sun',
-        correctAnswer: 'Adlaw',
-        options: ['Ulan', 'Dagu-ob', 'Adlaw', 'Gab-i'],
-        imagePath: 'assets/sun.png',
-      ),
-      Flashcard(
-        englishWord: 'Rain',
-        correctAnswer: 'Ulan',
-        options: ['Ulan', 'Adlaw', 'Hangin', 'Tubig'],
-        imagePath: 'assets/rain.png',
-      ),
-      Flashcard(
-        englishWord: 'Cloud',
-        correctAnswer: 'Dagu-ob',
-        options: ['Adlaw', 'Dagu-ob', 'Ulan', 'Hangin'],
-        imagePath: 'assets/cloud.png',
-      ),
-      Flashcard(
-        englishWord: 'Night',
-        correctAnswer: 'Gab-i',
-        options: ['Adlaw', 'Ulan', 'Dagu-ob', 'Gab-i'],
-        imagePath: 'assets/night.png',
-      ),
+    
+     
+     
+    
       Flashcard(
         englishWord: 'Water',
         correctAnswer: 'Tubig',

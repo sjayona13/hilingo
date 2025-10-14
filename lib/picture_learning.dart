@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'piceasy.dart';
 import 'picmedium.dart';
 import 'pichard.dart';
+import 'homepage.dart'; // Import your homepage
 
 class PictureLearningPage extends StatelessWidget {
   const PictureLearningPage({super.key});
@@ -31,7 +32,12 @@ class PictureLearningPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);
+            // Navigate to homepage instead of just popping
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const HilingoApp()),
+              (route) => false,
+            );
           },
         ),
       ),

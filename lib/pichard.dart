@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/score.dart';
-import 'score.dart'; // Make sure you have ScorePage implemented
+import 'pscore.dart'; // ⬅️ Use your PscorePage here
 
 class PicHard extends StatefulWidget {
   const PicHard({Key? key}) : super(key: key);
@@ -13,7 +12,6 @@ class PicHard extends StatefulWidget {
 
 class _PicHardState extends State<PicHard> {
   late ConfettiController _confettiController;
-
   int currentIndex = 0;
   int? selectedIndex;
   bool answered = false;
@@ -22,105 +20,233 @@ class _PicHardState extends State<PicHard> {
 
   late List<PicQuestion> questions;
 
-  final List<PicQuestion> allQuestions = [
-    PicQuestion(
-      hiligaynon: 'Payong',
-      options: [
-        PicOption(label: 'Umbrella', isCorrect: true),
-        PicOption(label: 'Raincoat'),
-        PicOption(label: 'Hat'),
-        PicOption(label: 'Bag'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Salakyan sa Dalan',
-      options: [
-        PicOption(label: 'Bus', isCorrect: true),
-        PicOption(label: 'Airplane'),
-        PicOption(label: 'Boat'),
-        PicOption(label: 'Train'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Orasan nga Butang',
-      options: [
-        PicOption(label: 'Clock', isCorrect: true),
-        PicOption(label: 'Calendar'),
-        PicOption(label: 'Compass'),
-        PicOption(label: 'Scale'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Baryo',
-      options: [
-        PicOption(label: 'Village', isCorrect: true),
-        PicOption(label: 'City'),
-        PicOption(label: 'Farm'),
-        PicOption(label: 'Island'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Gugma',
-      options: [
-        PicOption(label: 'Love', isCorrect: true),
-        PicOption(label: 'Hate'),
-        PicOption(label: 'Fear'),
-        PicOption(label: 'Joy'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Kalibutan',
-      options: [
-        PicOption(label: 'World', isCorrect: true),
-        PicOption(label: 'Country'),
-        PicOption(label: 'City'),
-        PicOption(label: 'Island'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Kusina',
-      options: [
-        PicOption(label: 'Kitchen', isCorrect: true),
-        PicOption(label: 'Bedroom'),
-        PicOption(label: 'Bathroom'),
-        PicOption(label: 'Garage'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Pañit',
-      options: [
-        PicOption(label: 'Skin', isCorrect: true),
-        PicOption(label: 'Hair'),
-        PicOption(label: 'Bone'),
-        PicOption(label: 'Muscle'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Kapasidad',
-      options: [
-        PicOption(label: 'Ability', isCorrect: true),
-        PicOption(label: 'Object'),
-        PicOption(label: 'Place'),
-        PicOption(label: 'Person'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Panumduman',
-      options: [
-        PicOption(label: 'Memory', isCorrect: true),
-        PicOption(label: 'Message'),
-        PicOption(label: 'Meaning'),
-        PicOption(label: 'Meeting'),
-      ],
-    ),
-  ];
+final List<PicQuestion> hardPicQuestions = [
+  PicQuestion(
+    hiligaynon: 'Manugtudlo',
+    options: [
+      PicOption(label: 'Teacher', image: 'assets/teacher.png', isCorrect: true),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+      PicOption(label: 'Carpenter', image: 'assets/carpenter.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Doktor',
+    options: [
+      PicOption(label: 'Teacher', image: 'assets/teacher.png'),
+      PicOption(label: 'Nurse', image: 'assets/nurse.png'),
+      PicOption(label: 'Police', image: 'assets/police.png'),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Pulis',
+    options: [
+      PicOption(label: 'Police', image: 'assets/police.png', isCorrect: true),
+      PicOption(label: 'Soldier', image: 'assets/soldier.png'),
+      PicOption(label: 'Fireman', image: 'assets/fireman.png'),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Mangunguma',
+    options: [
+      PicOption(label: 'Fisherman', image: 'assets/fisherman.png'),
+      PicOption(label: 'Carpenter', image: 'assets/carpenter.png'),
+      PicOption(label: 'Driver', image: 'assets/driver.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Mangingisda',
+    options: [
+      PicOption(label: 'Fisherman', image: 'assets/fisherman.png', isCorrect: true),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Drayber',
+    options: [
+      PicOption(label: 'Driver', image: 'assets/driver.png', isCorrect: true),
+      PicOption(label: 'Police', image: 'assets/police.png'),
+      PicOption(label: 'Carpenter', image: 'assets/carpenter.png'),
+      PicOption(label: 'Teacher', image: 'assets/teacher.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugtahi',
+    options: [
+      PicOption(label: 'Carpenter', image: 'assets/carpenter.png'),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png', isCorrect: true),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manunulat',
+    options: [
+      PicOption(label: 'Reader', image: 'assets/read.png'),
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+      PicOption(label: 'Writer', image: 'assets/writer.png', isCorrect: true),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manganganta',
+    options: [
+      PicOption(label: 'Dancer', image: 'assets/dancer.png'),
+      PicOption(label: 'Singer', image: 'assets/singer.png', isCorrect: true),
+      PicOption(label: 'Actor', image: 'assets/actor.png'),
+      PicOption(label: 'Writer', image: 'assets/writer.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugpinta',
+    options: [
+      PicOption(label: 'Painter', image: 'assets/painter.png', isCorrect: true),
+      PicOption(label: 'Writer', image: 'assets/writer.png'),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Kusinero',
+    options: [
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png', isCorrect: true),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Sundalo',
+    options: [
+      PicOption(label: 'Police', image: 'assets/police.png'),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+      PicOption(label: 'Teacher', image: 'assets/teacher.png'),
+      PicOption(label: 'Soldier', image: 'assets/soldier.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Bumbero',
+    options: [
+      PicOption(label: 'Police', image: 'assets/police.png'),
+      PicOption(label: 'Fireman', image: 'assets/fireman.png', isCorrect: true),
+      PicOption(label: 'Driver', image: 'assets/driver.png'),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugtanom',
+    options: [
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+      PicOption(label: 'Gardener', image: 'assets/gardener.png', isCorrect: true),
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manug-gunting',
+    options: [
+      PicOption(label: 'Barber', image: 'assets/barber.png', isCorrect: true),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Teacher', image: 'assets/teacher.png'),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugbaligya',
+    options: [
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Police', image: 'assets/police.png'),
+      PicOption(label: 'Vendor', image: 'assets/vendor.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manuglimpyo',
+    options: [
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+      PicOption(label: 'Cleaner', image: 'assets/cleaner.png', isCorrect: true),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugdul-ong',
+    options: [
+      PicOption(label: 'Deliverer', image: 'assets/deliverer.png', isCorrect: true),
+      PicOption(label: 'Vendor', image: 'assets/vendor.png'),
+      PicOption(label: 'Driver', image: 'assets/driver.png'),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugpanday',
+    options: [
+      PicOption(label: 'Carpenter', image: 'assets/carpenter.png', isCorrect: true),
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+      PicOption(label: 'Driver', image: 'assets/driver.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manughugas',
+    options: [
+      PicOption(label: 'Cleaner', image: 'assets/cleaner.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Washer', image: 'assets/washer.png', isCorrect: true),
+      PicOption(label: 'Painter', image: 'assets/painter.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Gapaligo',
+    options: [
+      PicOption(label: 'Showering', image: 'assets/bather.png', isCorrect: true),
+      PicOption(label: 'Swimming', image: 'assets/swim.png'),
+      PicOption(label: 'Washing', image: 'assets/washer.png'),
+      PicOption(label: 'Cooking', image: 'assets/cook.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugpinta sang balay',
+    options: [
+      PicOption(label: 'House Painter', image: 'assets/housepainter.png', isCorrect: true),
+      PicOption(label: 'Tailor', image: 'assets/tailor.png'),
+      PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Manugpuyo',
+    options: [
+      PicOption(label: 'Resident', image: 'assets/resident.png', isCorrect: true),
+      PicOption(label: 'Visitor', image: 'assets/visitor.png'),
+      PicOption(label: 'Traveler', image: 'assets/traveler.png'),
+      PicOption(label: 'Vendor', image: 'assets/vendor.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Estudyante',
+    options: [
+      PicOption(label: 'Student', image: 'assets/students.png', isCorrect: true),
+      PicOption(label: 'Doctor', image: 'assets/doctor.png'),
+       PicOption(label: 'Cook', image: 'assets/cook.png'),
+      PicOption(label: 'Farmer', image: 'assets/farmer.png'),
+    ],
+  ),
 
-  @override
+];
+
+
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     _score = 0;
-    questions = _pickRandomQuestions(allQuestions, 10);
+    questions = _pickRandomQuestions(hardPicQuestions, 10);
+
     for (var q in questions) {
       q.options.shuffle(Random());
     }
@@ -162,7 +288,7 @@ class _PicHardState extends State<PicHard> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => ScorePage(
+                builder: (_) => PscorePage( // ✅ updated destination
                   score: _score,
                   total: questions.length,
                 ),
@@ -217,7 +343,7 @@ class _PicHardState extends State<PicHard> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
-                'Select the correct answer',
+                'Select the correct image',
                 style: TextStyle(color: Color(0xFF878282), fontSize: 14),
               ),
             ),
@@ -257,47 +383,40 @@ class _PicHardState extends State<PicHard> {
 
                   return SizedBox(
                     width: 140,
-                    height: 80,
+                    height: 160,
                     child: Stack(
                       children: [
                         OutlinedButton(
                           onPressed: answered ? null : () => checkAnswer(index),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: borderColor),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.all(8),
                           ),
-                          child: Center(
-                            child: Text(option.label, style: TextStyle(color: textColor)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Image.asset(option.image, fit: BoxFit.contain),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(option.label, style: TextStyle(color: textColor)),
+                            ],
                           ),
                         ),
                         if (answered && isSelected && isRight)
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.check, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.check, Colors.green),
                           ),
                         if (answered && isSelected && !isRight)
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.close, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.close, Colors.red),
                           ),
                       ],
                     ),
@@ -323,7 +442,9 @@ class _PicHardState extends State<PicHard> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2A7BE6),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     'CONTINUE',
@@ -338,6 +459,15 @@ class _PicHardState extends State<PicHard> {
       ),
     );
   }
+
+  Widget _buildIcon(IconData icon, Color color) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      child: Icon(icon, size: 16, color: Colors.white),
+    );
+  }
 }
 
 class PicQuestion {
@@ -349,7 +479,8 @@ class PicQuestion {
 
 class PicOption {
   final String label;
+  final String image;
   final bool isCorrect;
 
-  PicOption({required this.label, this.isCorrect = false});
+  PicOption({required this.label, required this.image, this.isCorrect = false});
 }

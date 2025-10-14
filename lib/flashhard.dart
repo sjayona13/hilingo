@@ -1,9 +1,7 @@
-// flash_hard.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/score.dart';
-import 'score.dart'; // Make sure ScorePage exists
+import 'package:flutter_application_1/escore.dart'; // ✅ Change this to escore.dart
 
 class FlashHard extends StatefulWidget {
   const FlashHard({Key? key}) : super(key: key);
@@ -25,66 +23,113 @@ class _FlashHardState extends State<FlashHard> {
 
   final List<FlashCard> allFlashCards = [
     FlashCard(
-      image: 'assets/conscience.png',
-      english: 'Conscience',
-      options: ['Konsensya', 'Hunahuna', 'Buot', 'Paglaum'],
-      correct: 'Konsensya',
+      image: 'assets/truth.png',
+      english: 'Truth',
+      options: ['Kamatuoran', 'Limbong', 'Kalayo', 'Pagtuo'],
+      correct: 'Kamatuoran',
     ),
     FlashCard(
-      image: 'assets/eternity.png',
-      english: 'Eternity',
-      options: ['Walay katapusan', 'Dugay', 'Malawig', 'Lakat'],
-      correct: 'Walay katapusan',
+      image: 'assets/freedom.png',
+      english: 'Freedom',
+      options: ['Pagpugong', 'Kagawasan', 'Kahadlok', 'Katarungan'],
+      correct: 'Kagawasan',
     ),
     FlashCard(
-      image: 'assets/chaos.png',
-      english: 'Chaos',
-      options: ['Kagamo', 'Hilum', 'Paghidlaw', 'Pagpalangga'],
-      correct: 'Kagamo',
+      image: 'assets/courage.png',
+      english: 'Courage',
+      options: ['Pagpalangga', 'Pag-isog', 'Pagtuo', 'Pagpangamuyo'],
+      correct: 'Pag-isog',
     ),
     FlashCard(
-      image: 'assets/resilience.png',
-      english: 'Resilience',
-      options: ['Pagbangon', 'Pagpahuway', 'Paglikaw', 'Pagpati'],
-      correct: 'Pagbangon',
+      image: 'assets/justice.png',
+      english: 'Justice',
+      options: ['Katarungan', 'Kalipay', 'Kagamo', 'Kasubo'],
+      correct: 'Katarungan',
     ),
     FlashCard(
-      image: 'assets/deception.png',
-      english: 'Deception',
-      options: ['Limbong', 'Pagtoo', 'Pagbaylo', 'Pagtuon'],
-      correct: 'Limbong',
+      image: 'assets/hope.png',
+      english: 'Hope',
+      options: ['Paglaum', 'Kahadlok', 'Pagduda', 'Kasubo'],
+      correct: 'Paglaum',
     ),
     FlashCard(
-      image: 'assets/fragile.png',
-      english: 'Fragile',
-      options: ['Maluyahon', 'Malig-on', 'Mabug-at', 'Malig-on nga butang'],
-      correct: 'Maluyahon',
+      image: 'assets/faith.png',
+      english: 'Faith',
+      options: ['Pagpangamuyo', 'Pagtuo', 'Pagpati', 'Pagpahuway'],
+      correct: 'Pagtuo',
     ),
     FlashCard(
-      image: 'assets/obligation.png',
-      english: 'Obligation',
-      options: ['Katungdanan', 'Buluhaton', 'Suhol', 'Handom'],
-      correct: 'Katungdanan',
+      image: 'assets/wisdom.png',
+      english: 'Wisdom',
+      options: ['Kaalam', 'Katingalahan', 'Paglibog', 'Kasubo'],
+      correct: 'Kaalam',
     ),
     FlashCard(
-      image: 'assets/abundance.png',
-      english: 'Abundance',
-      options: ['Kadamo', 'Kagutom', 'Kapaltahan', 'Kalamidad'],
-      correct: 'Kadamo',
+      image: 'assets/destiny.png',
+      english: 'Destiny',
+      options: ['Kapalaran', 'Pagpangabuhi', 'Paghandum', 'Pagpangita'],
+      correct: 'Kapalaran',
     ),
     FlashCard(
-      image: 'assets/mystery.png',
-      english: 'Mystery',
-      options: ['Tinago', 'Dayag', 'Hampang', 'Hunahuna'],
-      correct: 'Tinago',
+      image: 'assets/dream.png',
+      english: 'Dream',
+      options: ['Pagtuon', 'Paghidlaw', 'Handum', 'Pagpangamuyo'],
+      correct: 'Handum',
     ),
     FlashCard(
-      image: 'assets/burden.png',
-      english: 'Burden',
-      options: ['Kabug-atan', 'Kagaan', 'Katingalahan', 'Kalipay'],
-      correct: 'Kabug-atan',
+      image: 'assets/sacrifice.png',
+      english: 'Sacrifice',
+      options: ['Sakripisyo', 'Pagbato', 'Pagpangayo', 'Pagpangabuhi'],
+      correct: 'Sakripisyo',
     ),
-    // add remaining cards to make 20 total if needed
+    FlashCard(
+      image: 'assets/forgiveness.png',
+      english: 'Forgiveness',
+      options: ['Pagpatawad', 'Pagdumot', 'Pagtuo', 'Pagpangayo'],
+      correct: 'Pagpatawad',
+    ),
+    FlashCard(
+      image: 'assets/silence.png',
+      english: 'Silence',
+      options: ['Kahipos', 'Gahod', 'Tingog', 'Pagpamati'],
+      correct: 'Kahipos',
+    ),
+    FlashCard(
+      image: 'assets/peace.png',
+      english: 'Peace',
+      options: ['Kagamo', 'Kalinong', 'Kalisod', 'Pagbato'],
+      correct: 'Kalinong',
+    ),
+    FlashCard(
+      image: 'assets/fear.png',
+      english: 'Fear',
+      options: ['Kalipay', 'Pagtuo', 'Kahadlok', 'Pagpahuway'],
+      correct: 'Kahadlok',
+    ),
+    FlashCard(
+      image: 'assets/anger.png',
+      english: 'Anger',
+      options: ['Kainit', 'Kalinong', 'Kahadlok', 'Katarungan'],
+      correct: 'Kainit',
+    ),
+    FlashCard(
+      image: 'assets/love.png',
+      english: 'Love',
+      options: ['Pagpalangga', 'Kahadlok', 'Pagdumot', 'Kagamo'],
+      correct: 'Pagpalangga',
+    ),
+    FlashCard(
+      image: 'assets/gratitude.png',
+      english: 'Gratitude',
+      options: ['Pagtuo', 'Paghandum', 'Pagpangamuyo', 'Pagpasalamat'],
+      correct: 'Pagpasalamat',
+    ),
+    FlashCard(
+      image: 'assets/promise.png',
+      english: 'Promise',
+      options: ['Promiso', 'Tuman', 'Limbong', 'Paghidlaw'],
+      correct: 'Promiso',
+    ),
   ];
 
   @override
@@ -93,8 +138,8 @@ class _FlashHardState extends State<FlashHard> {
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _score = 0;
 
-    allFlashCards.shuffle(Random());
-    flashCards = allFlashCards.take(10).toList(); // pick 10 random for each run
+    allFlashCards.shuffle();
+    flashCards = allFlashCards.take(10).toList();
     for (var card in flashCards) {
       card.options.shuffle();
     }
@@ -110,7 +155,8 @@ class _FlashHardState extends State<FlashHard> {
     setState(() {
       selectedIndex = index;
       answered = true;
-      isCorrect = flashCards[currentIndex].options[index] == flashCards[currentIndex].correct;
+      isCorrect =
+          flashCards[currentIndex].options[index] == flashCards[currentIndex].correct;
       if (isCorrect) _score++;
     });
   }
@@ -124,12 +170,13 @@ class _FlashHardState extends State<FlashHard> {
         flashCards[currentIndex].options.shuffle();
       } else {
         _confettiController.play();
+
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => ScorePage(
+                builder: (_) => EscorePage( // ✅ Use EScorePage instead of ScorePage
                   score: _score,
                   total: flashCards.length,
                 ),
@@ -237,19 +284,14 @@ class _FlashHardState extends State<FlashHard> {
                     onPressed: answered ? null : () => checkAnswer(index),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: borderColor),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
                     child: Text(option, style: TextStyle(color: textColor)),
                   ),
                 );
               }),
             ),
-            const SizedBox(height: 16),
-            if (answered && !isCorrect)
-              const Text(
-                'Try again',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -260,7 +302,8 @@ class _FlashHardState extends State<FlashHard> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2A7BE6),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                   child: const Text(
                     'CONTINUE',

@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'homepage.dart'; // ✅ Import your homepage file
 
 class VoicePage extends StatefulWidget {
   const VoicePage({super.key});
 
   @override
-  _VoicePageState createState() => _VoicePageState();
+  _SpeechPageState createState() => _SpeechPageState();
 }
 
-class _VoicePageState extends State<VoicePage> {
+class _SpeechPageState extends State<VoicePage> {
   String leftLanguage = "English";
   String rightLanguage = "Hiligaynon";
 
@@ -21,7 +22,8 @@ class _VoicePageState extends State<VoicePage> {
   String _translatedText = '';
   String _statusMessage = 'Tap and hold the microphone to start speaking.';
 
-  late Map<String, dynamic> _dictionary;
+  Map<String, dynamic> _dictionary = {};
+  bool _dictionaryLoaded = false;
 
   @override
   void initState() {
@@ -30,6 +32,41 @@ class _VoicePageState extends State<VoicePage> {
     _initSpeech();
     _loadDictionary();
   }
+
+Future<void> _loadDictionary() async {
+  try {
+    final String jsonString =
+        await rootBundle.loadString('assets/dictionary.json');
+    final Map<String, dynamic> jsonData = json.decode(jsonString);
+
+    // ✅ Normalize and create both directions automatically
+    final engToHil = {
+      for (var e in (jsonData['eng'] as Map<String, dynamic>).entries)
+        e.key.toLowerCase(): e.value.toString().toLowerCase()
+    };
+
+    final hilToEng = {
+      for (var e in engToHil.entries)
+        e.value: e.key // reverse lookup
+    };
+
+    _dictionary = {'eng': engToHil, 'hil': hilToEng};
+
+    setState(() {
+      _dictionaryLoaded = true;
+    });
+
+    debugPrint(
+        "✅ Dictionary loaded: ${engToHil.length} eng→hil, ${hilToEng.length} hil→eng");
+  } catch (e) {
+    debugPrint("❌ Error loading dictionary: $e");
+    setState(() {
+      _statusMessage = "Dictionary not loaded. Check assets setup.";
+    });
+  }
+}
+
+
 
   Future<void> _requestMicPermission() async {
     var status = await Permission.microphone.status;
@@ -41,15 +78,18 @@ class _VoicePageState extends State<VoicePage> {
   Future<void> _initSpeech() async {
     await _requestMicPermission();
     await _speech.initialize(
-      onStatus: (status) => debugPrint('Speech status: $status'),
-      onError: (error) => debugPrint('Speech initialization error: $error'),
+      onStatus: (status) {
+        if (status == 'done' || status == 'notListening') {
+          _stopListening();
+        }
+      },
+      onError: (error) {
+        debugPrint('Speech error: $error');
+        setState(() {
+          _statusMessage = 'Speech initialization failed: $error';
+        });
+      },
     );
-  }
-
-  Future<void> _loadDictionary() async {
-    final jsonString = await rootBundle.loadString('assets/dictionary.json');
-    _dictionary = jsonDecode(jsonString);
-    debugPrint("Loaded dictionary with languages: ${_dictionary.keys}");
   }
 
   void _swapLanguages() {
@@ -59,308 +99,367 @@ class _VoicePageState extends State<VoicePage> {
       rightLanguage = temp;
       _spokenText = '';
       _translatedText = '';
-      _statusMessage =
-          'Swapped to $leftLanguage → $rightLanguage. Hold to speak.';
+      _statusMessage = 'Swapped to $leftLanguage → $rightLanguage.';
     });
   }
 
   void _listen() async {
-    bool available = await _speech.initialize(
-      onStatus: (status) {
-        debugPrint('Speech status: $status');
-        if (status == 'done' || status == 'notListening') {
-          _stopListening();
-        }
-      },
-      onError: (error) {
-        debugPrint('Speech error: $error');
-        setState(() => _statusMessage = 'Speech error: $error');
-      },
-    );
+    if (!_dictionaryLoaded) {
+      setState(() =>
+          _statusMessage = "Dictionary not loaded yet. Please wait...");
+      return;
+    }
+
+    bool available = await _speech.initialize();
 
     if (!available) {
       setState(() => _statusMessage = "Speech recognition unavailable.");
       return;
     }
 
-    final locale = leftLanguage == "English" ? "en_US" : "tl_PH";
+    final locale = leftLanguage == "English" ? "en_US" : "fil_PH";
 
     setState(() {
       _isListening = true;
       _spokenText = '';
       _translatedText = '';
-      _statusMessage = 'Listening in $locale...';
+      _statusMessage = 'Listening...';
     });
 
     await _speech.listen(
-      localeId: locale,
       listenFor: const Duration(seconds: 10),
       pauseFor: const Duration(seconds: 3),
+      localeId: locale,
       onResult: (result) async {
         setState(() {
           _spokenText = result.recognizedWords;
         });
 
-        if (result.finalResult) {
-          await _stopListening();
+        if (result.finalResult && _spokenText.isNotEmpty) {
+          setState(() => _statusMessage = 'Translating...');
+          final translation = _translateFromDictionary(_spokenText);
+          setState(() {
+            _translatedText = translation;
+            _statusMessage = 'Translation complete.';
+          });
         }
       },
     );
   }
 
-  Future<void> _stopListening() async {
+  void _stopListening() async {
     if (_isListening) {
       await _speech.stop();
     }
-
-    setState(() => _isListening = false);
-
-    if (_spokenText.trim().isEmpty) {
-      setState(() {
+    setState(() {
+      _isListening = false;
+      if (_spokenText.trim().isEmpty) {
         _statusMessage = "No speech detected. Try again.";
-      });
-      return;
-    }
-
-    setState(() {
-      _statusMessage = "Translating...";
-    });
-
-    final translation = await _translateText(_spokenText);
-    setState(() {
-      _translatedText = translation;
-      _statusMessage = "Translation complete.";
+      }
     });
   }
 
-  Future<String> _translateText(String input) async {
-    if (input.trim().isEmpty) return "No input detected.";
+  String _normalize(String text) {
+    return text.toLowerCase().replaceAll(RegExp(r"[^\w\s]"), "").trim();
+  }
 
-    final sourceLang = leftLanguage == "English" ? "eng" : "hil";
-    final sourceDict = _dictionary[sourceLang] ?? {};
+ String _translateFromDictionary(String input) {
+  if (!_dictionaryLoaded) return "Dictionary not loaded yet.";
 
-    String text = input.toLowerCase().trim();
-    List<String> words = text.split(' ');
-    List<String> translated = [];
-    int i = 0;
+  String lowerInput = _normalize(input);
+  Map<String, dynamic>? engMap = _dictionary['eng']; // English → Hiligaynon
+  Map<String, dynamic>? hilMap = _dictionary['hil']; // Hiligaynon → English
 
-    while (i < words.length) {
-      bool matchFound = false;
+  // Pick direction
+  Map<String, dynamic> fromMap;
+  Map<String, dynamic> toMap;
 
-      // Try longest phrases first
-      for (int j = words.length; j > i; j--) {
-        String phrase = words.sublist(i, j).join(' ');
-        if (sourceDict.containsKey(phrase)) {
-          translated.add(sourceDict[phrase]);
-          i = j;
-          matchFound = true;
+  if (leftLanguage == "English") {
+    fromMap = engMap!;
+    toMap = hilMap!;
+  } else {
+    fromMap = hilMap!;
+    toMap = engMap!;
+  }
+
+  // ✅ Direct phrase match
+  if (fromMap.containsKey(lowerInput)) {
+    String translated = fromMap[lowerInput];
+    return translated[0].toUpperCase() + translated.substring(1);
+  }
+
+  // ✅ Longest phrase match (5→1 words)
+  List<String> words = lowerInput.split(RegExp(r'\s+'));
+  List<String> translatedParts = [];
+
+  int i = 0;
+  while (i < words.length) {
+    String? translated;
+    int matchedLength = 0;
+
+    for (int len = 5; len >= 1; len--) {
+      if (i + len > words.length) continue;
+      String phrase = words.sublist(i, i + len).join(" ");
+      if (fromMap.containsKey(phrase)) {
+        translated = fromMap[phrase];
+        matchedLength = len;
+        break;
+      }
+    }
+
+    // If not found in current direction, try reverse direction
+    if (translated == null) {
+      for (int len = 5; len >= 1; len--) {
+        if (i + len > words.length) continue;
+        String phrase = words.sublist(i, i + len).join(" ");
+        if (toMap.containsKey(phrase)) {
+          translated = toMap[phrase];
+          matchedLength = len;
           break;
         }
       }
-
-      if (!matchFound) {
-        translated.add(words[i]); // keep word as-is if not found
-        i++;
-      }
     }
 
-    return translated.join(' ');
+    if (translated != null) {
+      translatedParts.add(translated);
+      i += matchedLength;
+    } else {
+      translatedParts.add(words[i]); // keep original word if not found
+      i++;
+    }
   }
+
+  String output = translatedParts.join(" ");
+  return output[0].toUpperCase() + output.substring(1);
+}
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Center(child: Image.asset('assets/iconh.png', height: 40)),
-              const SizedBox(height: 10),
-              const Text(
-                "HILIGAYNON SPEECH TRANSLATOR",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-              const SizedBox(height: 30),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  // ✅ Back Button + Title
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new,
+                            color: Colors.black),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HilingoApp()),
+                          );
+                        },
+                      ),
+                      const Spacer(),
+                      Center(
+                          child: Image.asset('assets/iconh.png', height: 40)),
+                      const Spacer(flex: 2),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "HILIGAYNON SPEECH TRANSLATOR",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
 
-              // Language Selector
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  border: Border.all(color: Colors.blue.shade200),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                  // 🌍 Language Selector
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      border: Border.all(color: Colors.blue.shade200),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ],
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          leftLanguage,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.blue.shade800),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              leftLanguage,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade800,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Center(
+                          child: IconButton(
+                            icon: const Icon(Icons.swap_horiz,
+                                color: Colors.blue),
+                            onPressed: _swapLanguages,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              rightLanguage,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade800,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: Colors.blue.shade200, width: 1.5),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.swap_horiz,
-                              color: Colors.blue, size: 24),
-                          onPressed: _swapLanguages,
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          rightLanguage,
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.blue.shade800),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
+                  ),
+                  const SizedBox(height: 40),
 
-              // Recognized Speech Box
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Recognized Speech ($leftLanguage):',
-                        style: TextStyle(
+                  // 🎙️ Recognized Speech
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Recognized Speech ($leftLanguage):',
+                          style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey.shade700,
-                            fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
-                    Text(_spokenText.isEmpty ? "..." : _spokenText,
-                        style: const TextStyle(
-                            fontSize: 18, color: Colors.black)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          _spokenText.isEmpty ? "..." : _spokenText,
+                          style: const TextStyle(
+                              fontSize: 18, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
-              // Translation Box
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: Colors.blue.shade200.withOpacity(0.8)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue.shade100,
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                  // 🌐 Translation Output (Fixed smaller height)
+                SizedBox(
+  height: 180, // 👈 change this number to make it taller or shorter
+  width: double.infinity,
+  child: Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.blue.shade50,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Colors.blue.shade200, width: 2),
+    ),
+    child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Translation ($rightLanguage):',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            _translatedText.isEmpty ? _statusMessage : _translatedText,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ),
+),
+
+
+                  const SizedBox(height: 150), // space for mic overlay
+                ],
+              ),
+            ),
+
+            // 🎤 Floating Mic Button
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onLongPressStart: (_) => _listen(),
+                      onLongPressEnd: (_) => _stopListening(),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _isListening
+                              ? Colors.red.shade600
+                              : Colors.blue.shade600,
+                          boxShadow: [
+                            BoxShadow(
+                              color: _isListening
+                                  ? Colors.red.shade200
+                                  : Colors.blue.shade200,
+                              spreadRadius: 8,
+                              blurRadius: 15,
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          _isListening ? Icons.mic_off : Icons.mic,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _isListening ? 'RELEASE TO STOP' : 'HOLD TO TALK',
+                      style: TextStyle(
+                        color: _isListening
+                            ? Colors.red.shade600
+                            : Colors.blue.shade600,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Translation ($rightLanguage):',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 4),
-                      Text(
-                        _translatedText.isEmpty
-                            ? _statusMessage
-                            : _translatedText,
-                        style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
               ),
-              const SizedBox(height: 60),
-
-              // Mic Button
-              GestureDetector(
-                onLongPressStart: (_) => _listen(),
-                onLongPressEnd: (_) => _stopListening(),
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _isListening
-                        ? Colors.red.shade600
-                        : Colors.blue.shade600,
-                    boxShadow: [
-                      BoxShadow(
-                        color: _isListening
-                            ? Colors.red.shade200
-                            : Colors.blue.shade200,
-                        spreadRadius: 8,
-                        blurRadius: 15,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    _isListening ? Icons.mic_off : Icons.mic,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                _isListening ? 'RELEASE TO STOP' : 'HOLD TO TALK',
-                style: TextStyle(
-                    color: _isListening
-                        ? Colors.red.shade600
-                        : Colors.blue.shade600,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

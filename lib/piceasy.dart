@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/score.dart';
-import 'score.dart'; // Make sure ScorePage exists
+import 'pscore.dart'; // ⬅️ Use your PscorePage here
 
 class PicEasy extends StatefulWidget {
   const PicEasy({Key? key}) : super(key: key);
@@ -13,7 +12,6 @@ class PicEasy extends StatefulWidget {
 
 class _PicEasyState extends State<PicEasy> {
   late ConfettiController _confettiController;
-
   int currentIndex = 0;
   int? selectedIndex;
   bool answered = false;
@@ -22,108 +20,277 @@ class _PicEasyState extends State<PicEasy> {
 
   late List<PicQuestion> questions;
 
-  final List<PicQuestion> allQuestions = [
-    PicQuestion(
-      hiligaynon: 'Adlaw',
-      options: [
-        PicOption(label: 'Sun', image: 'assets/sun.png', isCorrect: true),
-        PicOption(label: 'Moon', image: 'assets/moon.png'),
-        PicOption(label: 'Rain', image: 'assets/rain.png'),
-        PicOption(label: 'Thunder', image: 'assets/thunder.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Bulan',
-      options: [
-        PicOption(label: 'Moon', image: 'assets/moon.png', isCorrect: true),
-        PicOption(label: 'Sun', image: 'assets/sun.png'),
-        PicOption(label: 'Star', image: 'assets/star.png'),
-        PicOption(label: 'Cloud', image: 'assets/cloud.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Ulan',
-      options: [
-        PicOption(label: 'Rain', image: 'assets/rain.png', isCorrect: true),
-        PicOption(label: 'Thunder', image: 'assets/thunder.png'),
-        PicOption(label: 'Cloud', image: 'assets/cloud.png'),
-        PicOption(label: 'Wind', image: 'assets/wind.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Dagu-ob',
-      options: [
-        PicOption(label: 'Thunder', image: 'assets/thunder.png', isCorrect: true),
-        PicOption(label: 'Rain', image: 'assets/rain.png'),
-        PicOption(label: 'Cloud', image: 'assets/cloud.png'),
-        PicOption(label: 'Star', image: 'assets/star.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Bituon',
-      options: [
-        PicOption(label: 'Star', image: 'assets/star.png', isCorrect: true),
-        PicOption(label: 'Sun', image: 'assets/sun.png'),
-        PicOption(label: 'Moon', image: 'assets/moon.png'),
-        PicOption(label: 'Cloud', image: 'assets/cloud.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Hangin',
-      options: [
-        PicOption(label: 'Wind', image: 'assets/wind.png', isCorrect: true),
-        PicOption(label: 'Rain', image: 'assets/rain.png'),
-        PicOption(label: 'Sun', image: 'assets/sun.png'),
-        PicOption(label: 'Thunder', image: 'assets/thunder.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Iro',
-      options: [
-        PicOption(label: 'Dog', image: 'assets/dog.png', isCorrect: true),
-        PicOption(label: 'Cat', image: 'assets/cat.png'),
-        PicOption(label: 'Bird', image: 'assets/bird.png'),
-        PicOption(label: 'Fish', image: 'assets/fish.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Pusa',
-      options: [
-        PicOption(label: 'Cat', image: 'assets/cat.png', isCorrect: true),
-        PicOption(label: 'Dog', image: 'assets/dog.png'),
-        PicOption(label: 'Bird', image: 'assets/bird.png'),
-        PicOption(label: 'Fish', image: 'assets/fish.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Bulak',
-      options: [
-        PicOption(label: 'Flower', image: 'assets/flower.png', isCorrect: true),
-        PicOption(label: 'Tree', image: 'assets/tree.png'),
-        PicOption(label: 'Grass', image: 'assets/grass.png'),
-        PicOption(label: 'Leaf', image: 'assets/leaf.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Sakyanan',
-      options: [
-        PicOption(label: 'Car', image: 'assets/car.png', isCorrect: true),
-        PicOption(label: 'House', image: 'assets/house.png'),
-        PicOption(label: 'Phone', image: 'assets/phone.png'),
-        PicOption(label: 'Clock', image: 'assets/clock.png'),
-      ],
-    ),
-  ];
+final List<PicQuestion> allQuestions = [
 
-  @override
+  PicQuestion(
+    hiligaynon: 'Bulan',
+    options: [
+      PicOption(label: 'Moon', image: 'assets/moon.png', isCorrect: true),
+      PicOption(label: 'Sun', image: 'assets/sun.png'),
+      PicOption(label: 'Star', image: 'assets/star.png'),
+      PicOption(label: 'Cloud', image: 'assets/cloud.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Ulan',
+    options: [
+      PicOption(label: 'Thunder', image: 'assets/thunder.png'),
+      PicOption(label: 'Cloud', image: 'assets/cloud.png'),
+      PicOption(label: 'Rain', image: 'assets/rain.png', isCorrect: true),
+      PicOption(label: 'Wind', image: 'assets/wind.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Dagu-ob',
+    options: [
+      PicOption(label: 'Thunder', image: 'assets/thunder.png', isCorrect: true),
+      PicOption(label: 'Rain', image: 'assets/rain.png'),
+      PicOption(label: 'Cloud', image: 'assets/cloud.png'),
+      PicOption(label: 'Star', image: 'assets/star.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Bituon',
+    options: [
+      PicOption(label: 'Sun', image: 'assets/sun.png'),
+      PicOption(label: 'Moon', image: 'assets/moon.png'),
+      PicOption(label: 'Star', image: 'assets/star.png', isCorrect: true),
+      PicOption(label: 'Cloud', image: 'assets/cloud.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Hangin',
+    options: [
+      PicOption(label: 'Rain', image: 'assets/rain.png'),
+      PicOption(label: 'Sun', image: 'assets/sun.png'),
+      PicOption(label: 'Wind', image: 'assets/wind.png', isCorrect: true),
+      PicOption(label: 'Thunder', image: 'assets/thunder.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Ido',
+    options: [
+      PicOption(label: 'Cat', image: 'assets/cat.png'),
+      PicOption(label: 'Bird', image: 'assets/bird.png'),
+      PicOption(label: 'Fish', image: 'assets/fish.png'),
+      PicOption(label: 'Dog', image: 'assets/dog.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Kuring',
+    options: [
+      PicOption(label: 'Cat', image: 'assets/cat.png', isCorrect: true),
+      PicOption(label: 'Dog', image: 'assets/dog.png'),
+      PicOption(label: 'Bird', image: 'assets/bird.png'),
+      PicOption(label: 'Fish', image: 'assets/fish.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Pispis',
+    options: [
+      PicOption(label: 'Dog', image: 'assets/dog.png'),
+      PicOption(label: 'Fish', image: 'assets/fish.png'),
+      PicOption(label: 'Cat', image: 'assets/cat.png'),
+      PicOption(label: 'Bird', image: 'assets/bird.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Isda',
+    options: [
+      PicOption(label: 'Dog', image: 'assets/dog.png'),
+      PicOption(label: 'Cat', image: 'assets/cat.png'),
+      PicOption(label: 'Fish', image: 'assets/fish.png', isCorrect: true),
+      PicOption(label: 'Bird', image: 'assets/bird.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Bulak',
+    options: [
+      PicOption(label: 'Tree', image: 'assets/tree.png'),
+      PicOption(label: 'Grass', image: 'assets/grass.png'),
+      PicOption(label: 'Leaf', image: 'assets/leaf.png'),
+      PicOption(label: 'Flower', image: 'assets/flower.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Dahon',
+    options: [
+      PicOption(label: 'Tree', image: 'assets/tree.png'),
+      PicOption(label: 'Leaf', image: 'assets/leaf.png', isCorrect: true),
+      PicOption(label: 'Flower', image: 'assets/flower.png'),
+      PicOption(label: 'Grass', image: 'assets/grass.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Puno',
+    options: [
+      PicOption(label: 'Flower', image: 'assets/flower.png'),
+      PicOption(label: 'Leaf', image: 'assets/leaf.png'),
+      PicOption(label: 'Tree', image: 'assets/tree.png', isCorrect: true),
+      PicOption(label: 'Grass', image: 'assets/grass.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Hilamon',
+    options: [
+      PicOption(label: 'Grass', image: 'assets/grass.png', isCorrect: true),
+      PicOption(label: 'Tree', image: 'assets/tree.png'),
+      PicOption(label: 'Flower', image: 'assets/flower.png'),
+      PicOption(label: 'Leaf', image: 'assets/leaf.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Salakyan',
+    options: [
+      PicOption(label: 'House', image: 'assets/house.png'),
+      PicOption(label: 'Phone', image: 'assets/phone.png'),
+      PicOption(label: 'Car', image: 'assets/car.png', isCorrect: true),
+      PicOption(label: 'Clock', image: 'assets/clock.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Balay',
+    options: [
+      PicOption(label: 'Car', image: 'assets/car.png'),
+      PicOption(label: 'Chair', image: 'assets/chair.png'),
+      PicOption(label: 'Table', image: 'assets/table.png'),
+      PicOption(label: 'House', image: 'assets/house.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Lamesa',
+    options: [
+      PicOption(label: 'Chair', image: 'assets/chair.png'),
+      PicOption(label: 'Table', image: 'assets/table.png', isCorrect: true),
+      PicOption(label: 'Clock', image: 'assets/clock.png'),
+      PicOption(label: 'Phone', image: 'assets/phone.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Pulongkoan',
+    options: [
+      PicOption(label: 'Chair', image: 'assets/chair.png', isCorrect: true),
+      PicOption(label: 'Table', image: 'assets/table.png'),
+      PicOption(label: 'House', image: 'assets/house.png'),
+      PicOption(label: 'Car', image: 'assets/car.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Relo',
+    options: [
+      PicOption(label: 'Watch', image: 'assets/watch.png', isCorrect: true),
+      PicOption(label: 'Phone', image: 'assets/phone.png'),
+      PicOption(label: 'Car', image: 'assets/car.png'),
+      PicOption(label: 'Tree', image: 'assets/tree.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Telepono',
+    options: [
+      PicOption(label: 'Clock', image: 'assets/clock.png'),
+      PicOption(label: 'Car', image: 'assets/car.png'),
+      PicOption(label: 'Phone', image: 'assets/phone.png', isCorrect: true),
+      PicOption(label: 'Chair', image: 'assets/chair.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Libro',
+    options: [
+      PicOption(label: 'Bag', image: 'assets/bag.png'),
+      PicOption(label: 'Pen', image: 'assets/pen.png'),
+      PicOption(label: 'Paper', image: 'assets/paper.png'),
+      PicOption(label: 'Book', image: 'assets/book.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Bolpen',
+    options: [
+      PicOption(label: 'Book', image: 'assets/book.png'),
+      PicOption(label: 'Pen', image: 'assets/pen.png', isCorrect: true),
+      PicOption(label: 'Bag', image: 'assets/bag.png'),
+      PicOption(label: 'Paper', image: 'assets/paper.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Tubig',
+    options: [
+      PicOption(label: 'Water', image: 'assets/water.png', isCorrect: true),
+      PicOption(label: 'Juice', image: 'assets/juice.png'),
+      PicOption(label: 'Milk', image: 'assets/milk.png'),
+      PicOption(label: 'Coffee', image: 'assets/coffee.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Kape',
+    options: [
+      PicOption(label: 'Coffee', image: 'assets/coffee.png', isCorrect: true),
+      PicOption(label: 'Milk', image: 'assets/milk.png'),
+      PicOption(label: 'Water', image: 'assets/water.png'),
+      PicOption(label: 'Juice', image: 'assets/juice.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Gatas',
+    options: [
+      PicOption(label: 'Water', image: 'assets/water.png'),
+      PicOption(label: 'Juice', image: 'assets/juice.png'),
+      PicOption(label: 'Coffee', image: 'assets/coffee.png'),
+      PicOption(label: 'Milk', image: 'assets/milk.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Kalan-on',
+    options: [
+      PicOption(label: 'Drink', image: 'assets/water.png'),
+      PicOption(label: 'Food', image: 'assets/food1.png', isCorrect: true),
+      PicOption(label: 'Book', image: 'assets/book.png'),
+      PicOption(label: 'Car', image: 'assets/car.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Saging',
+    options: [
+      PicOption(label: 'Banana', image: 'assets/banana.png', isCorrect: true),
+      PicOption(label: 'Apple', image: 'assets/apple.png'),
+      PicOption(label: 'Mango', image: 'assets/mango.png'),
+      PicOption(label: 'Grapes', image: 'assets/grape.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Mansanas',
+    options: [
+      PicOption(label: 'Apple', image: 'assets/apple.png', isCorrect: true),
+      PicOption(label: 'Banana', image: 'assets/banana.png'),
+      PicOption(label: 'Mango', image: 'assets/mango.png'),
+      PicOption(label: 'Grapes', image: 'assets/grape.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Paho',
+    options: [
+      PicOption(label: 'Mango', image: 'assets/mango.png', isCorrect: true),
+      PicOption(label: 'Banana', image: 'assets/banana.png'),
+      PicOption(label: 'Apple', image: 'assets/apple.png'),
+      PicOption(label: 'Grapes', image: 'assets/grape.png'),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Ubas',
+    options: [
+      PicOption(label: 'Mango', image: 'assets/mango.png'),
+      PicOption(label: 'Banana', image: 'assets/banana.png'),
+      PicOption(label: 'Apple', image: 'assets/apple.png'),
+      PicOption(label: 'Grapes', image: 'assets/grape.png', isCorrect: true),
+    ],
+  ),
+];
+
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     _score = 0;
-
     questions = _pickRandomQuestions(allQuestions, 10);
 
-    // Shuffle each question's options
     for (var q in questions) {
       q.options.shuffle(Random());
     }
@@ -165,7 +332,7 @@ class _PicEasyState extends State<PicEasy> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => ScorePage(
+                builder: (_) => PscorePage( // ✅ updated destination
                   score: _score,
                   total: questions.length,
                 ),
@@ -236,7 +403,6 @@ class _PicEasyState extends State<PicEasy> {
               ),
             ),
             const SizedBox(height: 16),
-
             Center(
               child: Wrap(
                 spacing: 16,
@@ -268,7 +434,9 @@ class _PicEasyState extends State<PicEasy> {
                           onPressed: answered ? null : () => checkAnswer(index),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: borderColor),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             padding: const EdgeInsets.all(8),
                           ),
                           child: Column(
@@ -286,29 +454,13 @@ class _PicEasyState extends State<PicEasy> {
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.check, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.check, Colors.green),
                           ),
                         if (answered && isSelected && !isRight)
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.close, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.close, Colors.red),
                           ),
                       ],
                     ),
@@ -316,7 +468,6 @@ class _PicEasyState extends State<PicEasy> {
                 }),
               ),
             ),
-
             const SizedBox(height: 24),
             if (answered && isCorrect)
               const Center(
@@ -325,7 +476,6 @@ class _PicEasyState extends State<PicEasy> {
                   style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                 ),
               ),
-
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -336,7 +486,9 @@ class _PicEasyState extends State<PicEasy> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2A7BE6),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     'CONTINUE',
@@ -351,16 +503,22 @@ class _PicEasyState extends State<PicEasy> {
       ),
     );
   }
+
+  Widget _buildIcon(IconData icon, Color color) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      child: Icon(icon, size: 16, color: Colors.white),
+    );
+  }
 }
 
 class PicQuestion {
   final String hiligaynon;
   final List<PicOption> options;
 
-  PicQuestion({
-    required this.hiligaynon,
-    required this.options,
-  });
+  PicQuestion({required this.hiligaynon, required this.options});
 }
 
 class PicOption {
@@ -368,9 +526,5 @@ class PicOption {
   final String image;
   final bool isCorrect;
 
-  PicOption({
-    required this.label,
-    required this.image,
-    this.isCorrect = false,
-  });
+  PicOption({required this.label, required this.image, this.isCorrect = false});
 }

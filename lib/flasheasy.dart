@@ -1,24 +1,25 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/score.dart';
-import 'flashcards.dart'; // Import your FlashCards page
-import 'score.dart'; // Import the new ScorePage
+import 'package:confetti/confetti.dart';
+import 'escore.dart'; // ✅ Make sure this import exists
 
 class FlashEasy extends StatefulWidget {
   const FlashEasy({Key? key}) : super(key: key);
 
   @override
-  State<FlashEasy> createState() => _FlashEasyState();
+  State<FlashEasy> createState() => _FlashNavEasyState();
 }
 
-class _FlashEasyState extends State<FlashEasy> {
+class _FlashNavEasyState extends State<FlashEasy> {
+  late ConfettiController _confettiController;
+
   int currentIndex = 0;
   int? selectedIndex;
   bool answered = false;
   bool isCorrect = false;
   int _score = 0;
 
-  // Full flashcard pool
+
   final List<FlashCard> allFlashCards = [
     FlashCard(
       image: 'assets/sun.png',
@@ -29,126 +30,134 @@ class _FlashEasyState extends State<FlashEasy> {
     FlashCard(
       image: 'assets/moon.png',
       english: 'Moon',
-      options: ['Gab-i', 'Bulan', 'Bituon', 'Bola'],
+      options: ['Bulan', 'Dagu-ob', 'Ulan', 'Adlaw'],
       correct: 'Bulan',
     ),
     FlashCard(
       image: 'assets/rain.png',
       english: 'Rain',
-      options: ['Dagu-ob', 'Kilat', 'Tubig', 'Ulan'],
+      options: ['Dagu-ob', 'Adlaw', 'Gab-i', 'Ulan'],
       correct: 'Ulan',
     ),
     FlashCard(
       image: 'assets/cloud.png',
       english: 'Cloud',
-      options: ['Panganod', 'Dagu-ob', 'Gal-um', 'Kilat'],
+      options: ['Ulan', 'Panganod', 'Adlaw', 'Gab-i'],
       correct: 'Panganod',
     ),
     FlashCard(
       image: 'assets/star.png',
       english: 'Star',
-      options: ['Adlaw', 'Dahon', 'Bituon', 'Ulan'],
+      options: ['Adlaw', 'Gab-i', 'Bituon', 'Ulan'],
       correct: 'Bituon',
     ),
     FlashCard(
       image: 'assets/wind.png',
       english: 'Wind',
-      options: ['Subay', 'Hangin', 'Gab-i', 'Bato'],
+      options: ['Hangin', 'Ulan', 'Gab-i', 'Adlaw'],
       correct: 'Hangin',
     ),
     FlashCard(
       image: 'assets/tree.png',
       english: 'Tree',
-      options: ['Sanga', 'Tinapay', 'Puno', 'Balay'],
-      correct: 'Puno',
+      options: ['Kahoy', 'Adlaw', 'Ulan', 'Dagu-ob'],
+      correct: 'Kahoy',
     ),
     FlashCard(
       image: 'assets/flower.png',
       english: 'Flower',
-      options: ['Bulak', 'Buyog', 'Hilamon', 'Saging'],
+      options: ['Bulak', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Bulak',
     ),
     FlashCard(
       image: 'assets/river.png',
       english: 'River',
-      options: ['Baras', 'Bay-Bay', 'Kamote', 'Suba'],
+      options: ['Suba', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Suba',
     ),
     FlashCard(
       image: 'assets/mountain.png',
       english: 'Mountain',
-      options: ['Bukid', 'Saging', 'Tinapay', 'Balay'],
+      options: ['Bukid', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Bukid',
     ),
     FlashCard(
       image: 'assets/fish.png',
       english: 'Fish',
-      options: ['Bato', 'Ipot-Ipot', 'Isda', 'Ulan'],
+      options: ['Isda', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Isda',
     ),
     FlashCard(
       image: 'assets/bird.png',
       english: 'Bird',
-      options: ['Dahon', 'Manok', 'Hangin', 'PisPis'],
-      correct: 'PisPis',
+      options: ['Pispis', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Pispis',
     ),
     FlashCard(
       image: 'assets/dog.png',
       english: 'Dog',
-      options: ['Kuring', 'Kamote', 'Iro', 'Ulan'],
-      correct: 'Iro',
+      options: ['Ido', 'Gab-i', 'Adlaw', 'Ulan'],
+      correct: 'Ido',
     ),
     FlashCard(
       image: 'assets/cat.png',
       english: 'Cat',
-      options: ['Iro', 'Man-og', 'Kuring', 'Tuko'],
+      options: ['Kuring', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Kuring',
     ),
     FlashCard(
       image: 'assets/house.png',
       english: 'House',
-      options: ['Bangrus', 'Gab-i', 'Suba', 'Balay'],
+      options: ['Balay', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Balay',
     ),
     FlashCard(
       image: 'assets/car.png',
       english: 'Car',
-      options: ['Salakyan', 'Sikad', 'Iro', 'Ulan'],
+      options: ['Salakyan', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Salakyan',
     ),
     FlashCard(
       image: 'assets/book.png',
       english: 'Book',
-      options: ['Libro', 'Buyog', 'PisPis', 'Dahon'],
+      options: ['Libro', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Libro',
     ),
     FlashCard(
       image: 'assets/phone.png',
-      english: 'Telephone',
-      options: ['Telepono', 'Bukid', 'kuring', 'Bangros'],
+      english: 'Phone',
+      options: ['Telepono', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Telepono',
     ),
     FlashCard(
       image: 'assets/clock.png',
       english: 'Clock',
-      options: ['Orasan', 'Panganod', 'Iro', 'Kalamay'],
+      options: ['Orasan', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Orasan',
     ),
     FlashCard(
-      image: 'assets/food1.png',
+      image: 'assets/food.png',
       english: 'Food',
-      options: ['Pagkaon', 'Subay', 'Tinapay', 'Adlaw'],
+      options: ['Pagkaon', 'Gab-i', 'Adlaw', 'Ulan'],
       correct: 'Pagkaon',
     ),
   ];
 
+  
   late List<FlashCard> flashCards;
 
   @override
   void initState() {
     super.initState();
     flashCards = _pickRandomFlashCards(allFlashCards, 10);
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     _score = 0;
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
   }
 
   List<FlashCard> _pickRandomFlashCards(List<FlashCard> source, int count) {
@@ -176,11 +185,11 @@ class _FlashEasyState extends State<FlashEasy> {
         selectedIndex = null;
         answered = false;
       } else {
-        // Navigate to ScorePage when finished
+        // ✅ Navigate to EscorePage when finished
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ScorePage(
+            builder: (context) => EscorePage(
               score: _score,
               total: flashCards.length,
             ),
@@ -200,9 +209,11 @@ class _FlashEasyState extends State<FlashEasy> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context); // Go back to previous page
-          },
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          'Easy Level',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         actions: [
           Padding(
@@ -222,7 +233,7 @@ class _FlashEasyState extends State<FlashEasy> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
-              'Choose the correct match for each flashcard',
+              'Choose the correct match for each flashcard within 10 seconds',
               style: TextStyle(color: Color(0xFF878282), fontSize: 14),
               textAlign: TextAlign.center,
             ),
@@ -283,12 +294,6 @@ class _FlashEasyState extends State<FlashEasy> {
               );
             }),
           ),
-          const SizedBox(height: 12),
-          if (answered && !isCorrect)
-            const Text(
-              'Try again',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-            ),
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),

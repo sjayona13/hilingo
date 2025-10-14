@@ -1,9 +1,7 @@
-// flash_medium.dart
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/score.dart';
-import 'score.dart'; // Make sure you have ScorePage implemented
+import 'escore.dart'; // ✅ Redirects to EscorePage instead of ScorePage
 
 class FlashMedium extends StatefulWidget {
   const FlashMedium({Key? key}) : super(key: key);
@@ -33,66 +31,178 @@ class _FlashMediumState extends State<FlashMedium> {
     FlashCard(
       image: 'assets/noise.png',
       english: 'Noise',
-      options: ['Gahod', 'Hilom', 'Tingog', 'Tingog sang Iro'],
+      options: ['Hilom', 'Tingog', 'Gahod', 'Tingog sang Ido'],
       correct: 'Gahod',
     ),
     FlashCard(
       image: 'assets/fire.png',
       english: 'Fire',
-      options: ['Kalayo', 'Tubig', 'Hangin', 'Bato'],
+      options: ['Tubig', 'Kalayo', 'Hangin', 'Bato'],
       correct: 'Kalayo',
     ),
     FlashCard(
-      image: 'assets/water.png',
+      image: 'assets/water-drop.png',
       english: 'Water',
       options: ['Tubig', 'Adlaw', 'Bituon', 'Balay'],
       correct: 'Tubig',
     ),
     FlashCard(
-      image: 'assets/tree2.png',
+      image: 'assets/tree.png',
       english: 'Tree',
       options: ['Puno', 'Sanga', 'Dahon', 'Bulak'],
       correct: 'Puno',
     ),
     FlashCard(
-      image: 'assets/flower2.png',
+      image: 'assets/flower.png',
       english: 'Flower',
       options: ['Bulak', 'Buyog', 'Hilamon', 'Saging'],
       correct: 'Bulak',
     ),
     FlashCard(
-      image: 'assets/mountain2.png',
+      image: 'assets/mountain.png',
       english: 'Mountain',
-      options: ['Bukid', 'Suba', 'Balay', 'Tinapay'],
+      options: ['Suba', 'Balay', 'Bukid', 'Tinapay'],
       correct: 'Bukid',
     ),
     FlashCard(
-      image: 'assets/river2.png',
+      image: 'assets/river.png',
       english: 'River',
       options: ['Suba', 'Bay-Bay', 'Kamote', 'Ulan'],
       correct: 'Suba',
     ),
     FlashCard(
-      image: 'assets/bird2.png',
+      image: 'assets/bird.png',
       english: 'Bird',
-      options: ['PisPis', 'Manok', 'Dahon', 'Ulan'],
+      options: ['Manok', 'PisPis', 'Dahon', 'Ulan'],
       correct: 'PisPis',
     ),
     FlashCard(
-      image: 'assets/dog2.png',
-      english: 'Dog',
-      options: ['Iro', 'Kuring', 'Kamote', 'Ulan'],
-      correct: 'Iro',
+      image: 'assets/candle.png',
+      english: 'Candle',
+      options: ['Kandila', 'Kalayo', 'Adlaw', 'Lampara'],
+      correct: 'Kandila',
+    ),
+    FlashCard(
+      image: 'assets/mirror.png',
+      english: 'Mirror',
+      options: ['Esmirra', 'Espiyo', 'Bintana', 'Pintuan'],
+      correct: 'Espiyo',
+    ),
+    FlashCard(
+      image: 'assets/bridge.png',
+      english: 'Bridge',
+      options: ['Dal-an', 'Suba', 'Taytay', 'Balay'],
+      correct: 'Taytay',
+    ),
+    FlashCard(
+      image: 'assets/boat.png',
+      english: 'Boat',
+      options: ['Baruto', 'Sakayan', 'Barko', 'Salakyan'],
+      correct: 'Baruto',
+    ),
+    FlashCard(
+      image: 'assets/road.png',
+      english: 'Road',
+      options: ['Dalan', 'Balay', 'Suba', 'Bukid'],
+      correct: 'Dalan',
+    ),
+    FlashCard(
+      image: 'assets/leaf.png',
+      english: 'Leaf',
+      options: ['Dahon', 'Bulak', 'Sanga', 'Hilamon'],
+      correct: 'Dahon',
+    ),
+    FlashCard(
+      image: 'assets/storm.png',
+      english: 'Storm',
+      options: ['Ulan', 'Dagu-ob', 'Bagyo', 'Hangin'],
+      correct: 'Bagyo',
+    ),
+    FlashCard(
+      image: 'assets/lightning.png',
+      english: 'Lightning',
+      options: ['Kilat', 'Bagyo', 'Dagu-ob', 'Kalayo'],
+      correct: 'Kilat',
+    ),
+    FlashCard(
+      image: 'assets/rainbow.png',
+      english: 'Rainbow',
+      options: ['Bituon', 'Balangaw', 'Panganod', 'Adlaw'],
+      correct: 'Balangaw',
+    ),
+    FlashCard(
+      image: 'assets/earth.png',
+      english: 'Earth',
+      options: ['Kalibutan', 'Langit', 'Tubig', 'Hangin'],
+      correct: 'Kalibutan',
+    ),
+    FlashCard(
+      image: 'assets/sky.png',
+      english: 'Sky',
+      options: ['Langit', 'Panganod', 'Adlaw', 'Bulan'],
+      correct: 'Langit',
+    ),
+    FlashCard(
+      image: 'assets/beach.png',
+      english: 'Beach',
+      options: ['Baybay', 'Suba', 'Bukid', 'Balay'],
+      correct: 'Baybay',
+    ),
+    FlashCard(
+      image: 'assets/stone.png',
+      english: 'Stone',
+      options: ['Balas', 'Bato', 'Duta', 'Suga'],
+      correct: 'Bato',
+    ),
+    FlashCard(
+      image: 'assets/smoke.png',
+      english: 'Smoke',
+      options: ['Asu', 'Kalayo', 'Hangin', 'Tubig'],
+      correct: 'Asu',
+    ),
+    FlashCard(
+      image: 'assets/rope.png',
+      english: 'Rope',
+      options: ['Lansang', 'Bato', 'Pisi', 'Kawayan'],
+      correct: 'Pisi',
+    ),
+    FlashCard(
+      image: 'assets/basket.png',
+      english: 'Basket',
+      options: ['Balaon', 'Bakol', 'Balde', 'Sako'],
+      correct: 'Bakol',
+    ),
+    FlashCard(
+      image: 'assets/hammer.png',
+      english: 'Hammer',
+      options: ['Martilyo', 'Lagari', 'Pisi', 'Bato'],
+      correct: 'Martilyo',
+    ),
+    FlashCard(
+      image: 'assets/fan2.png',
+      english: 'Fan',
+      options: ['Hangin', 'Suga', 'Pamaypay', 'Lampara'],
+      correct: 'Pamaypay',
+    ),
+    FlashCard(
+      image: 'assets/milk.png',
+      english: 'Milk',
+      options: ['Tubig', 'Gatas', 'Pagkaon', 'Kalamay'],
+      correct: 'Gatas',
+    ),
+    FlashCard(
+      image: 'assets/shirt.png',
+      english: 'Shirt',
+      options: ['Sando', 'Pantalon', 'Bayo', 'Bisti'],
+      correct: 'Bayo',
     ),
   ];
 
   @override
   void initState() {
     super.initState();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _score = 0;
-
     allFlashCards.shuffle();
     flashCards = allFlashCards.take(10).toList();
     for (var card in flashCards) {
@@ -126,15 +236,13 @@ class _FlashMediumState extends State<FlashMedium> {
         answered = false;
         flashCards[currentIndex].options.shuffle();
       } else {
-        // Show ScorePage with confetti
         _confettiController.play();
-
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => ScorePage(
+                builder: (_) => EscorePage( // ✅ Changed to EscorePage
                   score: _score,
                   total: flashCards.length,
                 ),
@@ -243,19 +351,14 @@ class _FlashMediumState extends State<FlashMedium> {
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: borderColor),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                     child: Text(option, style: TextStyle(color: textColor)),
                   ),
                 );
               }),
             ),
-            const SizedBox(height: 16),
-            if (answered && !isCorrect)
-              const Text(
-                'Try again',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-              ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -267,11 +370,15 @@ class _FlashMediumState extends State<FlashMedium> {
                     backgroundColor: const Color(0xFF2A7BE6),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     'CONTINUE',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

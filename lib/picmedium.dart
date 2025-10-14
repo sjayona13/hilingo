@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/score.dart';
-import 'score.dart'; // Make sure you have ScorePage
+import 'pscore.dart'; // ⬅️ Use your PscorePage here
 
 class PicMedium extends StatefulWidget {
   const PicMedium({Key? key}) : super(key: key);
@@ -13,7 +12,6 @@ class PicMedium extends StatefulWidget {
 
 class _PicMediumState extends State<PicMedium> {
   late ConfettiController _confettiController;
-
   int currentIndex = 0;
   int? selectedIndex;
   bool answered = false;
@@ -22,105 +20,306 @@ class _PicMediumState extends State<PicMedium> {
 
   late List<PicQuestion> questions;
 
-  final List<PicQuestion> allQuestions = [
-    PicQuestion(
-      hiligaynon: 'Suba',
-      options: [
-        PicOption(label: 'River', image: 'assets/river.png', isCorrect: true),
-        PicOption(label: 'Mountain', image: 'assets/mountain.png'),
-        PicOption(label: 'Tree', image: 'assets/tree.png'),
-        PicOption(label: 'Lake', image: 'assets/lake.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Bukid',
-      options: [
-        PicOption(label: 'Mountain', image: 'assets/mountain.png', isCorrect: true),
-        PicOption(label: 'River', image: 'assets/river.png'),
-        PicOption(label: 'Sea', image: 'assets/sea.png'),
-        PicOption(label: 'Cloud', image: 'assets/cloud.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Tulay',
-      options: [
-        PicOption(label: 'Bridge', image: 'assets/bridge.png', isCorrect: true),
-        PicOption(label: 'House', image: 'assets/house.png'),
-        PicOption(label: 'Car', image: 'assets/car.png'),
-        PicOption(label: 'Boat', image: 'assets/boat.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Baybay',
-      options: [
-        PicOption(label: 'Beach', image: 'assets/beach.png', isCorrect: true),
-        PicOption(label: 'Mountain', image: 'assets/mountain.png'),
-        PicOption(label: 'Forest', image: 'assets/forest.png'),
-        PicOption(label: 'River', image: 'assets/river.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Isda',
-      options: [
-        PicOption(label: 'Fish', image: 'assets/fish.png', isCorrect: true),
-        PicOption(label: 'Bird', image: 'assets/bird.png'),
-        PicOption(label: 'Dog', image: 'assets/dog.png'),
-        PicOption(label: 'Cat', image: 'assets/cat.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Langgam',
-      options: [
-        PicOption(label: 'Bird', image: 'assets/bird.png', isCorrect: true),
-        PicOption(label: 'Fish', image: 'assets/fish.png'),
-        PicOption(label: 'Dog', image: 'assets/dog.png'),
-        PicOption(label: 'Cat', image: 'assets/cat.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Balay',
-      options: [
-        PicOption(label: 'House', image: 'assets/house.png', isCorrect: true),
-        PicOption(label: 'Car', image: 'assets/car.png'),
-        PicOption(label: 'Phone', image: 'assets/phone.png'),
-        PicOption(label: 'Clock', image: 'assets/clock.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Kahoy',
-      options: [
-        PicOption(label: 'Tree', image: 'assets/tree.png', isCorrect: true),
-        PicOption(label: 'Flower', image: 'assets/flower.png'),
-        PicOption(label: 'Grass', image: 'assets/grass.png'),
-        PicOption(label: 'Leaf', image: 'assets/leaf.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Eroplano',
-      options: [
-        PicOption(label: 'Airplane', image: 'assets/airplane.png', isCorrect: true),
-        PicOption(label: 'Ship', image: 'assets/ship.png'),
-        PicOption(label: 'Bus', image: 'assets/bus.png'),
-        PicOption(label: 'Bicycle', image: 'assets/bicycle.png'),
-      ],
-    ),
-    PicQuestion(
-      hiligaynon: 'Tindahan',
-      options: [
-        PicOption(label: 'Store', image: 'assets/store.png', isCorrect: true),
-        PicOption(label: 'School', image: 'assets/school.png'),
-        PicOption(label: 'Hospital', image: 'assets/hospital.png'),
-        PicOption(label: 'Church', image: 'assets/church.png'),
-      ],
-    ),
-  ];
+final List<PicQuestion> mediumPicQuestions = [
 
-  @override
+  PicQuestion(
+    hiligaynon: 'Balay',
+    options: [
+      PicOption(label: 'House', image: 'assets/house.png', isCorrect: true),
+      PicOption(label: 'Car', image: 'assets/car.png'),
+      PicOption(label: 'School', image: 'assets/school.png'),
+      PicOption(label: 'Tree', image: 'assets/tree.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Eskwelahan',
+    options: [
+      PicOption(label: 'Hospital', image: 'assets/hospital.png'),
+      PicOption(label: 'School', image: 'assets/school.png', isCorrect: true),
+      PicOption(label: 'Market', image: 'assets/market.png'),
+      PicOption(label: 'Church', image: 'assets/church.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Pangamuyo',
+    options: [
+      PicOption(label: 'Run', image: 'assets/run.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+      PicOption(label: 'Pray', image: 'assets/pray.png', isCorrect: true),
+      PicOption(label: 'Eat', image: 'assets/eat.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Kaon',
+    options: [
+      PicOption(label: 'Drink', image: 'assets/drink.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+      PicOption(label: 'Walk', image: 'assets/walk.png'),
+      PicOption(label: 'Eat', image: 'assets/eat.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Inom',
+    options: [
+      PicOption(label: 'Drink', image: 'assets/drink.png', isCorrect: true),
+      PicOption(label: 'Eat', image: 'assets/eat.png'),
+      PicOption(label: 'Swim', image: 'assets/swim.png'),
+      PicOption(label: 'Read', image: 'assets/read.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tulog',
+    options: [
+      PicOption(label: 'Run', image: 'assets/run.png'),
+      PicOption(label: 'Dance', image: 'assets/dance.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png', isCorrect: true),
+      PicOption(label: 'Read', image: 'assets/read.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Basa',
+    options: [
+      PicOption(label: 'Write', image: 'assets/write.png'),
+      PicOption(label: 'Draw', image: 'assets/draw.png'),
+      PicOption(label: 'Read', image: 'assets/read.png', isCorrect: true),
+      PicOption(label: 'Sing', image: 'assets/sing.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Sulat',
+    options: [
+      PicOption(label: 'Read', image: 'assets/read.png'),
+      PicOption(label: 'Draw', image: 'assets/draw.png'),
+      PicOption(label: 'Paint', image: 'assets/paint.png'),
+      PicOption(label: 'Write', image: 'assets/write.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Kanta',
+    options: [
+      PicOption(label: 'Dance', image: 'assets/dance.png'),
+      PicOption(label: 'Talk', image: 'assets/talk.png'),
+      PicOption(label: 'Sing', image: 'assets/sing.png', isCorrect: true),
+      PicOption(label: 'Run', image: 'assets/run.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Sayaw',
+    options: [
+      PicOption(label: 'Dance', image: 'assets/dance.png', isCorrect: true),
+      PicOption(label: 'Sing', image: 'assets/sing.png'),
+      PicOption(label: 'Run', image: 'assets/run.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Dalagan',
+    options: [
+      PicOption(label: 'Walk', image: 'assets/walk.png'),
+      PicOption(label: 'Jump', image: 'assets/jump.png'),
+      PicOption(label: 'Sit', image: 'assets/sit.png'),
+      PicOption(label: 'Run', image: 'assets/run.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Lakat',
+    options: [
+      PicOption(label: 'Run', image: 'assets/run.png'),
+      PicOption(label: 'Jump', image: 'assets/jump.png'),
+      PicOption(label: 'Sit', image: 'assets/sit.png'),
+      PicOption(label: 'Walk', image: 'assets/walk.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Pungko',
+    options: [
+      PicOption(label: 'Stand', image: 'assets/stand.png'),
+      PicOption(label: 'Run', image: 'assets/run.png'),
+      PicOption(label: 'Sit', image: 'assets/sit.png', isCorrect: true),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Indi',
+    options: [
+      PicOption(label: 'No', image: 'assets/no.png', isCorrect: true),
+      PicOption(label: 'Yes', image: 'assets/yes.png'),
+      PicOption(label: 'Maybe', image: 'assets/maybe.png'),
+      PicOption(label: 'Go', image: 'assets/go.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Oo',
+    options: [
+      PicOption(label: 'No', image: 'assets/no.png'),
+      PicOption(label: 'Go', image: 'assets/go.png'),
+      PicOption(label: 'Stop', image: 'assets/stop.png'),
+      PicOption(label: 'Yes', image: 'assets/yes.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tindog',
+    options: [
+      PicOption(label: 'Sit', image: 'assets/sit.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+      PicOption(label: 'Walk', image: 'assets/walk.png'),
+      PicOption(label: 'Stand', image: 'assets/stand.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Ginhawa',
+    options: [
+      PicOption(label: 'Breathe', image: 'assets/breathe.png', isCorrect: true),
+      PicOption(label: 'Eat', image: 'assets/eat.png'),
+      PicOption(label: 'Drink', image: 'assets/drink.png'),
+      PicOption(label: 'Run', image: 'assets/run.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tubo',
+    options: [
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+      PicOption(label: 'Read', image: 'assets/read.png'),
+      PicOption(label: 'Grow', image: 'assets/grow.png', isCorrect: true),
+      PicOption(label: 'Jump', image: 'assets/jump.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Hilam-os',
+    options: [
+      PicOption(label: 'Brush teeth', image: 'assets/brush.png'),
+      PicOption(label: 'Bathe', image: 'assets/bathe.png'),
+      PicOption(label: 'Sleep', image: 'assets/sleep.png'),
+      PicOption(label: 'Wash face', image: 'assets/washface.png', isCorrect: true),
+    ],
+  ),
+  PicQuestion(
+    hiligaynon: 'Gatas',
+    options: [
+      PicOption(label: 'Milk', image: 'assets/milk.png', isCorrect: true),
+      PicOption(label: 'Juice', image: 'assets/juice.png'),
+      PicOption(label: 'Coffee', image: 'assets/coffee.png'),
+      PicOption(label: 'Water', image: 'assets/water.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tubig',
+    options: [
+      PicOption(label: 'Water', image: 'assets/water.png', isCorrect: true),
+      PicOption(label: 'Juice', image: 'assets/juice.png'),
+      PicOption(label: 'Coffee', image: 'assets/coffee.png'),
+      PicOption(label: 'Soda', image: 'assets/soda.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tinapay',
+    options: [
+      PicOption(label: 'Rice', image: 'assets/rice.png'),
+      PicOption(label: 'Grapes', image: 'assets/grape.png'),
+      PicOption(label: 'Soda', image: 'assets/soda.png'),
+      PicOption(label: 'Bread', image: 'assets/bread.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Kutsara',
+    options: [
+      PicOption(label: 'Fork', image: 'assets/fork.png'),
+      PicOption(label: 'Plate', image: 'assets/plate.png'),
+      PicOption(label: 'Spoon', image: 'assets/spoon.png', isCorrect: true),
+      PicOption(label: 'Glass', image: 'assets/glass.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Tinidor',
+    options: [
+      PicOption(label: 'Spoon', image: 'assets/spoon.png'),
+      PicOption(label: 'Knife', image: 'assets/knife.png'),
+      PicOption(label: 'Fork', image: 'assets/fork.png', isCorrect: true),
+      PicOption(label: 'Plate', image: 'assets/plate.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Pinggan',
+    options: [
+      PicOption(label: 'Plate', image: 'assets/plate.png', isCorrect: true),
+      PicOption(label: 'Spoon', image: 'assets/spoon.png'),
+      PicOption(label: 'Cup', image: 'assets/cup.png'),
+      PicOption(label: 'Glass', image: 'assets/glass.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Kutsilyo',
+    options: [
+      PicOption(label: 'Knife', image: 'assets/knife.png', isCorrect: true),
+      PicOption(label: 'Fork', image: 'assets/fork.png'),
+      PicOption(label: 'Spoon', image: 'assets/spoon.png'),
+      PicOption(label: 'Glass', image: 'assets/glass.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Orasan',
+    options: [
+      PicOption(label: 'Phone', image: 'assets/phone.png'),
+      PicOption(label: 'Calendar', image: 'assets/calendar.png'),
+      PicOption(label: 'Book', image: 'assets/book.png'),
+      PicOption(label: 'Clock', image: 'assets/clock.png', isCorrect: true),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Lapis',
+    options: [
+      PicOption(label: 'Pen', image: 'assets/pen.png'),
+      PicOption(label: 'Pencil', image: 'assets/pencil.png', isCorrect: true),
+      PicOption(label: 'Eraser', image: 'assets/eraser.png'),
+      PicOption(label: 'Book', image: 'assets/book.png'),
+    ],
+  ),
+
+  PicQuestion(
+    hiligaynon: 'Libro',
+    options: [
+      PicOption(label: 'Paper', image: 'assets/paper.png'),
+      PicOption(label: 'Pencil', image: 'assets/pencil.png'),
+      PicOption(label: 'Notebook', image: 'assets/notebook.png'),
+      PicOption(label: 'Book', image: 'assets/book.png', isCorrect: true),
+    ],
+  ),
+];
+
+
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     _score = 0;
-    questions = _pickRandomQuestions(allQuestions, 10);
+    questions = _pickRandomQuestions(mediumPicQuestions, 10);
+
+
     for (var q in questions) {
       q.options.shuffle(Random());
     }
@@ -162,7 +361,7 @@ class _PicMediumState extends State<PicMedium> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => ScorePage(
+                builder: (_) => PscorePage( // ✅ updated destination
                   score: _score,
                   total: questions.length,
                 ),
@@ -195,7 +394,7 @@ class _PicMediumState extends State<PicMedium> {
             },
           ),
           title: const Text(
-            'Intermediate Level',
+            'Medium Level',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           ),
           actions: [
@@ -257,21 +456,25 @@ class _PicMediumState extends State<PicMedium> {
 
                   return SizedBox(
                     width: 140,
-                    height: 150,
+                    height: 160,
                     child: Stack(
                       children: [
                         OutlinedButton(
                           onPressed: answered ? null : () => checkAnswer(index),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(color: borderColor),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.all(12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.all(8),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(child: Image.asset(option.image, fit: BoxFit.contain)),
-                              const SizedBox(height: 8),
+                              Expanded(
+                                child: Image.asset(option.image, fit: BoxFit.contain),
+                              ),
+                              const SizedBox(height: 6),
                               Text(option.label, style: TextStyle(color: textColor)),
                             ],
                           ),
@@ -280,29 +483,13 @@ class _PicMediumState extends State<PicMedium> {
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.check, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.check, Colors.green),
                           ),
                         if (answered && isSelected && !isRight)
                           Positioned(
                             right: -6,
                             bottom: -6,
-                            child: Container(
-                              width: 24,
-                              height: 24,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(Icons.close, size: 16, color: Colors.white),
-                            ),
+                            child: _buildIcon(Icons.close, Colors.red),
                           ),
                       ],
                     ),
@@ -328,7 +515,9 @@ class _PicMediumState extends State<PicMedium> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2A7BE6),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text(
                     'CONTINUE',
@@ -341,6 +530,15 @@ class _PicMediumState extends State<PicMedium> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildIcon(IconData icon, Color color) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      child: Icon(icon, size: 16, color: Colors.white),
     );
   }
 }

@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:confetti/confetti.dart';
 import 'dart:math';
-import 'quizzes.dart';
-import 'quiz_page.dart';
+import 'package:flutter/material.dart';
+import 'qscore.dart'; // Import the score page
 
 class Qeasy extends StatefulWidget {
   const Qeasy({Key? key}) : super(key: key);
@@ -13,7 +11,7 @@ class Qeasy extends StatefulWidget {
 
 // ✅ Question model
 class Question {
-  final String type; // "phrase", "picture", "flashcard"
+  final String type; // "phrase", "flashcard", "picture"
   final String phrase;
   final List<String> options;
   final String correct;
@@ -26,6 +24,13 @@ class Question {
     required this.correct,
     this.image,
   });
+
+  // Create a copy of options and shuffle it
+  List<String> shuffledOptions() {
+    List<String> shuffled = List.from(options);
+    shuffled.shuffle(Random());
+    return shuffled;
+  }
 }
 
 class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
@@ -34,65 +39,147 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
   bool _answered = false;
   int _score = 0;
 
-  late ConfettiController _confettiController;
   late List<Question> _questions;
-
-  // 🔹 Timer controller
   late AnimationController _timerController;
   final Duration questionDuration = const Duration(seconds: 10);
 
-  // ✅ Sample Questions
+  late List<String> _shuffledOptions; // ✅ hold shuffled options for current question
+
   final List<Question> _allQuestions = [
     // 🔹 Guess the Phrase
     Question(
-      type: "phrase",
-      phrase: "Hello",
-      options: ["Kamusta", "Salamat", "Indi"],
-      correct: "Kamusta",
-    ),
+        type: "phrase",
+        phrase: "Good morning",
+        options: ["Maayong aga", "Maayong hapon", "Maayong gab-i"],
+        correct: "Maayong aga"),
     Question(
-      type: "phrase",
-      phrase: "Thank you",
-      options: ["Palihog", "Salamat", "Kamusta"],
-      correct: "Salamat",
-    ),
-
-    // 🔹 Picture Learning
+        type: "phrase",
+        phrase: "How are you?",
+        options: ["Kamusta ka?", "Salamat", "Palihog"],
+        correct: "Kamusta ka?"),
     Question(
-      type: "picture",
-      phrase: "DOG",
-      options: ["Ido", "Kuring", "Isda"],
-      correct: "Ido",
-      image: "assets/dog.png",
-    ),
+        type: "phrase",
+        phrase: "Thank you",
+        options: ["Salamat", "Indi", "Palihog"],
+        correct: "Salamat"),
     Question(
-      type: "picture",
-      phrase: "BIRD",
-      options: ["Langgam", "Isda", "Kuring"],
-      correct: "Langgam",
-      image: "assets/bird.png",
-    ),
+        type: "phrase",
+        phrase: "Please",
+        options: ["Palihog", "Salamat", "Kamusta"],
+        correct: "Palihog"),
+    Question(
+        type: "phrase",
+        phrase: "Sorry",
+        options: ["Pasensya", "Salamat", "Indi"],
+        correct: "Pasensya"),
+    Question(
+        type: "phrase",
+        phrase: "Yes",
+        options: ["Oo", "Indi", "Sigurado"],
+        correct: "Oo"),
+    Question(
+        type: "phrase",
+        phrase: "No",
+        options: ["Indi", "Oo", "Palihog"],
+        correct: "Indi"),
 
     // 🔹 Flashcards
     Question(
-      type: "flashcard",
-      phrase: "Water",
-      options: ["Tubig", "Pagkaon", "Hangin"],
-      correct: "Tubig",
-    ),
+        type: "flashcard",
+        phrase: "Water",
+        options: ["Tubig", "Hangin", "Pagkaon"],
+        correct: "Tubig"),
     Question(
-      type: "flashcard",
-      phrase: "Food",
-      options: ["Pagkaon", "Tubig", "Hangin"],
-      correct: "Pagkaon",
-    ),
+        type: "flashcard",
+        phrase: "Food",
+        options: ["Pagkaon", "Tubig", "Hangin"],
+        correct: "Pagkaon"),
+    Question(
+        type: "flashcard",
+        phrase: "Air",
+        options: ["Hangin", "Tubig", "Kalayo"],
+        correct: "Hangin"),
+    Question(
+        type: "flashcard",
+        phrase: "Fire",
+        options: ["Kalayo", "Tubig", "Hangin"],
+        correct: "Kalayo"),
+    Question(
+        type: "flashcard",
+        phrase: "House",
+        options: ["Balay", "Dalan", "Kalan"],
+        correct: "Balay"),
+    Question(
+        type: "flashcard",
+        phrase: "Road",
+        options: ["Dalan", "Balay", "Kalsada"],
+        correct: "Dalan"),
+    Question(
+        type: "flashcard",
+        phrase: "School",
+        options: ["Eskwelahan", "Balay", "Tindahan"],
+        correct: "Eskwelahan"),
+
+    // 🔹 Picture Learning
+    Question(
+        type: "picture",
+        phrase: "Dog",
+        options: ["Ido", "Kuring", "Isda"],
+        correct: "Ido",
+        image: "assets/dog.png"),
+    Question(
+        type: "picture",
+        phrase: "Cat",
+        options: ["Kuring", "Ido", "Isda"],
+        correct: "Kuring",
+        image: "assets/cat.png"),
+    Question(
+        type: "picture",
+        phrase: "Bird",
+        options: ["Pispis", "Isda", "Kuring"],
+        correct: "Pispis",
+        image: "assets/bird.png"),
+    Question(
+    type: "picture",
+    phrase: "Fish",
+    options: ["Isda", "Kuring", "Ido"],
+    correct: "Isda",
+    image: "assets/fish.png"),
+Question(
+    type: "picture",
+    phrase: "Apple",
+    options: ["Mansanas", "Saging", "Mangga"],
+    correct: "Mansanas",
+    image: "assets/apple.png"),
+Question(
+    type: "picture",
+    phrase: "Banana",
+    options: ["Saging", "Mansanas", "Mangga"],
+    correct: "Saging",
+    image: "assets/banana.png"),
+Question(
+    type: "picture",
+    phrase: "Mango",
+    options: ["Paho", "Saging", "Mansanas"],
+    correct: "Paho",
+    image: "assets/mango.png"),
+Question(
+    type: "picture",
+    phrase: "Car",
+    options: ["Salakyan", "Barko", "Bus"],
+    correct: "Salakyan",
+    image: "assets/car.png"),
+Question(
+    type: "picture",
+    phrase: "Boat",
+    options: ["Barko", "Sakyanan", "Bus"],
+    correct: "Barko",
+    image: "assets/boat.png"),
   ];
 
   @override
   void initState() {
     super.initState();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
 
     _timerController = AnimationController(
       vsync: this,
@@ -102,9 +189,8 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         if (status == AnimationStatus.completed && !_answered) {
           setState(() {
             _answered = true;
-            _selectedIndex = null; // no answer selected
+            _selectedIndex = null;
           });
-          // ⏳ wait 1 second, then go to next question
           Future.delayed(const Duration(seconds: 1), () {
             if (mounted) _nextQuestion();
           });
@@ -118,19 +204,16 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
     _startTimer();
   }
 
-  void _startTimer() {
-    _timerController.forward(from: 0);
-  }
+  void _startTimer() => _timerController.forward(from: 0);
 
   void _loadNewSet() {
-    setState(() {
-      _questions = List.from(_allQuestions)..shuffle();
-      _questions = _questions.take(10).toList();
-      _currentIndex = 0;
-      _score = 0;
-      _answered = false;
-      _selectedIndex = null;
-    });
+    _questions = List.from(_allQuestions)..shuffle();
+    _questions = _questions.take(10).toList();
+    _currentIndex = 0;
+    _score = 0;
+    _answered = false;
+    _selectedIndex = null;
+    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // ✅ first question
   }
 
   void _nextQuestion() {
@@ -139,73 +222,22 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         _currentIndex++;
         _selectedIndex = null;
         _answered = false;
+        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // ✅ shuffle new question options
       });
       _startTimer();
     } else {
-      _showQuizCompletedDialog();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              Qscore(score: _score, total: _questions.length),
+        ),
+      );
     }
-  }
-
-  void _showQuizCompletedDialog() {
-    _confettiController.play();
-
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, _, __) {
-        return GestureDetector(
-          onTap: () {
-            _confettiController.stop();
-            Navigator.of(context, rootNavigator: true)
-                .popUntil((route) => route.isFirst);
-          },
-          child: Material(
-            color: Colors.black54,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                ConfettiWidget(
-                  confettiController: _confettiController,
-                  blastDirectionality: BlastDirectionality.explosive,
-                  shouldLoop: false,
-                  colors: const [Color(0xFF2A7BE6), Colors.lightBlue, Colors.cyan],
-                  numberOfParticles: 30,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Your Score: $_score / ${_questions.length}',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2A7BE6),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return ScaleTransition(
-          scale: CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
-          child: child,
-        );
-      },
-    );
   }
 
   @override
   void dispose() {
-    _confettiController.dispose();
     _timerController.dispose();
     super.dispose();
   }
@@ -214,15 +246,35 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
+    // Determine card color and icon
+    Color cardColor;
+    IconData cardIcon;
+
+    switch (question.type) {
+      case "phrase":
+        cardColor = Colors.blue.shade50;
+        cardIcon = Icons.chat_bubble_outline;
+        break;
+      case "flashcard":
+        cardColor = Colors.orange.shade50;
+        cardIcon = Icons.menu_book_outlined;
+        break;
+      case "picture":
+        cardColor = Colors.purple.shade50;
+        cardIcon = Icons.image;
+        break;
+      default:
+        cardColor = Colors.grey.shade100;
+        cardIcon = Icons.help_outline;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Color(0xFF2A7BE6)),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           Padding(
@@ -236,163 +288,145 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
                 fontSize: 18,
               ),
             ),
-          )
+          ),
         ],
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 8),
-                Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 8),
+            const Text(
+              "Choose the correct answer within 10 seconds",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Kumbh',
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: Color(0xFF878282),
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            if (question.type == "picture" && question.image != null)
+              SizedBox(
+                width: 155,
+                height: 155,
+                child: Image.asset(question.image!, fit: BoxFit.contain),
+              ),
+
+            if (question.type != "picture" || question.image == null)
+              Column(
+                children: [
+                  Icon(
+                    cardIcon,
+                    size: 40,
+                    color: question.type == "phrase"
+                        ? Colors.blue
+                        : question.type == "flashcard"
+                            ? Colors.orange
+                            : Colors.purple,
+                  ),
+                  const SizedBox(height: 12),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        question.phrase,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Kumbh',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 22,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+            const SizedBox(height: 32),
+
+            // ✅ Options
+            ...List.generate(_shuffledOptions.length, (index) {
+              final option = _shuffledOptions[index];
+              Color borderColor = const Color(0xFF878282);
+              Color textColor = const Color(0xFF878282);
+
+              if (_answered) {
+                if (option == question.correct) {
+                  borderColor = Colors.green;
+                  textColor = Colors.green;
+                } else if (_selectedIndex == index) {
+                  borderColor = Colors.red;
+                  textColor = Colors.red;
+                }
+              }
+
+              return Container(
+                width: 258,
+                height: 46,
+                margin: const EdgeInsets.only(bottom: 12),
+                child: OutlinedButton(
+                  onPressed: _answered
+                      ? null
+                      : () {
+                          setState(() {
+                            _selectedIndex = index;
+                            _answered = true;
+                            if (option == question.correct) _score++;
+                            _timerController.stop();
+                          });
+                        },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: borderColor),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
                   child: Text(
-                    question.type == "phrase"
-                        ? "Choose the correct answer within 10 seconds"
-                        : question.type == "picture"
-                            ? "Choose the correct answer within 10 seconds"
-                            : "Choose the correct answer within 10 seconds",
-                    style: const TextStyle(
+                    option,
+                    style: TextStyle(
+                      color: textColor,
                       fontFamily: 'Kumbh',
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
-                      color: Color(0xFF878282),
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
+              );
+            }),
 
-                // 🔹 Picture Learning UI
-                if (question.type == "picture")
-                  Column(
-                    children: [
-                      if (question.image != null)
-                        SizedBox(
-                          width: 155,
-                          height: 155,
-                          child: Image.asset(question.image!, fit: BoxFit.contain),
-                        ),
-                      const SizedBox(height: 16),
-                      Text(
-                        question.phrase,
-                        style: const TextStyle(
-                          fontFamily: 'Kumbh',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Color(0xFF878282),
-                        ),
-                      ),
-                    ],
-                  )
-                else
-                  // 🔹 Guess & Flashcards UI
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 155,
-                        height: 188,
-                        child: Image.asset('assets/boy.png', fit: BoxFit.contain),
-                      ),
-                      const SizedBox(width: 16),
-                      Container(
-                        width: 153,
-                        height: 115,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFF878282)),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          question.phrase,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Kumbh',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: Color(0xFF878282),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 32),
-
-                // 🔹 Answer Options
-                ...List.generate(question.options.length, (index) {
-                  final option = question.options[index];
-                  Color borderColor = const Color(0xFF878282);
-                  Color textColor = const Color(0xFF878282);
-
-                  if (_answered) {
-                    if (option == question.correct) {
-                      borderColor = Colors.green;
-                      textColor = Colors.green;
-                    } else if (_selectedIndex == index) {
-                      borderColor = Colors.red;
-                      textColor = Colors.red;
-                    }
-                  }
-
-                  return Container(
-                    width: 258,
-                    height: 46,
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: OutlinedButton(
-                      onPressed: _answered
-                          ? null
-                          : () {
-                              setState(() {
-                                _selectedIndex = index;
-                                _answered = true;
-                                if (option == question.correct) _score++;
-                                _timerController.stop();
-                              });
-                            },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: borderColor),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text(
-                        option,
-                        style: TextStyle(
-                          color: textColor,
-                          fontFamily: 'Kumbh',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-
-                const SizedBox(height: 20),
-
-                // 🔹 Blue Timer Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: LinearProgressIndicator(
-                    value: _timerController.value,
-                    minHeight: 6,
-                    backgroundColor: Colors.grey.shade300,
-                    valueColor:
-                        const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
-                  ),
-                ),
-              ],
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: LinearProgressIndicator(
+                value: _timerController.value,
+                minHeight: 6,
+                backgroundColor: Colors.grey.shade300,
+                valueColor:
+                    const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
+              ),
             ),
-          ),
 
-          // 🔹 Continue Button
-          Positioned(
-            left: 66,
-            bottom: 40,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width - 132,
+            const SizedBox(height: 40),
+            SizedBox(
+              width: double.infinity,
               height: 50,
               child: ElevatedButton(
                 onPressed: _answered ? _nextQuestion : null,
@@ -412,8 +446,8 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

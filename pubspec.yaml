@@ -41,6 +41,8 @@ flutter:
   assets:
 
     - assets/Starting.png
+    - assets/trust.png
+    - assets/Ass.png
     - assets/cloud_top.png
     - assets/cloud_bottom.png
     - assets/KumbhSans-VariableFont_YOPQwght.ttf
@@ -64,12 +66,16 @@ flutter:
     - assets/emergency.png
     - assets/polite.png
     - assets/techno.png
+    - assets/respect.png
     - assets/weather.png
     - assets/feeling.png
     - assets/fav.png
+    - assets/charity.png
     - assets/boy.png
     - assets/correct.mp3
+    - assets/unity.png
     - assets/confetti.mp3
+    - assets/discipline.png
     - assets/easy.png
     - assets/intermediate.png
     - assets/hard.png
@@ -91,6 +97,7 @@ flutter:
     - assets/dog.png
     - assets/cat.png
     - assets/house.png
+    - assets/patience.png
     - assets/car.png
     - assets/book.png
     - assets/phone.png
@@ -107,6 +114,7 @@ flutter:
     - assets/university.png
     - assets/government.png
     - assets/thunder.png
+    - assets/humility.png
     - assets/grass.png
     - assets/leaf.png
     - assets/bridge.png
@@ -176,6 +184,150 @@ flutter:
     - assets/owl.png
     - assets/dictionary.json
     - assets/owl_fly.riv
+    - assets/fire.png
+    - assets/water-drop.png
+    - assets/candle.png
+    - assets/mirror.png
+    - assets/road.png
+    - assets/rainbow.png
+    - assets/earth.png
+    - assets/sky.png
+    - assets/beach.png
+    - assets/stone.png
+    - assets/smoke.png
+    - assets/rope.png
+    - assets/basket.png
+    - assets/hammer.png
+    - assets/fan2.png
+    - assets/milk.png
+    - assets/shirt.png
+    - assets/freedom.png
+    - assets/truth.png
+    - assets/courage.png
+    - assets/justice.png
+    - assets/hope.png
+    - assets/faith.png
+    - assets/destiny.png
+    - assets/sacrifice.png
+    - assets/forgiveness.png
+    - assets/silence.png
+    - assets/fear.png
+    - assets/anger.png
+    - assets/gratitude.png
+    - assets/promise.png
+    - assets/chair.png
+    - assets/table.png
+    - assets/watch.png
+    - assets/bag.png
+    - assets/pen.png
+    - assets/paper.png
+    - assets/water.png
+    - assets/juice.png
+    - assets/coffee.png
+    - assets/banana.png
+    - assets/mango.png
+    - assets/grape.png
+    - assets/apple.png
+    - assets/school.png
+    - assets/church.png
+    - assets/run.png
+    - assets/sleep.png
+    - assets/walk.png
+    - assets/eat.png
+    - assets/drink.png
+    - assets/swim.png
+    - assets/read.png
+    - assets/dance.png
+    - assets/write.png
+    - assets/draw.png
+    - assets/sing.png
+    - assets/paint.png
+    - assets/talk.png
+    - assets/jump.png
+    - assets/sit.png
+    - assets/stand.png
+    - assets/no.png
+    - assets/go.png
+    - assets/stop.png
+    - assets/yes.png
+    - assets/maybe.png
+    - assets/breathe.png
+    - assets/grow.png
+    - assets/brush.png
+    - assets/bathe.png
+    - assets/washface.png
+    - assets/rice.png
+    - assets/bread.png
+    - assets/fork.png
+    - assets/plate.png
+    - assets/spoon.png
+    - assets/glass.png
+    - assets/knife.png
+    - assets/calendar.png
+    - assets/eraser.png
+    - assets/notebook.png
+    - assets/soda.png
+    - assets/pray.png
+    - assets/pencil.png
+    - assets/cup.png
+    - assets/teacher.png
+    - assets/doctor.png
+    - assets/carpenter.png
+    - assets/nurse.png
+    - assets/police.png
+    - assets/soldier.png
+    - assets/fireman.png
+    - assets/fisherman.png
+    - assets/driver.png
+    - assets/cook.png
+    - assets/tailor.png
+    - assets/painter.png
+    - assets/reader.png
+    - assets/writer.png
+    - assets/singer.png
+    - assets/dancer.png
+    - assets/actor.png
+    - assets/gardener.png
+    - assets/butcher.png
+    - assets/barber.png
+    - assets/vendor.png
+    - assets/cleaner.png
+    - assets/loader.png
+    - assets/deliverer.png
+    - assets/washer.png
+    - assets/bather.png
+    - assets/housepainter.png
+    - assets/resident.png
+    - assets/traveler.png
+    - assets/visitor.png
+    - assets/students.png
+    - assets/elephant.png
+    - assets/goat.png
+    - assets/cow.png
+    - assets/duck.png
+    - assets/tomato.png
+    - assets/pineapple.png
+    - assets/helicopter.png
+    - assets/tiger.png
+    - assets/monkey.png
+    - assets/crocodile.png
+    - assets/snake.png
+    - assets/papaya.png
+    - assets/coconut.png
+    - assets/motorbike.png
+    - assets/tricycle.png
+
+
+
+
+
+
+
+
+
+  
+
+
     
 
 flutter_launcher_icons:
