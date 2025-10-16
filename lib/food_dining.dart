@@ -107,7 +107,7 @@ class _FoodDiningPageState extends State<FoodDiningPage> {
         });
       }
     } catch (e) {
-      // rollback UI
+      
       setState(() {
         if (isFavorite) {
           favorites.add(phrase);
@@ -133,7 +133,7 @@ class _FoodDiningPageState extends State<FoodDiningPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // ✅ Returns to previous screen (e.g., homepage)
+            Navigator.pop(context); 
           },
         ),
       ),

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'escore.dart'; // ✅ Redirects to EscorePage instead of ScorePage
+import 'escore.dart'; 
 
 class FlashNavMedium extends StatefulWidget {
   const FlashNavMedium({Key? key}) : super(key: key);
@@ -242,7 +242,7 @@ class _FlashMediumState extends State<FlashNavMedium> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => EscorePage( // ✅ Changed to EscorePage
+                builder: (_) => EscorePage( 
                   score: _score,
                   total: flashCards.length,
                 ),

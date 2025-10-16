@@ -51,9 +51,9 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
   alignment: Alignment.center,
   children: [
 
-    // Confetti slightly higher while still centered
+    
     Transform.translate(
-      offset: const Offset(0, -50), // negative y moves it up
+      offset: const Offset(0, -50), 
       child: ConfettiWidget(
         confettiController: _confettiController,
         blastDirectionality: BlastDirectionality.explosive,
@@ -63,7 +63,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
       ),
     ),
 
-    // Owl and score content
+    
     Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,

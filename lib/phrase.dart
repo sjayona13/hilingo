@@ -4,7 +4,7 @@ class Phrase {
 
   Phrase({required this.english, required this.hiligaynon});
 
-  // Used to check if it's already in favorites
+  
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

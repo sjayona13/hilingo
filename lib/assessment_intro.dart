@@ -64,7 +64,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Title
+                    
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
@@ -90,7 +90,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
                     ),
                     const SizedBox(height: 20),
 
-                    // Instructions panel
+                    
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
                     ),
                     const SizedBox(height: 16),
 
-                    // Checkbox
+                    
                     Row(
                       children: [
                         Checkbox(
@@ -140,7 +140,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
                     ),
                     const SizedBox(height: 16),
 
-                    // Start button
+                    
                     ElevatedButton(
                       onPressed: _acknowledged
                           ? () {
@@ -207,7 +207,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
       ),
       body: Stack(
         children: [
-          // Animated gradient background
+          
           AnimatedBuilder(
             animation: _bgAnimation,
             builder: (context, child) {
@@ -231,7 +231,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
               );
             },
           ),
-          // Arcane-style particles
+          
           Positioned(
             top: 80,
             left: 20,
@@ -256,7 +256,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
             child: Icon(Icons.star,
                 size: 25, color: Colors.grey.shade400.withOpacity(0.15)),
           ),
-          // Main content
+          
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -267,7 +267,7 @@ class _AssessmentIntroState extends State<AssessmentIntro>
                     'assets/Ass.png',
                     width: 160,
                     height: 160,
-                    color: Colors.lightBlueAccent, // Arcane glow
+                    color: Colors.lightBlueAccent,  
                   ),
                   const SizedBox(height: 20),
                   const Text(

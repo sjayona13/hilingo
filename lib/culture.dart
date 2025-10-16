@@ -11,7 +11,7 @@ class CulturePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back arrow
+              
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
@@ -22,7 +22,7 @@ class CulturePage extends StatelessWidget {
                 ),
               ),
 
-              // Title
+              
               const Padding(
                 padding: EdgeInsets.only(bottom: 20),
                 child: Text(
@@ -37,7 +37,7 @@ class CulturePage extends StatelessWidget {
                 ),
               ),
 
-              // Outlined square box
+              
               Center(
                 child: Container(
                   width: 328,
@@ -88,7 +88,7 @@ class CulturePage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Section 1
+              
               sectionWithImage(
                 title: 'A Glimpse of Iloilo’s Historical Soul',
                 image: 'assets/cpic.png',
@@ -96,7 +96,7 @@ class CulturePage extends StatelessWidget {
                     'Walking through the streets of Jaro, Molo, or downtown Iloilo, you’ll see Spanish colonial houses and old churches that have stood the test of time. The Molo Church, famously known as the “feminist church” for its all-female saint statues, and the Jaro Cathedral, where the miraculous image of Our Lady of the Candles resides, are just some cultural gems that speak of Iloilo’s strong Catholic faith.',
               ),
 
-              // Section 2
+              
               sectionWithImage(
                 title: 'Festivals That Bring People Together',
                 image: 'assets/cpic2.png',
@@ -104,7 +104,7 @@ class CulturePage extends StatelessWidget {
                     'The Dinagyang Festival is Iloilo’s most iconic celebration. Held every January, it honors the Santo Niño and showcases Ati-Atihan-inspired dances in elaborate costumes, drumbeats, and joyful street parades. It’s more than a show — it’s a symbol of devotion, unity, and Ilonggo creativity.',
               ),
 
-              // Section 3
+              
               sectionWithImage(
                 title: 'The Art of Hablon and Local Craftsmanship',
                 image: 'assets/cpic3.png',
@@ -112,7 +112,7 @@ class CulturePage extends StatelessWidget {
                     'In places like Miag-ao and Oton, traditional weaving continues to thrive. Hablon, a handwoven fabric made from natural fibers, is more than cloth — it represents the patience and pride of local weavers. Today, it’s being reintroduced in modern fashion, keeping Iloilo’s textile legacy alive.',
               ),
 
-              // Section 4
+              
               sectionWithImage(
                 title: 'The Language of Sweetness',
                 image: 'assets/cpic4.png',
@@ -120,7 +120,7 @@ class CulturePage extends StatelessWidget {
                     'Hiligaynon, the local language, is often described as malambing (gentle or sweet-sounding). Conversations in Iloilo are respectful, warm, and polite — a reflection of the Ilonggo character. Whether you\'re a stranger or family, you\'re always welcomed with a smile and treated with kindness.',
               ),
 
-              // Section 5 (No image)
+              
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
@@ -155,7 +155,7 @@ class CulturePage extends StatelessWidget {
     );
   }
 
-  // Custom widget builder for reusable layout with image
+  
   Widget sectionWithImage({
     required String title,
     required String image,

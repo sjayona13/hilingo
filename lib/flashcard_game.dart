@@ -178,7 +178,7 @@ class _FlashcardGameState extends State<FlashcardGame> {
             ),
             const SizedBox(height: 40),
             
-            // Flashcard
+            
             Container(
               width: double.infinity,
               height: 200,
@@ -233,7 +233,7 @@ class _FlashcardGameState extends State<FlashcardGame> {
             
             const SizedBox(height: 40),
             
-            // Answer options in 2x2 grid
+            
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -284,7 +284,7 @@ class _FlashcardGameState extends State<FlashcardGame> {
             
             const SizedBox(height: 20),
             
-            // Feedback text
+            
             if (_answered)
               Text(
                 _isCorrect ? 'Correct!' : 'Try again',
@@ -297,7 +297,7 @@ class _FlashcardGameState extends State<FlashcardGame> {
             
             const SizedBox(height: 20),
             
-            // Continue button
+            
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -326,7 +326,7 @@ class _FlashcardGameState extends State<FlashcardGame> {
   }
 
   Widget _buildFlashcardImage(String word) {
-    // Placeholder images - you can replace with actual asset paths
+    
     switch (word.toLowerCase()) {
       case 'sun':
         return Container(

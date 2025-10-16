@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'qscore.dart'; // Import the score page
+import 'qscore.dart'; 
 
 class Qhard extends StatefulWidget {
   const Qhard({Key? key}) : super(key: key);
@@ -9,9 +9,9 @@ class Qhard extends StatefulWidget {
   _QhardState createState() => _QhardState();
 }
 
-// ✅ Question model
+
 class Question {
-  final String type; // "phrase", "picture", "flashcard"
+  final String type; 
   final String phrase;
   final List<String> options;
   final String correct;
@@ -25,7 +25,7 @@ class Question {
     this.image,
   });
 
-  // Shuffle options
+  
   List<String> shuffledOptions() {
     List<String> shuffled = List.from(options);
     shuffled.shuffle(Random());
@@ -40,12 +40,12 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
   int _score = 0;
 
   late List<Question> _questions;
-  late List<String> _shuffledOptions; // ✅ hold shuffled options for current question
+  late List<String> _shuffledOptions; 
   late AnimationController _timerController;
   final Duration questionDuration = const Duration(seconds: 10);
 
   final List<Question> allQuestions = [
-    // 🔹 Guess the Phrase (Hard)
+    
     Question(
       type: "phrase",
       phrase: "I’m looking for the restroom",
@@ -107,7 +107,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
       correct: "Kapoy na ako",
     ),
 
-    // 🔹 Flashcards (Hard)
+    
     Question(
       type: "flashcard",
       phrase: "Mountain",
@@ -157,7 +157,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
       correct: "Bintana",
     ),
 
-    // 🔹 Picture Learning (Hard)
+    
     Question(
       type: "picture",
       phrase: "Monkey",
@@ -259,7 +259,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
     _score = 0;
     _answered = false;
     _selectedIndex = null;
-    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // shuffle first question
+    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
   }
 
   void _nextQuestion() {
@@ -268,7 +268,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
         _currentIndex++;
         _selectedIndex = null;
         _answered = false;
-        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // shuffle new question
+        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
       });
       _startTimer();
     } else {
@@ -292,7 +292,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-    // Determine card color and icon
+   
     Color cardColor;
     IconData cardIcon;
 

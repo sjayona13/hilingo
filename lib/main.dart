@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
     _logoScaleAnimation =
         CurvedAnimation(parent: _logoController, curve: Curves.easeOutBack);
 
-    // 🦉 Show owl for 8 seconds, then show logo for 3 seconds
+    
     Future.delayed(const Duration(seconds: 4), () {
       setState(() => showLogo = true);
       _logoController.forward();
@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
         print(" - ${a.name}");
       }
 
-      // ✅ Replace 'Timeline 1' if your animation name is different
+      
       artboard.addController(rive.SimpleAnimation('Timeline 1', autoplay: true));
 
       setState(() => _riveArtboard = artboard);
@@ -107,11 +107,11 @@ class _SplashScreenState extends State<SplashScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 🦉 Owl animation section
+          
           if (_riveArtboard != null && !showLogo)
             Center(
               child: SizedBox(
-                width: 400, // bigger owl size
+                width: 400, 
                 height: 400,
                 child: rive.Rive(artboard: _riveArtboard!),
               ),
@@ -124,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
 
-          // 🕊️ Hilingo logo + text section
+          
           if (showLogo)
   Center(
     child: Column(
@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen>
             height: 150,
           ),
         ),
-        const SizedBox(height: 0), // 👈 closer spacing between logo & text
+        const SizedBox(height: 0), 
         const Text(
           'Speak. Understand. Connect.',
           textAlign: TextAlign.center,
@@ -147,7 +147,7 @@ class _SplashScreenState extends State<SplashScreen>
             fontWeight: FontWeight.w500,
             color: Color.fromARGB(221, 63, 62, 62),
             letterSpacing: 0.3,
-            height: 0.1, // tighter line height
+            height: 0.1, 
           ),
         ),
       ],

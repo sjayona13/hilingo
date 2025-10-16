@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart'; // Make sure this file exists
+import 'homepage.dart'; 
 
 class StartingScreen extends StatefulWidget {
   const StartingScreen({super.key});
@@ -13,7 +13,7 @@ class _StartingScreenState extends State<StartingScreen>
   late AnimationController _textController;
   late Animation<Offset> _slide;
   late Animation<double> _fade;
-  bool _isPressed = false; // Track button press state
+  bool _isPressed = false; 
 
   @override
   void initState() {
@@ -52,12 +52,12 @@ class _StartingScreenState extends State<StartingScreen>
   Future<void> _onStartPressed() async {
     setState(() => _isPressed = true);
 
-    // Wait for the button to "press down"
+    
     await Future.delayed(const Duration(milliseconds: 120));
 
     setState(() => _isPressed = false);
 
-    // Wait for it to return to normal, then navigate
+    
     await Future.delayed(const Duration(milliseconds: 100));
 
     Navigator.pushReplacement(
@@ -77,7 +77,7 @@ class _StartingScreenState extends State<StartingScreen>
           height: screenHeight + 100,
           child: Stack(
             children: [
-              // Top cloud
+              
               Positioned(
                 left: 75,
                 top: -66,
@@ -89,7 +89,7 @@ class _StartingScreenState extends State<StartingScreen>
                 ),
               ),
 
-              // Bottom cloud
+              
               Positioned(
                 left: -130,
                 top: 475,
@@ -101,7 +101,7 @@ class _StartingScreenState extends State<StartingScreen>
                 ),
               ),
 
-              // Text
+              
               Positioned(
                 left: 36,
                 top: 420,
@@ -137,12 +137,12 @@ class _StartingScreenState extends State<StartingScreen>
                 ),
               ),
 
-              // Start Learning Button
+              
               Positioned(
                 left: 80,
                 top: 693,
                 child: AnimatedScale(
-                  scale: _isPressed ? 0.93 : 1.0, // Press effect
+                  scale: _isPressed ? 0.93 : 1.0, 
                   duration: const Duration(milliseconds: 100),
                   curve: Curves.easeInOut,
                   child: SizedBox(

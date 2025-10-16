@@ -31,13 +31,13 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
   double xpToNextLevel = 100.0;
   double animatedXp = 0.0;
 
-  // Gradient
+ 
   late AnimationController _gradientController;
   late Animation<Color?> _color1;
   late Animation<Color?> _color2;
   late Animation<Color?> _color3;
 
-  // XP Bar pulse
+  
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -113,7 +113,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
     await prefs.setDouble('xp', xp);
     await prefs.setDouble('xpToNextLevel', xpToNextLevel);
 
-    // Smooth XP animation
+    
     double start = animatedXp;
     double end = xp;
     int steps = 20;
@@ -181,7 +181,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 20),
 
-                    // Overall Score
+                    
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(24),
@@ -232,7 +232,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 30),
 
-                    // Level Progress Section
+                    
                     Row(
                       children: [
                         const Expanded(
@@ -262,7 +262,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 10),
 
-                    // XP Bar with Owl
+                    
                     Stack(
                       alignment: Alignment.centerLeft,
                       children: [
@@ -306,7 +306,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 30),
 
-                    // Performance by Level
+                    
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -329,7 +329,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 20),
 
-                    // Congratulations Section
+                    
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
@@ -369,7 +369,7 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     ),
                     const Spacer(),
 
-                    // Back to Home button
+                    
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(

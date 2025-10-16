@@ -11,7 +11,7 @@ class FoodCuisinesPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back arrow
+              
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
@@ -22,7 +22,7 @@ class FoodCuisinesPage extends StatelessWidget {
                 ),
               ),
 
-              // Title
+              
               const Padding(
                 padding: EdgeInsets.only(bottom: 20),
                 child: Text(
@@ -37,7 +37,7 @@ class FoodCuisinesPage extends StatelessWidget {
                 ),
               ),
 
-              // Outlined square box
+              
               Center(
                 child: Container(
                   width: 328,
@@ -88,7 +88,7 @@ class FoodCuisinesPage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Section 1
+              
               sectionWithImage(
                 title: 'La Paz Batchoy',
                 image: 'assets/batchoy.png',
@@ -96,7 +96,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'This iconic noodle soup is a must-try. Originating from the La Paz district, batchoy is made with egg noodles, pork organs, crushed chicharon (pork cracklings), garlic, and a flavorful broth.\n\nWhere to try: Netong’s, Deco’s, Ted’s La Paz Batchoy\nFun Fact: It’s best eaten fresh, with puto or pan de sal on the side!',
               ),
 
-              // Section 2
+              
               sectionWithImage(
                 title: 'Pancit Molo',
                 image: 'assets/pancitM.png',
@@ -104,7 +104,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'A local version of dumpling soup, Pancit Molo features wonton wrappers filled with ground meat, swimming in a garlicky chicken broth. It’s originally from Molo district and is perfect for rainy days or light comfort meals.\n\nWhere to try: Molo Mansion Café, local carinderias\nBest served hot with fried garlic on top',
               ),
 
-              // Section 3
+              
               sectionWithImage(
                 title: 'KBL (Kadyos, Baboy, Langka)',
                 image: 'assets/kbl.png',
@@ -112,7 +112,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'A traditional Ilonggo stew made from pork (baboy), jackfruit (langka), and pigeon peas (kadyos). The secret? The souring agent called batuan, which gives it a distinct Ilonggo taste.\n\nWhere to try: Tatoy’s, Breakthrough, or home-cooked meals\nFlavor: Sour-savory, rich and earthy',
               ),
 
-              // Section 4
+              
               sectionWithImage(
                 title: 'Fresh Seafood',
                 image: 'assets/seafood.png',
@@ -120,7 +120,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'With Iloilo’s proximity to the sea, expect an abundance of fresh seafood — grilled scallops, oysters, shrimps, blue crabs, and bangus (milkfish). Whether baked, grilled, or in soup, it’s always a feast!\n\nWhere to try: Breakthrough, Allan’s Talabahan\nTry this: Buttered scallops and talaba (oysters)',
               ),
 
-              // Section 5
+              
               sectionWithImage(
                 title: 'Ilonggo Street Food',
                 image: 'assets/streetF.png',
@@ -128,7 +128,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'Don’t miss the tasty treats from the sidewalks — balut (duck egg), isaw (intestines), kwek-kwek (quail eggs), and the local favorite binatog (boiled corn with coconut and sugar).\n\nWhere to try: Iloilo Night Market, JM Basa Street, Plazas\nBest enjoyed at night with friends',
               ),
 
-              // Section 6
+              
               sectionWithImage(
                 title: 'Desserts and Delicacies',
                 image: 'assets/biscuit.png',
@@ -136,7 +136,7 @@ class FoodCuisinesPage extends StatelessWidget {
                     'Satisfy your sweet tooth with Baye-Baye (ground rice & coconut), Biscocho (buttered toast with sugar), Pinasugbo (caramelized banana chips), and Butterscotch — a signature pasalubong treat!\n\nWhere to buy: Biscocho Haus, Panaderia de Molo, JD’s\nGreat for pasalubong!',
               ),
 
-              // Section 7
+              
               sectionWithImage(
                 title: 'Native Drinks',
                 image: 'assets/bokujuice.png',
@@ -151,7 +151,7 @@ class FoodCuisinesPage extends StatelessWidget {
     );
   }
 
-  // Custom widget builder for reusable layout with image
+  
   Widget sectionWithImage({
     required String title,
     required String image,

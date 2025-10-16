@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'qscore.dart'; // Import the score page
+import 'qscore.dart'; 
 
 class Qintermediate extends StatefulWidget {
   const Qintermediate({Key? key}) : super(key: key);
@@ -8,9 +8,9 @@ class Qintermediate extends StatefulWidget {
   _QintermediateState createState() => _QintermediateState();
 }
 
-// ✅ Question model
+
 class Question {
-  final String type; // "phrase", "picture", "flashcard"
+  final String type; 
   final String phrase;
   final List<String> options;
   final String correct;
@@ -44,7 +44,7 @@ class _QintermediateState extends State<Qintermediate>
   final Duration questionDuration = const Duration(seconds: 10);
 
   final List<Question> allQuestions = [
-    // 🔹 Guess the Phrase
+    
   Question(
     type: "phrase",
     phrase: "Could you repeat that, please?",
@@ -106,7 +106,7 @@ class _QintermediateState extends State<Qintermediate>
     correct: "Pwede mo isulat?",
   ),
 
-  // 🔹 Flashcards (harder vocabulary)
+  
   Question(
     type: "flashcard",
     phrase: "Window",
@@ -162,7 +162,7 @@ class _QintermediateState extends State<Qintermediate>
     correct: "Tasa",
   ),
 
-  // 🔹 Picture Learning (harder / less common)
+  
   Question(
     type: "picture",
     phrase: "Elephant",
@@ -290,7 +290,7 @@ class _QintermediateState extends State<Qintermediate>
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-    // Determine card color and icon
+    
     Color cardColor;
     IconData cardIcon;
 
@@ -407,7 +407,7 @@ class _QintermediateState extends State<Qintermediate>
 
             const SizedBox(height: 32),
 
-            // ✅ Options
+            
             ...List.generate(_shuffledOptions.length, (index) {
               final option = _shuffledOptions[index];
               Color borderColor = const Color(0xFF878282);

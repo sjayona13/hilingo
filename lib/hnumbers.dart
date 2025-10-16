@@ -185,7 +185,7 @@ class _QuizPageState extends State<Hnumbers> {
         leading: IconButton(
   icon: const Icon(Icons.arrow_back, color: Colors.black),
   onPressed: () {
-    Navigator.pop(context);  // Go back to Quizzes page (do not replace)
+    Navigator.pop(context);  
   },
 ),
 

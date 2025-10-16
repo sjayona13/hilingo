@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'flashnaveasy.dart';
 import 'flashnavmedium.dart';
 import 'flashnavhard.dart';
-import 'homepage.dart'; // ⬅️ Import where HilingoApp() is defined
+import 'homepage.dart'; 
 
 class FlashcardsPages extends StatelessWidget {
   const FlashcardsPages({super.key});
@@ -32,7 +32,7 @@ class FlashcardsPages extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // ⬅️ Go back directly to HilingoApp()
+            
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (_) => const HilingoApp()),

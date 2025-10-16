@@ -32,7 +32,7 @@ class HistoryPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Back Arrow
+              
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
@@ -43,7 +43,7 @@ class HistoryPage extends StatelessWidget {
                 ),
               ),
 
-              // Title
+              
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(bottom: 10),
@@ -59,7 +59,7 @@ class HistoryPage extends StatelessWidget {
                 ),
               ),
 
-              // Image Slider
+              
               SizedBox(
                 height: 230,
                 child: ListView(
@@ -87,7 +87,7 @@ class HistoryPage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Etymology Box
+              
               Center(
                 child: Container(
                   width: 328,
@@ -137,7 +137,7 @@ class HistoryPage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // History Texts
+              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(

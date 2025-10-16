@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'qeasy.dart';     // ✅ Easy
-import 'qintermediate.dart';  // ✅ Intermediate
-import 'qhard.dart';    // ✅ Hard
+import 'qeasy.dart';     
+import 'qintermediate.dart';  
+import 'qhard.dart';    
 import 'assessment_intro.dart';
-import 'homepage.dart'; // ✅ Import your homepage (HilingoApp)
+import 'homepage.dart'; 
 
 class Quizzess extends StatelessWidget {
   const Quizzess({super.key});
@@ -33,7 +33,7 @@ class Quizzess extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            // ✅ Always go back to Homepage
+            
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const HilingoApp()),
@@ -58,25 +58,25 @@ class Quizzess extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 if (index == 0) {
-                  // ✅ Easy → Qeasy.dart
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qeasy()),
                   );
                 } else if (index == 1) {
-                  // ✅ Intermediate → Qintermediate.dart
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qintermediate()),
                   );
                 } else if (index == 2) {
-                  // ✅ Hard → Qhard.dart
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const Qhard()),
                   );
                 } else if (index == 3) {
-                  // ✅ Assessment → AssessmentIntro
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(

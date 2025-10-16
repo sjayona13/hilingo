@@ -58,7 +58,7 @@ Future<void> toggleFavorite(Phrase phrase) async {
   final isAlreadyFavorite = favorites.any((p) =>
       p.english == phrase.english && p.hiligaynon == phrase.hiligaynon);
 
-  // Optimistic UI update
+  
   setState(() {
     if (isAlreadyFavorite) {
       favorites.removeWhere((p) =>
@@ -87,7 +87,7 @@ Future<void> toggleFavorite(Phrase phrase) async {
       });
     }
   } catch (e) {
-    // Optional rollback if Firebase fails
+    
     setState(() {
       if (isAlreadyFavorite) {
         favorites.add(phrase);
@@ -115,7 +115,7 @@ Future<void> toggleFavorite(Phrase phrase) async {
   leading: IconButton(
     icon: const Icon(Icons.arrow_back),
     onPressed: () {
-      Navigator.pop(context); // This sends user back to homepage.dart
+      Navigator.pop(context); 
     },
   ),
 ),

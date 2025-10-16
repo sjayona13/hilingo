@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter_application_1/escore.dart'; // ✅ Change this to escore.dart
+import 'package:flutter_application_1/escore.dart'; 
 
 class FlashNavHard extends StatefulWidget {
   const FlashNavHard({Key? key}) : super(key: key);
@@ -176,7 +176,7 @@ class _FlashHardState extends State<FlashNavHard> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => EscorePage( // ✅ Use EScorePage instead of ScorePage
+                builder: (_) => EscorePage( 
                   score: _score,
                   total: flashCards.length,
                 ),

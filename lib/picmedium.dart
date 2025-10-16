@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'pscore.dart'; // ⬅️ Use your PscorePage here
+import 'pscore.dart'; 
 
 class PicMedium extends StatefulWidget {
   const PicMedium({Key? key}) : super(key: key);
@@ -361,7 +361,7 @@ final List<PicQuestion> mediumPicQuestions = [
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => PscorePage( // ✅ updated destination
+                builder: (_) => PscorePage( 
                   score: _score,
                   total: questions.length,
                 ),

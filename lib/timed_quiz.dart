@@ -82,12 +82,12 @@ class _TimedQuizPageState extends State<TimedQuizPage>
   QuizCard(
       image: 'assets/fish.png',
       english: 'Fish',
-      options: [ 'Manok', 'Iro', 'Ipis','Isda'],
+      options: [ 'Manok', 'Ido', 'Ipis','Isda'],
       correct: 'Isda'),
   QuizCard(
       image: 'assets/bird.png',
       english: 'Bird',
-      options: ['Pispis', 'Isda', 'Iro', 'Kanding'],
+      options: ['Pispis', 'Isda', 'Ido', 'Kanding'],
       correct: 'Pispis'),
   QuizCard(
       image: 'assets/dog.png',
@@ -236,8 +236,8 @@ QuizCard(
     correct: 'Papel'),
 QuizCard(
     image: 'assets/cup.png',
-    english: 'Cup',
-    options: ['Basó', 'Tinidor', 'Tasa', 'Pinggan'],
+    english: 'Mug',
+    options: ['Baso', 'Tinidor', 'Tasa', 'Pinggan'],
     correct: 'Tasa'),
 QuizCard(
     image: 'assets/fork.png',
@@ -247,7 +247,7 @@ QuizCard(
 QuizCard(
     image: 'assets/spoon.png',
     english: 'Spoon',
-    options: ['Basó', 'Tinidor', 'Kutsara', 'Tasa'],
+    options: ['Baso', 'Tinidor', 'Kutsara', 'Tasa'],
     correct: 'Kutsara'),
   ];
 
@@ -410,9 +410,9 @@ QuizCard(
       correct: 'Husto'),
   QuizCard(
       image: 'assets/truth.png',
-      english: 'Honesty',
+      english: 'Truth',
       options: [ 'Kabuhi', 'Pagtuo','Pagkamatuod', 'Paglaum'],
-      correct: 'Pagkamatuod'),
+      correct: 'Pahkamatuod'),
   QuizCard(
     image: 'assets/courage.png',
     english: 'Courage',
@@ -428,6 +428,41 @@ QuizCard(
     english: 'Truth',
     options: ['Kamatuoran', 'Kabutigan', 'Kasadya', 'Kasubo'],
     correct: 'Kamatuoran'),
+QuizCard(
+      image: 'assets/happiness.png',
+      english: 'Happiness',
+      options: [ 'Kasubo', 'Kasakit', 'Kalipay','Kaguol'],
+      correct: 'Kalipay'),
+  QuizCard(
+      image: 'assets/sad.png',
+      english: 'Sadness',
+      options: [ 'Kalipay','Kasubo', 'Kasadyahan', 'Paghidait'],
+      correct: 'Kasubo'),
+  QuizCard(
+      image: 'assets/angry.png',
+      english: 'Anger',
+      options: ['Kasingkasing', 'Kaugot', 'Kabug-at', 'Kahadlok'],
+      correct: 'Kaugot'),
+  QuizCard(
+      image: 'assets/fear.png',
+      english: 'Fear',
+      options: ['Pagtuo', 'Paglaum','Kahadlok',  'Kahupong'],
+      correct: 'Kahadlok'),
+  QuizCard(
+      image: 'assets/life.png',
+      english: 'Life',
+      options: ['Kamatayon', 'Kalibutan', 'Pagtuo','Kabuhi'],
+      correct: 'Kabuhi'),
+  QuizCard(
+      image: 'assets/death.png',
+      english: 'Death',
+      options: ['Kamatayon', 'Paglaum', 'Kabuhi', 'Paghidait'],
+      correct: 'Kamatayon'),
+      QuizCard(
+      image: 'assets/lies.png',
+      english: 'Lie',
+      options: ['Kamatuoran','Kabutigan', 'Paglaum', 'Katingalahan'],
+      correct: 'Kabutigan'),
   ];
 
 
@@ -450,8 +485,8 @@ QuizCard(
     QuizCard(
       image: 'assets/faith.png',
       english: 'Belief',
-      options: ['Pagtoo', 'Paglaum', 'Pagbantay', 'Pagdula'],
-      correct: 'Pagtoo'),
+      options: ['Pagtuo', 'Paglaum', 'Pagbantay', 'Pagdula'],
+      correct: 'Pagtuo'),
   QuizCard(
       image: 'assets/forgiveness.png',
       english: 'Mercy',
@@ -537,10 +572,6 @@ QuizCard(
     english: 'Communal Unity',
     options: [ 'Kalinong', 'Bayanihan','Katarungan', 'Pagtuon'],
     correct: 'Bayanihan'),
-
-
-
-
     QuizCard(
     image: 'assets/resilience.png',
     english: 'Resilience',
@@ -576,6 +607,57 @@ QuizCard(
     english: 'Mystery',
     options: ['Kalibutan', 'Paglaum', 'Misteryo', 'Tinguha'],
     correct: 'Misteryo'),
+
+
+
+
+
+QuizCard(
+    image: 'assets/heritage.png',
+    english: 'Heritage',
+    options: ['Pagtuon','Panublion','Kultura', 'Paglaum'],
+    correct: 'Panublion'),
+QuizCard(
+    image: 'assets/success.png',
+    english: 'Success',
+    options: ['Kalampusan', 'Kadalag-an', 'Pagtuon', 'Paglaum'],
+    correct: 'Kadalag-an'),
+QuizCard(
+    image: 'assets/failure.png',
+    english: 'Failure',
+    options: ['Kadalag-an', 'Pagkapirde', 'Paglaum', 'Kalisod'],
+    correct: 'Pagkapirde'),
+QuizCard(
+    image: 'assets/forbidden.png',
+    english: 'Forbidden',
+    options: ['Ginadilian', 'Ginaprobahan', 'Ginabaton', 'Gintugutan'],
+    correct: 'Ginadili'),
+QuizCard(
+    image: 'assets/friendship.png',
+    english: 'Friendship',
+    options: ['Pagtililipon', 'Pag-abyanay', 'Pagpalangga', 'Pag-ulikid'],
+    correct: 'Pag-abyanay'),
+QuizCard(
+    image: 'assets/earthquake.png',
+    english: 'Earthquake',
+    options: ['Linog', 'Hangin', 'Pagbaha', 'Ulan'],
+    correct: 'Linog'),
+QuizCard(
+    image: 'assets/wave.png',
+    english: 'Wave',
+    options: ['Baybay', 'Suba', 'Bulan','Balod',],
+    correct: 'Balod'),
+QuizCard(
+    image: 'assets/innovation.png',
+    english: 'Innovation',
+    options: ['Pagtuon','Pagbag-o','Pag-ayo', 'Panumduman'],
+    correct: 'Pagbag-o'),
+QuizCard(
+      image: 'assets/fog.png',
+      english: 'Fog',
+      options: ['Ambon', 'Habol', 'Tun-og', 'Asin'],
+      correct: 'Tun-og'),
+
   ];
 
   bool _showCountdown = false;
@@ -588,7 +670,7 @@ QuizCard(
     questionDuration =
         widget.perQuestionDuration ?? _durationForDifficulty(widget.difficulty);
 
-    // Shuffle the cards to randomize order each time
+    
     cards.shuffle();
 
     _timerController = AnimationController(
@@ -627,7 +709,7 @@ QuizCard(
     }
   }
 
-  // ✅ Prevents duplicates by sampling unique random questions
+  
   List<QuizCard> _pickRandom(List<QuizCard> source, int count) {
     final random = Random();
     final result = <QuizCard>[];
@@ -636,7 +718,7 @@ QuizCard(
     final takeCount = count > shuffled.length ? shuffled.length : count;
 
     for (int i = 0; i < takeCount; i++) {
-      // Also shuffle options for each question
+      
       final options = List<String>.from(shuffled[i].options)..shuffle(random);
       result.add(QuizCard(
         image: shuffled[i].image,
@@ -868,7 +950,7 @@ QuizCard(
                             child: Text(
                               option,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: textColor,
                               ),
@@ -940,7 +1022,7 @@ QuizCard(
   }
 }
 
-// Background
+
 class AnimatedGradientBackground extends StatefulWidget {
   const AnimatedGradientBackground({super.key});
 

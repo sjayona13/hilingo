@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'pscore.dart'; // ⬅️ Use your PscorePage here
+import 'pscore.dart'; 
 
 class PicHard extends StatefulWidget {
   const PicHard({Key? key}) : super(key: key);
@@ -288,7 +288,7 @@ final List<PicQuestion> hardPicQuestions = [
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => PscorePage( // ✅ updated destination
+                builder: (_) => PscorePage( 
                   score: _score,
                   total: questions.length,
                 ),

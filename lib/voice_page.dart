@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'homepage.dart'; // ✅ Import your homepage file
+import 'homepage.dart'; 
 
 class VoicePage extends StatefulWidget {
   const VoicePage({super.key});
@@ -39,7 +39,7 @@ Future<void> _loadDictionary() async {
         await rootBundle.loadString('assets/dictionary.json');
     final Map<String, dynamic> jsonData = json.decode(jsonString);
 
-    // ✅ Normalize and create both directions automatically
+    
     final engToHil = {
       for (var e in (jsonData['eng'] as Map<String, dynamic>).entries)
         e.key.toLowerCase(): e.value.toString().toLowerCase()
@@ -47,7 +47,7 @@ Future<void> _loadDictionary() async {
 
     final hilToEng = {
       for (var e in engToHil.entries)
-        e.value: e.key // reverse lookup
+        e.value: e.key 
     };
 
     _dictionary = {'eng': engToHil, 'hil': hilToEng};
@@ -167,28 +167,42 @@ Future<void> _loadDictionary() async {
   if (!_dictionaryLoaded) return "Dictionary not loaded yet.";
 
   String lowerInput = _normalize(input);
-  Map<String, dynamic>? engMap = _dictionary['eng']; // English → Hiligaynon
-  Map<String, dynamic>? hilMap = _dictionary['hil']; // Hiligaynon → English
+  final engToHil = _dictionary['eng'] as Map<String, dynamic>;
+  final hilToEng = _dictionary['hil'] as Map<String, dynamic>;
 
-  // Pick direction
+  bool likelyEnglish = false;
+  bool likelyHiligaynon = false;
+
+  if (engToHil.containsKey(lowerInput)) {
+    likelyEnglish = true;
+  } else if (hilToEng.containsKey(lowerInput)) {
+    likelyHiligaynon = true;
+  } else {
+    for (String word in lowerInput.split(RegExp(r'\s+'))) {
+      if (engToHil.containsKey(word)) likelyEnglish = true;
+      if (hilToEng.containsKey(word)) likelyHiligaynon = true;
+    }
+  }
+
   Map<String, dynamic> fromMap;
   Map<String, dynamic> toMap;
-
-  if (leftLanguage == "English") {
-    fromMap = engMap!;
-    toMap = hilMap!;
+  if (likelyEnglish && !likelyHiligaynon) {
+    fromMap = engToHil;
+    toMap = hilToEng;
+    leftLanguage = "English";
+    rightLanguage = "Hiligaynon";
+  } else if (likelyHiligaynon && !likelyEnglish) {
+    fromMap = hilToEng;
+    toMap = engToHil;
+    leftLanguage = "Hiligaynon";
+    rightLanguage = "English";
   } else {
-    fromMap = hilMap!;
-    toMap = engMap!;
+    fromMap = engToHil;
+    toMap = hilToEng;
+    leftLanguage = "English";
+    rightLanguage = "Hiligaynon";
   }
 
-  // ✅ Direct phrase match
-  if (fromMap.containsKey(lowerInput)) {
-    String translated = fromMap[lowerInput];
-    return translated[0].toUpperCase() + translated.substring(1);
-  }
-
-  // ✅ Longest phrase match (5→1 words)
   List<String> words = lowerInput.split(RegExp(r'\s+'));
   List<String> translatedParts = [];
 
@@ -197,7 +211,7 @@ Future<void> _loadDictionary() async {
     String? translated;
     int matchedLength = 0;
 
-    for (int len = 5; len >= 1; len--) {
+    for (int len = 6; len >= 1; len--) {
       if (i + len > words.length) continue;
       String phrase = words.sublist(i, i + len).join(" ");
       if (fromMap.containsKey(phrase)) {
@@ -207,9 +221,8 @@ Future<void> _loadDictionary() async {
       }
     }
 
-    // If not found in current direction, try reverse direction
     if (translated == null) {
-      for (int len = 5; len >= 1; len--) {
+      for (int len = 6; len >= 1; len--) {
         if (i + len > words.length) continue;
         String phrase = words.sublist(i, i + len).join(" ");
         if (toMap.containsKey(phrase)) {
@@ -224,19 +237,22 @@ Future<void> _loadDictionary() async {
       translatedParts.add(translated);
       i += matchedLength;
     } else {
-      translatedParts.add(words[i]); // keep original word if not found
+      translatedParts.add(words[i]);
       i++;
     }
   }
 
   String output = translatedParts.join(" ");
-  return output[0].toUpperCase() + output.substring(1);
+  output = output.isNotEmpty
+      ? output[0].toUpperCase() + output.substring(1)
+      : "No translation found.";
+
+  setState(() {
+    _statusMessage = 'Auto-detected: $leftLanguage → $rightLanguage';
+  });
+
+  return output;
 }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +265,7 @@ Future<void> _loadDictionary() async {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // ✅ Back Button + Title
+                  
                   Row(
                     children: [
                       IconButton(
@@ -280,7 +296,7 @@ Future<void> _loadDictionary() async {
                   ),
                   const SizedBox(height: 30),
 
-                  // 🌍 Language Selector
+                 
                   Container(
                     height: 50,
                     decoration: BoxDecoration(
@@ -333,7 +349,7 @@ Future<void> _loadDictionary() async {
                   ),
                   const SizedBox(height: 40),
 
-                  // 🎙️ Recognized Speech
+                  
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -364,9 +380,9 @@ Future<void> _loadDictionary() async {
                   ),
                   const SizedBox(height: 20),
 
-                  // 🌐 Translation Output (Fixed smaller height)
+                  
                 SizedBox(
-  height: 180, // 👈 change this number to make it taller or shorter
+  height: 180, 
   width: double.infinity,
   child: Container(
     padding: const EdgeInsets.all(12),
@@ -404,12 +420,12 @@ Future<void> _loadDictionary() async {
 ),
 
 
-                  const SizedBox(height: 150), // space for mic overlay
+                  const SizedBox(height: 150), 
                 ],
               ),
             ),
 
-            // 🎤 Floating Mic Button
+            
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

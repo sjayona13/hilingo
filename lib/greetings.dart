@@ -61,13 +61,13 @@ class _Greetings2PageState extends State<Greetings2Page> {
     Phrase(english: "Welcome home", hiligaynon: "Dayon sa inyo balay"),
   ];
 
-  /// Use a Set of favorite IDs for quick lookup
+  
   Set<String> favoriteIds = {};
 
   @override
   void initState() {
     super.initState();
-    // Listen to Firestore changes in real-time
+    
     FirebaseFirestore.instance.collection('favorites').snapshots().listen((snapshot) {
       setState(() {
         favoriteIds = snapshot.docs

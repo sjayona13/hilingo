@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'escore.dart'; // ✅ Make sure this import exists
+import 'escore.dart'; 
 
 class FlashEasy extends StatefulWidget {
   const FlashEasy({Key? key}) : super(key: key);
@@ -185,7 +185,7 @@ class _FlashNavEasyState extends State<FlashEasy> {
         selectedIndex = null;
         answered = false;
       } else {
-        // ✅ Navigate to EscorePage when finished
+        
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

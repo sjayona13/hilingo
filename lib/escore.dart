@@ -51,7 +51,7 @@ class _EscorePageState extends State<EscorePage> with SingleTickerProviderStateM
         alignment: Alignment.center,
         children: [
 
-          // Confetti slightly higher while still centered
+          
           Transform.translate(
             offset: const Offset(0, -50),
             child: ConfettiWidget(
@@ -63,7 +63,7 @@ class _EscorePageState extends State<EscorePage> with SingleTickerProviderStateM
             ),
           ),
 
-          // Owl and score content
+          
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -130,7 +130,7 @@ class _EscorePageState extends State<EscorePage> with SingleTickerProviderStateM
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate back to homepage
+                      
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (_) => const FlashCards()),

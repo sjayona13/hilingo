@@ -316,18 +316,18 @@ flutter:
     - assets/coconut.png
     - assets/motorbike.png
     - assets/tricycle.png
-
-
-
-
-
-
-
-
-
-  
-
-
+    - assets/happiness.png
+    - assets/sad.png
+    - assets/angry.png
+    - assets/life.png
+    - assets/death.png
+    - assets/lies.png
+    - assets/success.png
+    - assets/failure.png
+    - assets/forbidden.png
+    - assets/wave.png
+    - assets/innovation.png
+    - assets/fog.png
     
 
 flutter_launcher_icons:

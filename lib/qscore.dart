@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'quizzes.dart'; // Make sure this points to your quizzes.dart file
+import 'quizzes.dart'; 
 
 class Qscore extends StatefulWidget {
   final int score;
@@ -48,9 +48,9 @@ class _QscoreState extends State<Qscore> with SingleTickerProviderStateMixin {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // Confetti slightly higher while still centered
+          
           Transform.translate(
-            offset: const Offset(0, -50), // move up
+            offset: const Offset(0, -50), 
             child: ConfettiWidget(
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
@@ -60,7 +60,7 @@ class _QscoreState extends State<Qscore> with SingleTickerProviderStateMixin {
             ),
           ),
 
-          // Owl and score content
+          
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -123,7 +123,7 @@ class _QscoreState extends State<Qscore> with SingleTickerProviderStateMixin {
                 ),
                 const SizedBox(height: 40),
 
-                // Continue Button → Goes to QuizzesPage()
+                
                 SizedBox(
                   width: 250,
                   height: 50,

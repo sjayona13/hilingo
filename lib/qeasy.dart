@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'qscore.dart'; // Import the score page
+import 'qscore.dart'; 
 
 class Qeasy extends StatefulWidget {
   const Qeasy({Key? key}) : super(key: key);
@@ -9,9 +9,9 @@ class Qeasy extends StatefulWidget {
   _QeasyState createState() => _QeasyState();
 }
 
-// ✅ Question model
+
 class Question {
-  final String type; // "phrase", "flashcard", "picture"
+  final String type; 
   final String phrase;
   final List<String> options;
   final String correct;
@@ -25,7 +25,7 @@ class Question {
     this.image,
   });
 
-  // Create a copy of options and shuffle it
+  
   List<String> shuffledOptions() {
     List<String> shuffled = List.from(options);
     shuffled.shuffle(Random());
@@ -43,10 +43,10 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
   late AnimationController _timerController;
   final Duration questionDuration = const Duration(seconds: 10);
 
-  late List<String> _shuffledOptions; // ✅ hold shuffled options for current question
+  late List<String> _shuffledOptions; 
 
   final List<Question> _allQuestions = [
-    // 🔹 Guess the Phrase
+    
     Question(
         type: "phrase",
         phrase: "Good morning",
@@ -83,7 +83,7 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         options: ["Indi", "Oo", "Palihog"],
         correct: "Indi"),
 
-    // 🔹 Flashcards
+    
     Question(
         type: "flashcard",
         phrase: "Water",
@@ -120,7 +120,7 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         options: ["Eskwelahan", "Balay", "Tindahan"],
         correct: "Eskwelahan"),
 
-    // 🔹 Picture Learning
+   
     Question(
         type: "picture",
         phrase: "Dog",
@@ -213,7 +213,7 @@ Question(
     _score = 0;
     _answered = false;
     _selectedIndex = null;
-    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // ✅ first question
+    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
   }
 
   void _nextQuestion() {
@@ -222,7 +222,7 @@ Question(
         _currentIndex++;
         _selectedIndex = null;
         _answered = false;
-        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); // ✅ shuffle new question options
+        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
       });
       _startTimer();
     } else {
@@ -246,7 +246,7 @@ Question(
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-    // Determine card color and icon
+    
     Color cardColor;
     IconData cardIcon;
 
@@ -363,7 +363,7 @@ Question(
 
             const SizedBox(height: 32),
 
-            // ✅ Options
+            
             ...List.generate(_shuffledOptions.length, (index) {
               final option = _shuffledOptions[index];
               Color borderColor = const Color(0xFF878282);
