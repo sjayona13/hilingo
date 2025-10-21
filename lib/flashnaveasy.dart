@@ -54,7 +54,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/wind.png',
       english: 'Wind',
-      options: ['Hangin', 'Ulan', 'Gab-i', 'Adlaw'],
+      options: ['Ulan', 'Hangin','Gab-i', 'Adlaw'],
       correct: 'Hangin',
     ),
     FlashCard(
@@ -66,7 +66,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/flower.png',
       english: 'Flower',
-      options: ['Bulak', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Bulak', 'Adlaw', 'Ulan'],
       correct: 'Bulak',
     ),
     FlashCard(
@@ -78,7 +78,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/mountain.png',
       english: 'Mountain',
-      options: ['Bukid', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: [ 'Gab-i', 'Bukid','Adlaw', 'Ulan'],
       correct: 'Bukid',
     ),
     FlashCard(
@@ -90,31 +90,31 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/bird.png',
       english: 'Bird',
-      options: ['Pispis', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: [ 'Gab-i', 'Adlaw','Pispis', 'Ulan'],
       correct: 'Pispis',
     ),
     FlashCard(
       image: 'assets/dog.png',
       english: 'Dog',
-      options: ['Ido', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: [ 'Gab-i', 'Adlaw', 'Ido','Ulan'],
       correct: 'Ido',
     ),
     FlashCard(
       image: 'assets/cat.png',
       english: 'Cat',
-      options: ['Kuring', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: [ 'Gab-i', 'Kuring','Adlaw', 'Ulan'],
       correct: 'Kuring',
     ),
     FlashCard(
       image: 'assets/house.png',
       english: 'House',
-      options: ['Balay', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Adlaw', 'Ulan','Balay'],
       correct: 'Balay',
     ),
     FlashCard(
       image: 'assets/car.png',
       english: 'Car',
-      options: ['Salakyan', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: [ 'Gab-i', 'Salakyan','Adlaw', 'Ulan'],
       correct: 'Salakyan',
     ),
     FlashCard(
@@ -126,19 +126,19 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/phone.png',
       english: 'Phone',
-      options: ['Telepono', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: ['Gab-i','Telepono',  'Adlaw', 'Ulan'],
       correct: 'Telepono',
     ),
     FlashCard(
       image: 'assets/clock.png',
       english: 'Clock',
-      options: ['Orasan', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Adlaw', 'Ulan','Orasan'],
       correct: 'Orasan',
     ),
     FlashCard(
       image: 'assets/food.png',
       english: 'Food',
-      options: ['Pagkaon', 'Gab-i', 'Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Pagkaon', 'Adlaw', 'Ulan'],
       correct: 'Pagkaon',
     ),
   ];

@@ -59,6 +59,15 @@ class _Greetings2PageState extends State<Greetings2Page> {
     Phrase(english: "Have a blessed day", hiligaynon: "Pagpakamaayo sa imo adlaw"),
     Phrase(english: "Bless you", hiligaynon: "Pagpakamaayo"),
     Phrase(english: "Welcome home", hiligaynon: "Dayon sa inyo balay"),
+    Phrase(english: "I'm sorry", hiligaynon: "Pasensya gid"),
+    Phrase(english: "Thank you", hiligaynon: "Salamat"),
+    Phrase(english: "You're welcome", hiligaynon: "Wala sang ano man"),
+    Phrase(english: "I love you", hiligaynon: "Palangga taka"),
+    Phrase(english: "See you soon", hiligaynon: "Kitaay ta sunod"),
+    Phrase(english: "I miss you", hiligaynon: "Nahidlaw nako simo"),
+    Phrase(english: "Help me", hiligaynon: "Buligi ko"),
+    Phrase(english: "What is this?", hiligaynon: "Ano ini?"),
+    Phrase(english: "Where are you?", hiligaynon: "Diin ka?"),
   ];
 
   

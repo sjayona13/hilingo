@@ -73,14 +73,14 @@ class _FlashHardState extends State<FlashHard> {
     FlashCard(
       image: 'assets/dream.png',
       english: 'Dream',
-      options: ['Pagtuon', 'Paghidlaw', 'Handum', 'Pagpangamuyo'],
-      correct: 'Handum',
+      options: ['Pagtuon', 'Paghidlaw', 'Damgo', 'Pagpangamuyo'],
+      correct: 'Damgo',
     ),
     FlashCard(
       image: 'assets/sacrifice.png',
-      english: 'Sacrifice',
-      options: ['Sakripisyo', 'Pagbato', 'Pagpangayo', 'Pagpangabuhi'],
-      correct: 'Sakripisyo',
+      english: 'Offer',
+      options: ['Paghalad', 'Pagbato', 'Pagpangayo', 'Pagpangabuhi'],
+      correct: 'Paghalad',
     ),
     FlashCard(
       image: 'assets/forgiveness.png',

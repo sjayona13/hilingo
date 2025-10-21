@@ -167,28 +167,42 @@ Future<void> _loadDictionary() async {
   if (!_dictionaryLoaded) return "Dictionary not loaded yet.";
 
   String lowerInput = _normalize(input);
-  Map<String, dynamic>? engMap = _dictionary['eng']; 
-  Map<String, dynamic>? hilMap = _dictionary['hil']; 
+  final engToHil = _dictionary['eng'] as Map<String, dynamic>;
+  final hilToEng = _dictionary['hil'] as Map<String, dynamic>;
 
-  
+  bool likelyEnglish = false;
+  bool likelyHiligaynon = false;
+
+  if (engToHil.containsKey(lowerInput)) {
+    likelyEnglish = true;
+  } else if (hilToEng.containsKey(lowerInput)) {
+    likelyHiligaynon = true;
+  } else {
+    for (String word in lowerInput.split(RegExp(r'\s+'))) {
+      if (engToHil.containsKey(word)) likelyEnglish = true;
+      if (hilToEng.containsKey(word)) likelyHiligaynon = true;
+    }
+  }
+
   Map<String, dynamic> fromMap;
   Map<String, dynamic> toMap;
-
-  if (leftLanguage == "English") {
-    fromMap = engMap!;
-    toMap = hilMap!;
+  if (likelyEnglish && !likelyHiligaynon) {
+    fromMap = engToHil;
+    toMap = hilToEng;
+    leftLanguage = "English";
+    rightLanguage = "Hiligaynon";
+  } else if (likelyHiligaynon && !likelyEnglish) {
+    fromMap = hilToEng;
+    toMap = engToHil;
+    leftLanguage = "Hiligaynon";
+    rightLanguage = "English";
   } else {
-    fromMap = hilMap!;
-    toMap = engMap!;
+    fromMap = engToHil;
+    toMap = hilToEng;
+    leftLanguage = "English";
+    rightLanguage = "Hiligaynon";
   }
 
-  
-  if (fromMap.containsKey(lowerInput)) {
-    String translated = fromMap[lowerInput];
-    return translated[0].toUpperCase() + translated.substring(1);
-  }
-
-  
   List<String> words = lowerInput.split(RegExp(r'\s+'));
   List<String> translatedParts = [];
 
@@ -197,7 +211,7 @@ Future<void> _loadDictionary() async {
     String? translated;
     int matchedLength = 0;
 
-    for (int len = 5; len >= 1; len--) {
+    for (int len = 6; len >= 1; len--) {
       if (i + len > words.length) continue;
       String phrase = words.sublist(i, i + len).join(" ");
       if (fromMap.containsKey(phrase)) {
@@ -207,9 +221,8 @@ Future<void> _loadDictionary() async {
       }
     }
 
-    
     if (translated == null) {
-      for (int len = 5; len >= 1; len--) {
+      for (int len = 6; len >= 1; len--) {
         if (i + len > words.length) continue;
         String phrase = words.sublist(i, i + len).join(" ");
         if (toMap.containsKey(phrase)) {
@@ -224,19 +237,22 @@ Future<void> _loadDictionary() async {
       translatedParts.add(translated);
       i += matchedLength;
     } else {
-      translatedParts.add(words[i]); 
+      translatedParts.add(words[i]);
       i++;
     }
   }
 
   String output = translatedParts.join(" ");
-  return output[0].toUpperCase() + output.substring(1);
+  output = output.isNotEmpty
+      ? output[0].toUpperCase() + output.substring(1)
+      : "No translation found.";
+
+  setState(() {
+    _statusMessage = 'Auto-detected: $leftLanguage → $rightLanguage';
+  });
+
+  return output;
 }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +296,7 @@ Future<void> _loadDictionary() async {
                   ),
                   const SizedBox(height: 30),
 
-                  
+                 
                   Container(
                     height: 50,
                     decoration: BoxDecoration(

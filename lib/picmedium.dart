@@ -37,7 +37,7 @@ final List<PicQuestion> mediumPicQuestions = [
     options: [
       PicOption(label: 'Hospital', image: 'assets/hospital.png'),
       PicOption(label: 'School', image: 'assets/school.png', isCorrect: true),
-      PicOption(label: 'Market', image: 'assets/market.png'),
+      PicOption(label: 'Market', image: 'assets/markets.png'),
       PicOption(label: 'Church', image: 'assets/church.png'),
     ],
   ),

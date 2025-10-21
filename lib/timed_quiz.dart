@@ -240,11 +240,6 @@ QuizCard(
     options: ['Baso', 'Tinidor', 'Tasa', 'Pinggan'],
     correct: 'Tasa'),
 QuizCard(
-    image: 'assets/fork.png',
-    english: 'Fork',
-    options: ['Kutsara', 'Tinidor', 'Pinggan', 'Kutsilyo'],
-    correct: 'Tinidor'),
-QuizCard(
     image: 'assets/spoon.png',
     english: 'Spoon',
     options: ['Baso', 'Tinidor', 'Kutsara', 'Tasa'],
@@ -277,7 +272,7 @@ QuizCard(
     image: 'assets/run.png',
     english: 'Run',
     options: ['Langoy', 'Dalagan', 'Ambak', 'Tindog'],
-    correct: 'Dagan'),
+    correct: 'Dalagan'),
 QuizCard(
     image: 'assets/jump.png',
     english: 'Jump',
@@ -318,11 +313,6 @@ QuizCard(
     english: 'Knife',
     options: ['Tinidor', 'Basong','Kutsilyo',  'Kutsara'],
     correct: 'Kutsilyo'),
-  QuizCard(
-      image: 'assets/truth.png',
-      english: 'Truth',
-      options: [ 'Buang', 'Kalayo', 'Kamatuoran','Tubig'],
-      correct: 'Kamatuoran'),
   QuizCard(
       image: 'assets/justice.png',
       english: 'Justice',
@@ -393,11 +383,6 @@ QuizCard(
       english: 'Bravery',
       options: ['Kaisog', 'Kaluoy', 'Pagtuo', 'Kalipay'],
       correct: 'Kaisog'),
-  QuizCard(
-      image: 'assets/truth.png',
-      english: 'Fact',
-      options: ['Kamatuoran', 'Bunggo', 'Buhat', 'Balay'],
-      correct: 'Kamatuoran'),
   QuizCard(
       image: 'assets/hope.png',
       english: 'Dream',
@@ -477,11 +462,6 @@ QuizCard(
     english: 'Visitor',
     options: [ 'Pagtuo', 'Pagrespeto', 'Bisita','Pagbaton'],
     correct: 'Bisita'),
-QuizCard(
-    image: 'assets/truth.png',
-    english: 'Truth',
-    options: ['Kamatuoran', 'Kabutigan', 'Kasadya', 'Kasubo'],
-    correct: 'Kamatuoran'),
     QuizCard(
       image: 'assets/faith.png',
       english: 'Belief',
@@ -631,7 +611,7 @@ QuizCard(
     image: 'assets/forbidden.png',
     english: 'Forbidden',
     options: ['Ginadilian', 'Ginaprobahan', 'Ginabaton', 'Gintugutan'],
-    correct: 'Ginadili'),
+    correct: 'Ginadilian'),
 QuizCard(
     image: 'assets/friendship.png',
     english: 'Friendship',

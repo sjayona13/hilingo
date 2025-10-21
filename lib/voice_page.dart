@@ -57,9 +57,9 @@ Future<void> _loadDictionary() async {
     });
 
     debugPrint(
-        "✅ Dictionary loaded: ${engToHil.length} eng→hil, ${hilToEng.length} hil→eng");
+        "Dictionary loaded: ${engToHil.length} eng→hil, ${hilToEng.length} hil→eng");
   } catch (e) {
-    debugPrint("❌ Error loading dictionary: $e");
+    debugPrint("Error loading dictionary: $e");
     setState(() {
       _statusMessage = "Dictionary not loaded. Check assets setup.";
     });
@@ -382,7 +382,7 @@ Future<void> _loadDictionary() async {
 
                   
                 SizedBox(
-  height: 180, 
+  height: 100, 
   width: double.infinity,
   child: Container(
     padding: const EdgeInsets.all(12),
