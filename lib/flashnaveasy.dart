@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'escore.dart'; 
+import 'escore.dart';
+import 'result_feature.dart';
 
 class FlashNavEasy extends StatefulWidget {
   const FlashNavEasy({Key? key}) : super(key: key);
@@ -18,7 +19,6 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
   bool answered = false;
   bool isCorrect = false;
   int _score = 0;
-
 
   final List<FlashCard> allFlashCards = [
     FlashCard(
@@ -54,7 +54,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/wind.png',
       english: 'Wind',
-      options: ['Ulan', 'Hangin','Gab-i', 'Adlaw'],
+      options: ['Ulan', 'Hangin', 'Gab-i', 'Adlaw'],
       correct: 'Hangin',
     ),
     FlashCard(
@@ -78,7 +78,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/mountain.png',
       english: 'Mountain',
-      options: [ 'Gab-i', 'Bukid','Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Bukid', 'Adlaw', 'Ulan'],
       correct: 'Bukid',
     ),
     FlashCard(
@@ -90,31 +90,31 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/bird.png',
       english: 'Bird',
-      options: [ 'Gab-i', 'Adlaw','Pispis', 'Ulan'],
+      options: ['Gab-i', 'Adlaw', 'Pispis', 'Ulan'],
       correct: 'Pispis',
     ),
     FlashCard(
       image: 'assets/dog.png',
       english: 'Dog',
-      options: [ 'Gab-i', 'Adlaw', 'Ido','Ulan'],
+      options: ['Gab-i', 'Adlaw', 'Ido', 'Ulan'],
       correct: 'Ido',
     ),
     FlashCard(
       image: 'assets/cat.png',
       english: 'Cat',
-      options: [ 'Gab-i', 'Kuring','Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Kuring', 'Adlaw', 'Ulan'],
       correct: 'Kuring',
     ),
     FlashCard(
       image: 'assets/house.png',
       english: 'House',
-      options: ['Gab-i', 'Adlaw', 'Ulan','Balay'],
+      options: ['Gab-i', 'Adlaw', 'Ulan', 'Balay'],
       correct: 'Balay',
     ),
     FlashCard(
       image: 'assets/car.png',
       english: 'Car',
-      options: [ 'Gab-i', 'Salakyan','Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Salakyan', 'Adlaw', 'Ulan'],
       correct: 'Salakyan',
     ),
     FlashCard(
@@ -126,13 +126,13 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     FlashCard(
       image: 'assets/phone.png',
       english: 'Phone',
-      options: ['Gab-i','Telepono',  'Adlaw', 'Ulan'],
+      options: ['Gab-i', 'Telepono', 'Adlaw', 'Ulan'],
       correct: 'Telepono',
     ),
     FlashCard(
       image: 'assets/clock.png',
       english: 'Clock',
-      options: ['Gab-i', 'Adlaw', 'Ulan','Orasan'],
+      options: ['Gab-i', 'Adlaw', 'Ulan', 'Orasan'],
       correct: 'Orasan',
     ),
     FlashCard(
@@ -149,7 +149,8 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
   void initState() {
     super.initState();
     flashCards = _pickRandomFlashCards(allFlashCards, 10);
-    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 3));
     _score = 0;
   }
 
@@ -166,14 +167,25 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
     return copy.take(count).toList();
   }
 
+  List<ResultDetails> _results = []; // List to store results
+
   void checkAnswer(int index) {
     setState(() {
       selectedIndex = index;
       answered = true;
-      isCorrect = flashCards[currentIndex].options[index] == flashCards[currentIndex].correct;
+      isCorrect = flashCards[currentIndex].options[index] ==
+          flashCards[currentIndex].correct;
       if (isCorrect) {
         _score++;
       }
+
+      // Store result
+      _results.add(ResultDetails(
+        phrase: flashCards[currentIndex].english,
+        userAnswer: flashCards[currentIndex].options[index],
+        correctAnswer: flashCards[currentIndex].correct,
+        isCorrect: isCorrect,
+      ));
     });
   }
 
@@ -184,18 +196,55 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
         selectedIndex = null;
         answered = false;
       } else {
-        
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => EscorePage(
               score: _score,
               total: flashCards.length,
+              results: _results, // Pass results
             ),
           ),
         );
       }
     });
+  }
+
+  Widget _buildOptionButton(int index, FlashCard card) {
+    final option = card.options[index];
+    final isSelected = selectedIndex == index;
+    final isRight = option == card.correct;
+
+    Color borderColor = const Color(0xFF878282);
+    Color textColor = const Color(0xFF878282);
+
+    if (answered) {
+      if (isRight) {
+        borderColor = Colors.green;
+        textColor = Colors.green;
+      } else if (isSelected) {
+        borderColor = Colors.red;
+        textColor = Colors.red;
+      }
+    }
+
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton(
+        onPressed: answered ? null : () => checkAnswer(index),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: borderColor),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(
+          option,
+          style: TextStyle(color: textColor),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+      ),
+    );
   }
 
   @override
@@ -232,7 +281,7 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
-              'Choose the correct match for each flashcard within 10 seconds',
+              'Choose the correct match for each flashcard',
               style: TextStyle(color: Color(0xFF878282), fontSize: 14),
               textAlign: TextAlign.center,
             ),
@@ -248,54 +297,46 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(card.image, height: 140, width: 140, fit: BoxFit.contain),
+                Image.asset(card.image,
+                    height: 140, width: 140, fit: BoxFit.contain),
                 const SizedBox(height: 16),
                 Text(
                   card.english,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 28),
-          Wrap(
-            spacing: 16,
-            runSpacing: 12,
-            alignment: WrapAlignment.center,
-            children: List.generate(card.options.length, (index) {
-              final option = card.options[index];
-              final isSelected = selectedIndex == index;
-              final isRight = option == card.correct;
-
-              Color borderColor = const Color(0xFF878282);
-              Color textColor = const Color(0xFF878282);
-
-              if (answered) {
-                if (isRight) {
-                  borderColor = Colors.green;
-                  textColor = Colors.green;
-                } else if (isSelected) {
-                  borderColor = Colors.red;
-                  textColor = Colors.red;
-                }
-              }
-
-              return SizedBox(
-                width: 140,
-                child: OutlinedButton(
-                  onPressed: answered ? null : () => checkAnswer(index),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: borderColor),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(child: _buildOptionButton(0, card)),
+                      const SizedBox(width: 16),
+                      Expanded(child: _buildOptionButton(1, card)),
+                    ],
                   ),
-                  child: Text(option, style: TextStyle(color: textColor)),
-                ),
-              );
-            }),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(child: _buildOptionButton(2, card)),
+                      const SizedBox(width: 16),
+                      Expanded(child: _buildOptionButton(3, card)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
+            padding: const EdgeInsets.only(left: 32, right: 32, bottom: 50),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -303,11 +344,13 @@ class _FlashNavEasyState extends State<FlashNavEasy> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2A7BE6),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                 ),
                 child: const Text(
                   'CONTINUE',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

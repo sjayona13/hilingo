@@ -1,0 +1,102 @@
+--- COLLISIONS START ---
+sa -> to, at, in, than
+na -> already, already
+pa -> yet, still
+ina -> that, thats
+ano -> what, whats
+man -> too, also
+ini -> it, this, this, this one, this one
+tuo -> right, right
+kag -> and, and
+ido -> dog, dog
+aga -> morning, morning
+imo -> your, yours
+iya -> his, her, his, hers
+ila -> their, theirs
+amo -> is, are
+isa -> one, one
+gwa -> exit, outside
+diin -> where, where
+pila -> some, how many
+ngaa -> why, why
+indi -> no, no, not
+tuod -> true, really
+ikaw -> you, you
+siya -> he, he, she, she
+sila -> they, they
+tawo -> person, person
+iloy -> mother, mother
+bata -> child, child
+kaon -> eat, eat
+kuha -> take, take
+tuyo -> dry, its dry
+saot -> dance, dance
+hibi -> cry, cry
+suba -> river, river
+wala -> left, left, none, nothing, without, no we dont have
+abri -> open, open
+tuon -> study, study, learn
+kita -> we, see
+diri -> here, here
+init -> hot, heat
+bago -> new, new
+akig -> angry, angry
+upod -> with, join, with
+pero -> but, but
+haln -> leave, depart
+isda -> fish, fish
+utan -> vegetable, vegetable
+asin -> salt, salt
+bayo -> shirt, clothes, clothes
+oras -> time, time
+tuig -> year, year
+gabi -> night, night, evening
+akon -> my, mine
+himo -> do, do, make
+duha -> two, two, dalawa
+apat -> four, four
+lima -> five, five
+anum -> six, six
+pito -> seven, seven
+walo -> eight, eight
+onse -> eleven, eleven
+dose -> twelve, twelve
+lang -> just, only, only
+dali -> soon, come, hurry up
+kayo -> fix, repair
+puno -> full, tree
+duta -> land, soil, earth
+ulan -> rain, rain
+gani -> so, therefore
+dayon -> welcome, welcome
+hulat -> wait, wait
+untat -> stop, stop
+bagyo -> storm, typhoon
+ulihi -> late, last
+hugas -> wash, wash
+didto -> that, there, there, that one
+lukso -> jump, jump
+kanta -> sing, sing
+balay -> house, house
+gamay -> few, small, small
+gwapa -> pretty, beautiful
+maayo -> good, good, healthy
+tubig -> water, water
+gutom -> hungry, hungry
+hinay -> slow, slow
+kahel -> orange, orange
+abyan -> friend, friend
+namit -> masarap, delicious, delicious
+pulis -> police, police
+palda -> skirt, skirt
+bulak -> flower, flower, flowers
+gatas -> milk, milk
+lakat -> go, walk
+bugas -> rice, rice, rice
+karne -> meat, meat
+tulog -> sleep, sleep
+bakal -> buy, buy
+balik -> return, go back
+dalan -> road, road
+sulod -> enter, inside
+--- Found 482 collisions (showing first 100) ---

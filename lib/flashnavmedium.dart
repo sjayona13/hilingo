@@ -1,7 +1,7 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'escore.dart'; 
+import 'escore.dart';
+import 'result_feature.dart';
 
 class FlashNavMedium extends StatefulWidget {
   const FlashNavMedium({Key? key}) : super(key: key);
@@ -18,6 +18,7 @@ class _FlashMediumState extends State<FlashNavMedium> {
   bool answered = false;
   bool isCorrect = false;
   int _score = 0;
+  List<ResultDetails> _results = [];
 
   late List<FlashCard> flashCards;
 
@@ -201,7 +202,8 @@ class _FlashMediumState extends State<FlashNavMedium> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
     _score = 0;
     allFlashCards.shuffle();
     flashCards = allFlashCards.take(10).toList();
@@ -220,11 +222,18 @@ class _FlashMediumState extends State<FlashNavMedium> {
     setState(() {
       selectedIndex = index;
       answered = true;
-      isCorrect =
-          flashCards[currentIndex].options[index] == flashCards[currentIndex].correct;
+      isCorrect = flashCards[currentIndex].options[index] ==
+          flashCards[currentIndex].correct;
       if (isCorrect) {
         _score++;
       }
+
+      _results.add(ResultDetails(
+        phrase: flashCards[currentIndex].english,
+        userAnswer: flashCards[currentIndex].options[index],
+        correctAnswer: flashCards[currentIndex].correct,
+        isCorrect: isCorrect,
+      ));
     });
   }
 
@@ -242,9 +251,10 @@ class _FlashMediumState extends State<FlashNavMedium> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => EscorePage( 
+                builder: (_) => EscorePage(
                   score: _score,
                   total: flashCards.length,
+                  results: _results,
                 ),
               ),
             );
@@ -252,6 +262,43 @@ class _FlashMediumState extends State<FlashNavMedium> {
         });
       }
     });
+  }
+
+  Widget _buildOptionButton(int index, FlashCard card) {
+    final option = card.options[index];
+    final isSelected = selectedIndex == index;
+    final isRight = option == card.correct;
+
+    Color borderColor = const Color(0xFF878282);
+    Color textColor = const Color(0xFF878282);
+
+    if (answered) {
+      if (isRight) {
+        borderColor = Colors.green;
+        textColor = Colors.green;
+      } else if (isSelected) {
+        borderColor = Colors.red;
+        textColor = Colors.red;
+      }
+    }
+
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton(
+        onPressed: answered ? null : () => checkAnswer(index),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: borderColor),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        child: Text(
+          option,
+          style: TextStyle(color: textColor),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+      ),
+    );
   }
 
   @override
@@ -284,7 +331,8 @@ class _FlashMediumState extends State<FlashNavMedium> {
               child: Center(
                 child: Text(
                   '${currentIndex + 1} / ${flashCards.length}',
-                  style: const TextStyle(color: Color(0xFF878282), fontSize: 16),
+                  style:
+                      const TextStyle(color: Color(0xFF878282), fontSize: 16),
                 ),
               ),
             ),
@@ -312,56 +360,46 @@ class _FlashMediumState extends State<FlashNavMedium> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(card.image, height: 100, width: 100, fit: BoxFit.contain),
+                  Image.asset(card.image,
+                      height: 100, width: 100, fit: BoxFit.contain),
                   const SizedBox(height: 16),
                   Text(
                     card.english,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 30),
-            Wrap(
-              spacing: 16,
-              runSpacing: 12,
-              alignment: WrapAlignment.center,
-              children: List.generate(card.options.length, (index) {
-                final option = card.options[index];
-                final isSelected = selectedIndex == index;
-                final isRight = option == card.correct;
-
-                Color borderColor = const Color(0xFF878282);
-                Color textColor = const Color(0xFF878282);
-
-                if (answered) {
-                  if (isRight) {
-                    borderColor = Colors.green;
-                    textColor = Colors.green;
-                  } else if (isSelected) {
-                    borderColor = Colors.red;
-                    textColor = Colors.red;
-                  }
-                }
-
-                return SizedBox(
-                  width: 140,
-                  child: OutlinedButton(
-                    onPressed: answered ? null : () => checkAnswer(index),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: borderColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: _buildOptionButton(0, card)),
+                        const SizedBox(width: 16),
+                        Expanded(child: _buildOptionButton(1, card)),
+                      ],
                     ),
-                    child: Text(option, style: TextStyle(color: textColor)),
-                  ),
-                );
-              }),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(child: _buildOptionButton(2, card)),
+                        const SizedBox(width: 16),
+                        Expanded(child: _buildOptionButton(3, card)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.only(left: 32, right: 32, bottom: 50),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

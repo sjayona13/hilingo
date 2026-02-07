@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homepage.dart';
+import 'result_feature.dart';
 import 'dart:async';
+import 'dart:ui' as ui;
 
 class StatsPage extends StatefulWidget {
   final int easyScore;
@@ -10,6 +12,7 @@ class StatsPage extends StatefulWidget {
   final int mediumTotal;
   final int hardScore;
   final int hardTotal;
+  final List<ResultDetails>? results;
 
   const StatsPage({
     Key? key,
@@ -19,6 +22,7 @@ class StatsPage extends StatefulWidget {
     required this.mediumTotal,
     required this.hardScore,
     required this.hardTotal,
+    this.results,
   }) : super(key: key);
 
   @override
@@ -31,13 +35,11 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
   double xpToNextLevel = 100.0;
   double animatedXp = 0.0;
 
- 
   late AnimationController _gradientController;
   late Animation<Color?> _color1;
   late Animation<Color?> _color2;
   late Animation<Color?> _color3;
 
-  
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -54,12 +56,15 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: const Duration(seconds: 6))
           ..repeat(reverse: true);
 
-    _color1 = ColorTween(begin: const Color(0xFF0D47A1), end: const Color(0xFF1565C0))
-        .animate(_gradientController);
-    _color2 = ColorTween(begin: const Color(0xFF1976D2), end: const Color(0xFF1E88E5))
-        .animate(_gradientController);
-    _color3 = ColorTween(begin: const Color(0xFF0B3D91), end: const Color(0xFF0D47A1))
-        .animate(_gradientController);
+    _color1 =
+        ColorTween(begin: const Color(0xFF0D47A1), end: const Color(0xFF1565C0))
+            .animate(_gradientController);
+    _color2 =
+        ColorTween(begin: const Color(0xFF1976D2), end: const Color(0xFF1E88E5))
+            .animate(_gradientController);
+    _color3 =
+        ColorTween(begin: const Color(0xFF0B3D91), end: const Color(0xFF0D47A1))
+            .animate(_gradientController);
   }
 
   void _initPulseAnimation() {
@@ -113,7 +118,6 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
     await prefs.setDouble('xp', xp);
     await prefs.setDouble('xpToNextLevel', xpToNextLevel);
 
-    
     double start = animatedXp;
     double end = xp;
     int steps = 20;
@@ -160,14 +164,20 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [_color1.value!, _color2.value!, _color3.value!, Colors.black],
+                colors: [
+                  _color1.value!,
+                  _color2.value!,
+                  _color3.value!,
+                  Colors.black
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
             child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
@@ -180,8 +190,6 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(24),
@@ -201,7 +209,8 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                         children: [
                           const Text(
                             "OVERALL SCORE",
-                            style: TextStyle(fontSize: 16, color: Colors.white70),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white70),
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -231,8 +240,6 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                       ),
                     ),
                     const SizedBox(height: 30),
-
-                    
                     Row(
                       children: [
                         const Expanded(
@@ -249,7 +256,8 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                           onPressed: _resetLevelXp,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF2A7BE6),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
                             minimumSize: const Size(0, 0),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
@@ -261,8 +269,6 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                       ],
                     ),
                     const SizedBox(height: 10),
-
-                    
                     Stack(
                       alignment: Alignment.centerLeft,
                       children: [
@@ -302,11 +308,10 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                       style: const TextStyle(
                         color: Color.fromARGB(255, 166, 197, 238),
                         fontWeight: FontWeight.bold,
+                        fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 30),
-
-                    
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -322,14 +327,15 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildLevelBox("EASY", widget.easyScore, widget.easyTotal),
-                        _buildLevelBox("MEDIUM", widget.mediumScore, widget.mediumTotal),
-                        _buildLevelBox("HARD", widget.hardScore, widget.hardTotal),
+                        _buildLevelBox(
+                            "EASY", widget.easyScore, widget.easyTotal),
+                        _buildLevelBox(
+                            "MEDIUM", widget.mediumScore, widget.mediumTotal),
+                        _buildLevelBox(
+                            "HARD", widget.hardScore, widget.hardTotal),
                       ],
                     ),
                     const SizedBox(height: 20),
-
-                    
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
@@ -367,35 +373,94 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
                         ],
                       ),
                     ),
-                    const Spacer(),
-
-                    
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => const HilingoApp()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2A7BE6),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                    const SizedBox(height: 20),
+                    if (widget.results != null && widget.results!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 30),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _showResultModal(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2A7BE6),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "See Result",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const HilingoApp()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2A7BE6),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "Back to Home",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          "Back to Home",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      ),
+                    if (widget.results == null || widget.results!.isEmpty)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const HilingoApp()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2A7BE6),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            "Back to Home",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -403,6 +468,89 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
           );
         },
       ),
+    );
+  }
+
+  void _showResultModal(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Dismiss",
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Stack(
+          children: [
+            BackdropFilter(
+              filter: ui.ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.1),
+              ),
+            ),
+            Center(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE3F2FD),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      )
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Assessment Results",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1565C0),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(Icons.close,
+                                  color: Color(0xFF1565C0)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: ResultList(results: widget.results!),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(
+            scale:
+                CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
+            child: child,
+          ),
+        );
+      },
     );
   }
 
@@ -420,11 +568,15 @@ class _StatsPageState extends State<StatsPage> with TickerProviderStateMixin {
         children: [
           Text(label,
               style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 13, color: Colors.white)),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: Colors.white)),
           const SizedBox(height: 6),
           Text("$score/$total",
               style: const TextStyle(
-                  fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white70)),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  color: Colors.white70)),
           const SizedBox(height: 6),
           LinearProgressIndicator(
             value: percent / 100,

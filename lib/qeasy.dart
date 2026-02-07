@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'qscore.dart'; 
+import 'qscore.dart';
+
+import 'result_feature.dart';
 
 class Qeasy extends StatefulWidget {
   const Qeasy({Key? key}) : super(key: key);
@@ -9,9 +11,8 @@ class Qeasy extends StatefulWidget {
   _QeasyState createState() => _QeasyState();
 }
 
-
 class Question {
-  final String type; 
+  final String type;
   final String phrase;
   final List<String> options;
   final String correct;
@@ -25,7 +26,6 @@ class Question {
     this.image,
   });
 
-  
   List<String> shuffledOptions() {
     List<String> shuffled = List.from(options);
     shuffled.shuffle(Random());
@@ -38,15 +38,15 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
   int? _selectedIndex;
   bool _answered = false;
   int _score = 0;
+  List<ResultDetails> _results = [];
 
   late List<Question> _questions;
   late AnimationController _timerController;
   final Duration questionDuration = const Duration(seconds: 10);
 
-  late List<String> _shuffledOptions; 
+  late List<String> _shuffledOptions;
 
   final List<Question> _allQuestions = [
-    
     Question(
         type: "phrase",
         phrase: "Good morning",
@@ -82,8 +82,6 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         phrase: "No",
         options: ["Indi", "Oo", "Palihog"],
         correct: "Indi"),
-
-    
     Question(
         type: "flashcard",
         phrase: "Water",
@@ -119,8 +117,6 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         phrase: "School",
         options: ["Eskwelahan", "Balay", "Tindahan"],
         correct: "Eskwelahan"),
-
-   
     Question(
         type: "picture",
         phrase: "Dog",
@@ -140,41 +136,41 @@ class _QeasyState extends State<Qeasy> with SingleTickerProviderStateMixin {
         correct: "Pispis",
         image: "assets/bird.png"),
     Question(
-    type: "picture",
-    phrase: "Fish",
-    options: ["Isda", "Kuring", "Ido"],
-    correct: "Isda",
-    image: "assets/fish.png"),
-Question(
-    type: "picture",
-    phrase: "Apple",
-    options: ["Mansanas", "Saging", "Mangga"],
-    correct: "Mansanas",
-    image: "assets/apple.png"),
-Question(
-    type: "picture",
-    phrase: "Banana",
-    options: ["Saging", "Mansanas", "Mangga"],
-    correct: "Saging",
-    image: "assets/banana.png"),
-Question(
-    type: "picture",
-    phrase: "Mango",
-    options: ["Paho", "Saging", "Mansanas"],
-    correct: "Paho",
-    image: "assets/mango.png"),
-Question(
-    type: "picture",
-    phrase: "Car",
-    options: ["Salakyan", "Barko", "Bus"],
-    correct: "Salakyan",
-    image: "assets/car.png"),
-Question(
-    type: "picture",
-    phrase: "Boat",
-    options: ["Barko", "Sakyanan", "Bus"],
-    correct: "Barko",
-    image: "assets/boat.png"),
+        type: "picture",
+        phrase: "Fish",
+        options: ["Isda", "Kuring", "Ido"],
+        correct: "Isda",
+        image: "assets/fish.png"),
+    Question(
+        type: "picture",
+        phrase: "Apple",
+        options: ["Mansanas", "Saging", "Mangga"],
+        correct: "Mansanas",
+        image: "assets/apple.png"),
+    Question(
+        type: "picture",
+        phrase: "Banana",
+        options: ["Saging", "Mansanas", "Mangga"],
+        correct: "Saging",
+        image: "assets/banana.png"),
+    Question(
+        type: "picture",
+        phrase: "Mango",
+        options: ["Paho", "Saging", "Mansanas"],
+        correct: "Paho",
+        image: "assets/mango.png"),
+    Question(
+        type: "picture",
+        phrase: "Car",
+        options: ["Salakyan", "Barko", "Bus"],
+        correct: "Salakyan",
+        image: "assets/car.png"),
+    Question(
+        type: "picture",
+        phrase: "Boat",
+        options: ["Barko", "Sakyanan", "Bus"],
+        correct: "Barko",
+        image: "assets/boat.png"),
   ];
 
   @override
@@ -213,7 +209,8 @@ Question(
     _score = 0;
     _answered = false;
     _selectedIndex = null;
-    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
+    _results = []; // Reset results
+    _shuffledOptions = _questions[_currentIndex].shuffledOptions();
   }
 
   void _nextQuestion() {
@@ -222,15 +219,15 @@ Question(
         _currentIndex++;
         _selectedIndex = null;
         _answered = false;
-        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
+        _shuffledOptions = _questions[_currentIndex].shuffledOptions();
       });
       _startTimer();
     } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              Qscore(score: _score, total: _questions.length),
+          builder: (context) => Qscore(
+              score: _score, total: _questions.length, results: _results),
         ),
       );
     }
@@ -246,7 +243,6 @@ Question(
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-    
     Color cardColor;
     IconData cardIcon;
 
@@ -308,14 +304,12 @@ Question(
               ),
             ),
             const SizedBox(height: 32),
-
             if (question.type == "picture" && question.image != null)
               SizedBox(
                 width: 155,
                 height: 155,
                 child: Image.asset(question.image!, fit: BoxFit.contain),
               ),
-
             if (question.type != "picture" || question.image == null)
               Column(
                 children: [
@@ -360,10 +354,7 @@ Question(
                   ),
                 ],
               ),
-
             const SizedBox(height: 32),
-
-            
             ...List.generate(_shuffledOptions.length, (index) {
               final option = _shuffledOptions[index];
               Color borderColor = const Color(0xFF878282);
@@ -390,7 +381,16 @@ Question(
                           setState(() {
                             _selectedIndex = index;
                             _answered = true;
-                            if (option == question.correct) _score++;
+                            bool isCorrect = option == question.correct;
+                            if (isCorrect) _score++;
+
+                            _results.add(ResultDetails(
+                              phrase: question.phrase,
+                              userAnswer: option,
+                              correctAnswer: question.correct,
+                              isCorrect: isCorrect,
+                            ));
+
                             _timerController.stop();
                           });
                         },
@@ -411,7 +411,6 @@ Question(
                 ),
               );
             }),
-
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -419,11 +418,9 @@ Question(
                 value: _timerController.value,
                 minHeight: 6,
                 backgroundColor: Colors.grey.shade300,
-                valueColor:
-                    const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
+                valueColor: const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
               ),
             ),
-
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,

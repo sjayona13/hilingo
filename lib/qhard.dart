@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'qscore.dart'; 
+import 'qscore.dart';
+import 'result_feature.dart';
 
 class Qhard extends StatefulWidget {
   const Qhard({Key? key}) : super(key: key);
@@ -9,9 +10,8 @@ class Qhard extends StatefulWidget {
   _QhardState createState() => _QhardState();
 }
 
-
 class Question {
-  final String type; 
+  final String type;
   final String phrase;
   final List<String> options;
   final String correct;
@@ -25,7 +25,6 @@ class Question {
     this.image,
   });
 
-  
   List<String> shuffledOptions() {
     List<String> shuffled = List.from(options);
     shuffled.shuffle(Random());
@@ -38,24 +37,32 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
   int? _selectedIndex;
   bool _answered = false;
   int _score = 0;
+  List<ResultDetails> _results = [];
 
   late List<Question> _questions;
-  late List<String> _shuffledOptions; 
+  late List<String> _shuffledOptions;
   late AnimationController _timerController;
   final Duration questionDuration = const Duration(seconds: 10);
 
   final List<Question> allQuestions = [
-    
     Question(
       type: "phrase",
       phrase: "I’m looking for the restroom",
-      options: ["Nagapangita ako sang kasilyas", "Gusto ko magkaon", "Diin ang balay?"],
+      options: [
+        "Nagapangita ako sang kasilyas",
+        "Gusto ko magkaon",
+        "Diin ang balay?"
+      ],
       correct: "Nagapangita ako sang kasilyas",
     ),
     Question(
       type: "phrase",
       phrase: "Can you speak slower?",
-      options: ["Pwede ka maghambal hinay?", "Pwede ka maglakat?", "Ano ang imo ngalan?"],
+      options: [
+        "Pwede ka maghambal hinay?",
+        "Pwede ka maglakat?",
+        "Ano ang imo ngalan?"
+      ],
       correct: "Pwede ka maghambal hinay?",
     ),
     Question(
@@ -97,7 +104,11 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
     Question(
       type: "phrase",
       phrase: "I need water",
-      options: ["Kinahanglan ko tubig", "Kinahanglan ko pagkaon", "Gusto ko ini"],
+      options: [
+        "Kinahanglan ko tubig",
+        "Kinahanglan ko pagkaon",
+        "Gusto ko ini"
+      ],
       correct: "Kinahanglan ko sang tubig",
     ),
     Question(
@@ -106,8 +117,6 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
       options: ["Kapoy na ako", "Gutom ako", "Masakit ako"],
       correct: "Kapoy na ako",
     ),
-
-    
     Question(
       type: "flashcard",
       phrase: "Mountain",
@@ -156,8 +165,6 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
       options: ["Bintana", "Pwertahan", "Balay"],
       correct: "Bintana",
     ),
-
-    
     Question(
       type: "picture",
       phrase: "Monkey",
@@ -259,7 +266,8 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
     _score = 0;
     _answered = false;
     _selectedIndex = null;
-    _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
+    _results = [];
+    _shuffledOptions = _questions[_currentIndex].shuffledOptions();
   }
 
   void _nextQuestion() {
@@ -268,15 +276,15 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
         _currentIndex++;
         _selectedIndex = null;
         _answered = false;
-        _shuffledOptions = _questions[_currentIndex].shuffledOptions(); 
+        _shuffledOptions = _questions[_currentIndex].shuffledOptions();
       });
       _startTimer();
     } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              Qscore(score: _score, total: _questions.length),
+          builder: (context) => Qscore(
+              score: _score, total: _questions.length, results: _results),
         ),
       );
     }
@@ -292,7 +300,6 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-   
     Color cardColor;
     IconData cardIcon;
 
@@ -354,14 +361,12 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
               ),
             ),
             const SizedBox(height: 32),
-
             if (question.type == "picture" && question.image != null)
               SizedBox(
                 width: 155,
                 height: 155,
                 child: Image.asset(question.image!, fit: BoxFit.contain),
               ),
-
             if (question.type != "picture" || question.image == null)
               Column(
                 children: [
@@ -406,9 +411,7 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-
             const SizedBox(height: 32),
-
             ...List.generate(_shuffledOptions.length, (index) {
               final option = _shuffledOptions[index];
               Color borderColor = const Color(0xFF878282);
@@ -435,7 +438,16 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
                           setState(() {
                             _selectedIndex = index;
                             _answered = true;
-                            if (option == question.correct) _score++;
+                            bool isCorrect = option == question.correct;
+                            if (isCorrect) _score++;
+
+                            _results.add(ResultDetails(
+                              phrase: question.phrase,
+                              userAnswer: option,
+                              correctAnswer: question.correct,
+                              isCorrect: isCorrect,
+                            ));
+
                             _timerController.stop();
                           });
                         },
@@ -456,7 +468,6 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
                 ),
               );
             }),
-
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -467,7 +478,6 @@ class _QhardState extends State<Qhard> with SingleTickerProviderStateMixin {
                 valueColor: const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
               ),
             ),
-
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,

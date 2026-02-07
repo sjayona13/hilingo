@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'qscore.dart'; 
+import 'qscore.dart';
+import 'result_feature.dart';
 
 class Qintermediate extends StatefulWidget {
   const Qintermediate({Key? key}) : super(key: key);
@@ -8,9 +9,8 @@ class Qintermediate extends StatefulWidget {
   _QintermediateState createState() => _QintermediateState();
 }
 
-
 class Question {
-  final String type; 
+  final String type;
   final String phrase;
   final List<String> options;
   final String correct;
@@ -37,6 +37,7 @@ class _QintermediateState extends State<Qintermediate>
   int? _selectedIndex;
   bool _answered = false;
   int _score = 0;
+  List<ResultDetails> _results = [];
 
   late List<Question> _questions;
   late List<String> _shuffledOptions;
@@ -44,182 +45,185 @@ class _QintermediateState extends State<Qintermediate>
   final Duration questionDuration = const Duration(seconds: 10);
 
   final List<Question> allQuestions = [
-    
-  Question(
-    type: "phrase",
-    phrase: "Could you repeat that, please?",
-    options: ["Pwede mo balikon?", "Gusto ko ini", "Indi ko maintindihan"],
-    correct: "Pwede mo balikon?",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "I have a headache",
-    options: ["Masakit ang ulo ko", "Gutom ako", "Nawad-an ako sang dalan"],
-    correct: "Masakit ang ulo ko",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "Where did you go yesterday?",
-    options: ["Diin ka nagkadto kagapon?", "Ano ang imo ngalan?", "Gusto ko ini"],
-    correct: "Diin ka nagkadto kagapon?",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "I don’t know how to say it",
-    options: ["Indi ko kabalo kon paano ihambal", "Gusto ko ini", "Okay lang, salamat"],
-    correct: "Indi ko kabalo kon paano ihambal",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "Can you speak slowly?",
-    options: ["Pwede ka maghambal hinay?", "Pila ang imo edad?", "Gutom ako"],
-    correct: "Pwede ka maghambal hinay?",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "I forgot",
-    options: ["Nalimtan ko", "Indi ko maintindihan", "Gusto ko ini"],
-    correct: "Nalimtan ko",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "What time is it?",
-    options: ["Ano oras na?", "Diin ka makadto?", "Gutom ako"],
-    correct: "Ano oras na?",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "I need a doctor",
-    options: ["Kinahanglan ko doktor", "Gusto ko ini", "Okay lang, salamat"],
-    correct: "Kinahanglan ko doktor",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "I’m allergic to peanuts",
-    options: ["Allergic ako sa mani", "Gutom ako", "Pwede mo ako buligan?"],
-    correct: "Allergic ako sa mani",
-  ),
-  Question(
-    type: "phrase",
-    phrase: "Could you write it down?",
-    options: ["Pwede mo isulat?", "Gusto ko ini", "Indi ko maintindihan"],
-    correct: "Pwede mo isulat?",
-  ),
-
-  
-  Question(
-    type: "flashcard",
-    phrase: "Window",
-    options: ["Bintana", "Pultahan", "Lamesa"],
-    correct: "Bintana",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Door",
-    options: ["Puertahan", "Bintana", "Bangko"],
-    correct: "Puertahan",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Pillow",
-    options: ["Ulonan", "Bangko", "Libro"],
-    correct: "Ulonan",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Blanket",
-    options: ["Habol", "Lamesa", "Bolpen"],
-    correct: "Habol",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Stove",
-    options: ["Kalan", "Kahoy", "Bukid"],
-    correct: "Kalan",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Spoon",
-    options: ["Kutsara", "Tinidor", "Banga"],
-    correct: "Kutsara",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Fork",
-    options: ["Tinidor", "Kutsara", "Banga"],
-    correct: "Tinidor",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Knife",
-    options: ["Kutsilyo", "Tinidor", "Kutsara"],
-    correct: "Kutsilyo",
-  ),
-  Question(
-    type: "flashcard",
-    phrase: "Cup",
-    options: ["Tasa", "Banga", "Plato"],
-    correct: "Tasa",
-  ),
-
-  
-  Question(
-    type: "picture",
-    phrase: "Elephant",
-    options: ["Elepante", "Kanding", "Ibon"],
-    correct: "Elepante",
-    image: "assets/elephant.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Goat",
-    options: ["Kanding", "Baka", "Kuring"],
-    correct: "Kanding",
-    image: "assets/goat.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Cow",
-    options: ["Baka", "Kanding", "Ido"],
-    correct: "Baka",
-    image: "assets/cow.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Duck",
-    options: ["Pato", "Langgam", "Isda"],
-    correct: "Pato",
-    image: "assets/duck.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Pineapple",
-    options: ["Pinya", "Mangga", "Saging"],
-    correct: "Pinya",
-    image: "assets/pineapple.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Tomato",
-    options: ["Kamatis", "Saging", "Mansanas"],
-    correct: "Kamatis",
-    image: "assets/tomato.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Airplane",
-    options: ["Eroplano", "Barko", "Bus"],
-    correct: "Eroplano",
-    image: "assets/plane.png",
-  ),
-  Question(
-    type: "picture",
-    phrase: "Helicopter",
-    options: ["Helikopter", "Barko", "Sakyanan"],
-    correct: "Helikopter",
-    image: "assets/helicopter.png",
-  ),
-];
+    Question(
+      type: "phrase",
+      phrase: "Could you repeat that, please?",
+      options: ["Pwede mo balikon?", "Gusto ko ini", "Indi ko maintindihan"],
+      correct: "Pwede mo balikon?",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "I have a headache",
+      options: ["Masakit ang ulo ko", "Gutom ako", "Nawad-an ako sang dalan"],
+      correct: "Masakit ang ulo ko",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "Where did you go yesterday?",
+      options: [
+        "Diin ka nagkadto kagapon?",
+        "Ano ang imo ngalan?",
+        "Gusto ko ini"
+      ],
+      correct: "Diin ka nagkadto kagapon?",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "I don’t know how to say it",
+      options: [
+        "Indi ko kabalo kon paano ihambal",
+        "Gusto ko ini",
+        "Okay lang, salamat"
+      ],
+      correct: "Indi ko kabalo kon paano ihambal",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "Can you speak slowly?",
+      options: ["Pwede ka maghambal hinay?", "Pila ang imo edad?", "Gutom ako"],
+      correct: "Pwede ka maghambal hinay?",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "I forgot",
+      options: ["Nalimtan ko", "Indi ko maintindihan", "Gusto ko ini"],
+      correct: "Nalimtan ko",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "What time is it?",
+      options: ["Ano oras na?", "Diin ka makadto?", "Gutom ako"],
+      correct: "Ano oras na?",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "I need a doctor",
+      options: ["Kinahanglan ko doktor", "Gusto ko ini", "Okay lang, salamat"],
+      correct: "Kinahanglan ko doktor",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "I’m allergic to peanuts",
+      options: ["Allergic ako sa mani", "Gutom ako", "Pwede mo ako buligan?"],
+      correct: "Allergic ako sa mani",
+    ),
+    Question(
+      type: "phrase",
+      phrase: "Could you write it down?",
+      options: ["Pwede mo isulat?", "Gusto ko ini", "Indi ko maintindihan"],
+      correct: "Pwede mo isulat?",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Window",
+      options: ["Bintana", "Pultahan", "Lamesa"],
+      correct: "Bintana",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Door",
+      options: ["Puertahan", "Bintana", "Bangko"],
+      correct: "Puertahan",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Pillow",
+      options: ["Ulonan", "Bangko", "Libro"],
+      correct: "Ulonan",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Blanket",
+      options: ["Habol", "Lamesa", "Bolpen"],
+      correct: "Habol",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Stove",
+      options: ["Kalan", "Kahoy", "Bukid"],
+      correct: "Kalan",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Spoon",
+      options: ["Kutsara", "Tinidor", "Banga"],
+      correct: "Kutsara",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Fork",
+      options: ["Tinidor", "Kutsara", "Banga"],
+      correct: "Tinidor",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Knife",
+      options: ["Kutsilyo", "Tinidor", "Kutsara"],
+      correct: "Kutsilyo",
+    ),
+    Question(
+      type: "flashcard",
+      phrase: "Cup",
+      options: ["Tasa", "Banga", "Plato"],
+      correct: "Tasa",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Elephant",
+      options: ["Elepante", "Kanding", "Ibon"],
+      correct: "Elepante",
+      image: "assets/elephant.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Goat",
+      options: ["Kanding", "Baka", "Kuring"],
+      correct: "Kanding",
+      image: "assets/goat.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Cow",
+      options: ["Baka", "Kanding", "Ido"],
+      correct: "Baka",
+      image: "assets/cow.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Duck",
+      options: ["Pato", "Langgam", "Isda"],
+      correct: "Pato",
+      image: "assets/duck.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Pineapple",
+      options: ["Pinya", "Mangga", "Saging"],
+      correct: "Pinya",
+      image: "assets/pineapple.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Tomato",
+      options: ["Kamatis", "Saging", "Mansanas"],
+      correct: "Kamatis",
+      image: "assets/tomato.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Airplane",
+      options: ["Eroplano", "Barko", "Bus"],
+      correct: "Eroplano",
+      image: "assets/plane.png",
+    ),
+    Question(
+      type: "picture",
+      phrase: "Helicopter",
+      options: ["Helikopter", "Barko", "Sakyanan"],
+      correct: "Helikopter",
+      image: "assets/helicopter.png",
+    ),
+  ];
 
   @override
   void initState() {
@@ -257,6 +261,7 @@ class _QintermediateState extends State<Qintermediate>
     _score = 0;
     _answered = false;
     _selectedIndex = null;
+    _results = [];
     _shuffledOptions = _questions[_currentIndex].shuffledOptions();
   }
 
@@ -273,8 +278,8 @@ class _QintermediateState extends State<Qintermediate>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              Qscore(score: _score, total: _questions.length),
+          builder: (context) => Qscore(
+              score: _score, total: _questions.length, results: _results),
         ),
       );
     }
@@ -290,7 +295,6 @@ class _QintermediateState extends State<Qintermediate>
   Widget build(BuildContext context) {
     final question = _questions[_currentIndex];
 
-    
     Color cardColor;
     IconData cardIcon;
 
@@ -352,14 +356,12 @@ class _QintermediateState extends State<Qintermediate>
               ),
             ),
             const SizedBox(height: 32),
-
             if (question.type == "picture" && question.image != null)
               SizedBox(
                 width: 155,
                 height: 155,
                 child: Image.asset(question.image!, fit: BoxFit.contain),
               ),
-
             if (question.type != "picture" || question.image == null)
               Column(
                 children: [
@@ -404,10 +406,7 @@ class _QintermediateState extends State<Qintermediate>
                   ),
                 ],
               ),
-
             const SizedBox(height: 32),
-
-            
             ...List.generate(_shuffledOptions.length, (index) {
               final option = _shuffledOptions[index];
               Color borderColor = const Color(0xFF878282);
@@ -434,7 +433,16 @@ class _QintermediateState extends State<Qintermediate>
                           setState(() {
                             _selectedIndex = index;
                             _answered = true;
-                            if (option == question.correct) _score++;
+                            bool isCorrect = option == question.correct;
+                            if (isCorrect) _score++;
+
+                            _results.add(ResultDetails(
+                              phrase: question.phrase,
+                              userAnswer: option,
+                              correctAnswer: question.correct,
+                              isCorrect: isCorrect,
+                            ));
+
                             _timerController.stop();
                           });
                         },
@@ -455,7 +463,6 @@ class _QintermediateState extends State<Qintermediate>
                 ),
               );
             }),
-
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -463,11 +470,9 @@ class _QintermediateState extends State<Qintermediate>
                 value: _timerController.value,
                 minHeight: 6,
                 backgroundColor: Colors.grey.shade300,
-                valueColor:
-                    const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
+                valueColor: const AlwaysStoppedAnimation(Color(0xFF2A7BE6)),
               ),
             ),
-
             const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,

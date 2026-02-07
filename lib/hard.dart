@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'score.dart';
+import 'result_feature.dart';
 
 class HardPage extends StatefulWidget {
   const HardPage({Key? key}) : super(key: key);
@@ -14,7 +15,8 @@ class Question {
   final List<String> options;
   final String correct;
 
-  Question({required this.phrase, required this.options, required this.correct});
+  Question(
+      {required this.phrase, required this.options, required this.correct});
 }
 
 class _QuizPageState extends State<HardPage> {
@@ -22,38 +24,59 @@ class _QuizPageState extends State<HardPage> {
   int? _selectedIndex;
   bool _answered = false;
   int _score = 0;
+  List<ResultDetails> _results = [];
 
   late ConfettiController _confettiController;
 
   final List<Question> _allQuestions = [
     Question(
       phrase: 'Ano ginahimo mo?',
-      options: ['What are you doing?', 'Where are you going?', 'Who are you with?'],
+      options: [
+        'What are you doing?',
+        'Where are you going?',
+        'Who are you with?'
+      ],
       correct: 'What are you doing?',
     ),
     Question(
       phrase: 'Wala ko kabalo',
-      options: ['I am not going','I don’t know',  'I am not hungry'],
+      options: ['I am not going', 'I don’t know', 'I am not hungry'],
       correct: 'I don’t know',
     ),
     Question(
       phrase: 'Ginapanilagan ko siya',
-      options: ['I am waiting for him/her', 'I am calling him/her','I am watching him/her'],
+      options: [
+        'I am waiting for him/her',
+        'I am calling him/her',
+        'I am watching him/her'
+      ],
       correct: 'I am watching him/her',
     ),
     Question(
       phrase: 'Indi ko gusto sina',
-      options: [ 'I don’t understand that', 'I don’t like that','I can’t hear that'],
+      options: [
+        'I don’t understand that',
+        'I don’t like that',
+        'I can’t hear that'
+      ],
       correct: 'I don’t like that',
     ),
     Question(
       phrase: 'Nagakadlaw siya.',
-      options: ['He/She is laughing.', 'He/She is crying.', 'He/She is running.'],
+      options: [
+        'He/She is laughing.',
+        'He/She is crying.',
+        'He/She is running.'
+      ],
       correct: 'He/She is laughing.',
     ),
     Question(
       phrase: 'Ginbutangan ko tubig ang baso',
-      options: ['I washed the glass', 'I broke the glass','I put water in the glass'],
+      options: [
+        'I washed the glass',
+        'I broke the glass',
+        'I put water in the glass'
+      ],
       correct: 'I put water in the glass',
     ),
     Question(
@@ -63,57 +86,101 @@ class _QuizPageState extends State<HardPage> {
     ),
     Question(
       phrase: 'Palihog ko hugasi ang pinggan',
-      options: [ 'Please cook the food', 'Please wash the dishes','Please open the door'],
+      options: [
+        'Please cook the food',
+        'Please wash the dishes',
+        'Please open the door'
+      ],
       correct: 'Please wash the dishes',
     ),
     Question(
       phrase: 'Nadula ang akon cellphone',
-      options: ['My cellphone is missing', 'My cellphone is charging', 'My cellphone is broken'],
+      options: [
+        'My cellphone is missing',
+        'My cellphone is charging',
+        'My cellphone is broken'
+      ],
       correct: 'My cellphone is missing',
     ),
     Question(
       phrase: 'Gitawag ka ni Mama mo',
-      options: [ 'Your mother is angry', 'Your mother is calling you','Your mother is cooking'],
+      options: [
+        'Your mother is angry',
+        'Your mother is calling you',
+        'Your mother is cooking'
+      ],
       correct: 'Your mother is calling you',
     ),
     Question(
       phrase: 'Tingala ako ngaa wala ka nag-abot',
-      options: [ 'I knew you would not come', 'I forgot you were coming','I wondered why you didn’t arrive'],
+      options: [
+        'I knew you would not come',
+        'I forgot you were coming',
+        'I wondered why you didn’t arrive'
+      ],
       correct: 'I wondered why you didn’t arrive',
     ),
     Question(
       phrase: 'Ginpalangga niya ako pero wala ko kabalo',
-      options: ['He/She loved me but I didn’t know', 'He/She ignored me completely', 'He/She lied to me'],
+      options: [
+        'He/She loved me but I didn’t know',
+        'He/She ignored me completely',
+        'He/She lied to me'
+      ],
       correct: 'He/She loved me but I didn’t know',
     ),
     Question(
       phrase: 'Mas nami pa ni kaysa sa sang una',
-      options: ['This is better than before', 'This is worse than before', 'This is the same as before'],
+      options: [
+        'This is better than before',
+        'This is worse than before',
+        'This is the same as before'
+      ],
       correct: 'This is better than before',
     ),
     Question(
       phrase: 'Indi mo pag kalimtan ang imo ginhimo',
-      options: ['Don’t repeat what you did', 'Don’t forget what you did', 'Don’t say what you did'],
+      options: [
+        'Don’t repeat what you did',
+        'Don’t forget what you did',
+        'Don’t say what you did'
+      ],
       correct: 'Don’t forget what you did',
     ),
     Question(
       phrase: 'Ginpabaylo ko ang kwarta sa tindahan',
-      options: [ 'I spent the money at the store', 'I exchanged the money at the store','I borrowed money from the store'],
+      options: [
+        'I spent the money at the store',
+        'I exchanged the money at the store',
+        'I borrowed money from the store'
+      ],
       correct: 'I exchanged the money at the store',
     ),
     Question(
       phrase: 'Naglakat ako bisan ga-ulan',
-      options: [ 'I stayed home because of rain','I walked even though it was raining', 'I ran to avoid the rain'],
+      options: [
+        'I stayed home because of rain',
+        'I walked even though it was raining',
+        'I ran to avoid the rain'
+      ],
       correct: 'I walked even though it was raining',
     ),
     Question(
       phrase: 'Wala ko naga-uyat sang cellphone ko',
-      options: [ 'I lost my cellphone', 'I am not holding my cellphone','I forgot my cellphone'],
+      options: [
+        'I lost my cellphone',
+        'I am not holding my cellphone',
+        'I forgot my cellphone'
+      ],
       correct: 'I am not holding my cellphone',
     ),
     Question(
       phrase: 'Gindala ko ang imo libro',
-      options: [ 'I borrowed your book', 'I lost your book','I brought your book'],
+      options: [
+        'I borrowed your book',
+        'I lost your book',
+        'I brought your book'
+      ],
       correct: 'I brought your book',
     ),
     Question(
@@ -128,7 +195,8 @@ class _QuizPageState extends State<HardPage> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
     _loadNewSet();
   }
 
@@ -140,6 +208,7 @@ class _QuizPageState extends State<HardPage> {
       _score = 0;
       _answered = false;
       _selectedIndex = null;
+      _results = [];
     });
   }
 
@@ -151,11 +220,11 @@ class _QuizPageState extends State<HardPage> {
         _answered = false;
       });
     } else {
-      
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ScorePage(score: _score, total: _questions.length),
+          builder: (context) => ScorePage(
+              score: _score, total: _questions.length, results: _results),
         ),
       );
     }
@@ -270,12 +339,21 @@ class _QuizPageState extends State<HardPage> {
                           setState(() {
                             _selectedIndex = index;
                             _answered = true;
-                            if (option == question.correct) _score++;
+                            bool isCorrect = option == question.correct;
+                            if (isCorrect) _score++;
+
+                            _results.add(ResultDetails(
+                              phrase: question.phrase,
+                              userAnswer: option,
+                              correctAnswer: question.correct,
+                              isCorrect: isCorrect,
+                            ));
                           });
                         },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: borderColor),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text(
                     option,
@@ -289,7 +367,7 @@ class _QuizPageState extends State<HardPage> {
                 ),
               );
             }),
-          const Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 120),
               child: SizedBox(
@@ -299,7 +377,8 @@ class _QuizPageState extends State<HardPage> {
                   onPressed: _answered ? _nextQuestion : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2A7BE6),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
                   child: const Text(
                     'Continue',

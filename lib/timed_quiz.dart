@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'stats.dart';
+import 'result_feature.dart';
 
 enum QuizDifficulty { easy, intermediate, hard, assessment }
 
@@ -29,615 +30,613 @@ class _TimedQuizPageState extends State<TimedQuizPage>
   static int _easyScore = 0;
   static int _mediumScore = 0;
   static int _hardScore = 0;
+  static List<ResultDetails> _allResults = [];
 
   late final Duration questionDuration;
   late List<QuizCard> cards;
 
   final List<QuizCard> easyCards = [
-  QuizCard(
-      image: 'assets/moon.png',
-      english: 'Moon',
-      options: ['Bulan', 'Dagu-ob', 'Ulan', 'Adlaw'],
-      correct: 'Bulan'),
-  QuizCard(
-      image: 'assets/rain.png',
-      english: 'Rain',
-      options: ['Hangin', 'Ulan', 'Duta', 'Tubig'],
-      correct: 'Ulan'),
-  QuizCard(
-      image: 'assets/cloud.png',
-      english: 'Cloud',
-      options: ['Duta', 'Panganod', 'Pangpang', 'Pangpang'],
-      correct: 'Panganod'),
-  QuizCard(
-      image: 'assets/star.png',
-      english: 'Star',
-      options: ['Bulak', 'Kahoy', 'Bituon', 'Balay'],
-      correct: 'Bituon'),
-  QuizCard(
-      image: 'assets/wind.png',
-      english: 'Wind',
-      options: ['Hangin', 'Tubig', 'Kahoy', 'Ulan'],
-      correct: 'Hangin'),
-  QuizCard(
-      image: 'assets/tree.png',
-      english: 'Tree',
-      options: ['Kahoy', 'Duta', 'Bato', 'Tubig'],
-      correct: 'Kahoy'),
-  QuizCard(
-      image: 'assets/flower.png',
-      english: 'Flower',
-      options: [ 'Dahon','Bulak', 'Bunga', 'Kahoy'],
-      correct: 'Bulak'),
-  QuizCard(
-      image: 'assets/river.png',
-      english: 'River',
-      options: ['Bungtod', 'Langit', 'Suba', 'Dalan'],
-      correct: 'Suba'),
-  QuizCard(
-      image: 'assets/mountain.png',
-      english: 'Mountain',
-      options: ['Bukid', 'Tubig', 'Kahoy', 'Bituon'],
-      correct: 'Bukid'),
-  QuizCard(
-      image: 'assets/fish.png',
-      english: 'Fish',
-      options: [ 'Manok', 'Ido', 'Ipis','Isda'],
-      correct: 'Isda'),
-  QuizCard(
-      image: 'assets/bird.png',
-      english: 'Bird',
-      options: ['Pispis', 'Isda', 'Ido', 'Kanding'],
-      correct: 'Pispis'),
-  QuizCard(
-      image: 'assets/dog.png',
-      english: 'Dog',
-      options: ['Man-og', 'Kanding', 'Ido', 'Isda'],
-      correct: 'Ido'),
-  QuizCard(
-      image: 'assets/cat.png',
-      english: 'Cat',
-      options: ['Ido', 'Manok','Kuring',  'Kanding'],
-      correct: 'Kuring'),
-  QuizCard(
-      image: 'assets/house.png',
-      english: 'House',
-      options: ['Balay', 'Kwarto', 'Eskwelahan', 'Simba'],
-      correct: 'Balay'),
-  QuizCard(
-      image: 'assets/car.png',
-      english: 'Car',
-      options: ['Salakyan', 'Bangka', 'Motor', 'Traysikel'],
-      correct: 'Salakyan'),
-  QuizCard(
-      image: 'assets/book.png',
-      english: 'Book',
-      options: [ 'Lapis', 'Libro','Papel', 'Lamesa'],
-      correct: 'Libro'),
-  QuizCard(
-      image: 'assets/phone.png',
-      english: 'Phone',
-      options: ['Kompyuter', 'Radyo', 'Telepono', 'Telebisyon'],
-      correct: 'Telepono'),
-  QuizCard(
-      image: 'assets/clock.png',
-      english: 'Clock',
-      options: ['Orasan', 'Kandila', 'Bintana', 'Pinto'],
-      correct: 'Orasan'),
-  QuizCard(
-      image: 'assets/apple.png',
-      english: 'Apple',
-      options: ['Mansanas', 'Saging', 'Ubas', 'Mangga'],
-      correct: 'Mansanas'),
-  QuizCard(
-      image: 'assets/banana.png',
-      english: 'Banana',
-      options: [ 'Mansanas', 'Ubas', 'Papaya','Saging'],
-      correct: 'Saging'),
-  QuizCard(
-      image: 'assets/mango.png',
-      english: 'Mango',
-      options: ['Paho', 'Saging', 'Ubas', 'Lanzones'],
-      correct: 'Paho'),
-  QuizCard(
-      image: 'assets/grape.png',
-      english: 'Grape',
-      options: ['Ubas', 'Mangga', 'Saging', 'Mansanas'],
-      correct: 'Ubas'),
-  QuizCard(
-      image: 'assets/teacher.png',
-      english: 'Teacher',
-      options: ['Doktor', 'Pulis', 'Maestra', 'Manuglut'],
-      correct: 'Maestra'),
-  QuizCard(
-      image: 'assets/doctor.png',
-      english: 'Doctor',
-      options: ['Doktor', 'Maestra', 'Manugtahi', 'Pulis'],
-      correct: 'Doktor'),
-  QuizCard(
-      image: 'assets/police.png',
-      english: 'Police',
-      options: ['Sundalo','Pulis',  'Doktor', 'Tindera'],
-      correct: 'Pulis'),
-  QuizCard(
-      image: 'assets/fireman.png',
-      english: 'Fireman',
-      options: ['Pulis', 'Doktor', 'Bombero', 'Limpyo'],
-      correct: 'Bombero'),
-      QuizCard(
-    image: 'assets/sun.png',
-    english: 'Sun',
-    options: ['Adlaw', 'Bulan', 'Langit', 'Bituon'],
-    correct: 'Adlaw'),
-QuizCard(
-    image: 'assets/road.png',
-    english: 'Road',
-    options: [ 'Suba','Dalan', 'Bukid', 'Baryo'],
-    correct: 'Dalan'),
-QuizCard(
-    image: 'assets/leaf.png',
-    english: 'Leaf',
-    options: ['Bulak', 'Kahoy','Dahon',  'Bunga'],
-    correct: 'Dahon'),
-QuizCard(
-    image: 'assets/beach.png',
-    english: 'Beach',
-    options: ['Suba', 'Baryo','Baybay',  'Bukid'],
-    correct: 'Baybay'),
-QuizCard(
-    image: 'assets/hammer.png',
-    english: 'Hammer',
-    options: ['Kutsilyo', 'Lansang','Martilyo',  'Lamesa'],
-    correct: 'Martilyo'),
-QuizCard(
-    image: 'assets/milk.png',
-    english: 'Milk',
-    options: [ 'Tubig','Gatas', 'Kape', 'Soda'],
-    correct: 'Gatas'),
-QuizCard(
-    image: 'assets/shirt.png',
-    english: 'Shirt',
-    options: [ 'Pantalon', 'Sapatos', 'Bayo','Belo'],
-    correct: 'Bayo'),
-QuizCard(
-    image: 'assets/fork.png',
-    english: 'Fork',
-    options: ['Kutsara','Tinidor',  'Kutsilyo', 'Plato'],
-    correct: 'Tinidor'),
-QuizCard(
-    image: 'assets/knife.png',
-    english: 'Knife',
-    options: ['Tinidor', 'Basong','Kutsilyo',  'Kutsara'],
-    correct: 'Kutsilyo'),
-QuizCard(
-    image: 'assets/chair.png',
-    english: 'Chair',
-    options: ['Katre', 'Lamesa', 'Bintana', 'Pulongkuan'],
-    correct: 'Pulongkuan'),
-QuizCard(
-    image: 'assets/table.png',
-    english: 'Table',
-    options: ['Bintana', 'Pinto', 'Lamesa', 'Katre'],
-    correct: 'Lamesa'),
-QuizCard(
-    image: 'assets/watch.png',
-    english: 'Watch',
-    options: ['Singsing', 'Kadena', 'Sapatos', 'Relo'],
-    correct: 'Relo'),
-QuizCard(
-    image: 'assets/pen.png',
-    english: 'Pen',
-    options: ['Lapis', 'Bolpen', 'Papel', 'Kutsilyo'],
-    correct: 'Bolpen'),
-QuizCard(
-    image: 'assets/paper.png',
-    english: 'Paper',
-    options: ['Bolpen', 'Papel', 'Mesa', 'Libro'],
-    correct: 'Papel'),
-QuizCard(
-    image: 'assets/cup.png',
-    english: 'Mug',
-    options: ['Baso', 'Tinidor', 'Tasa', 'Pinggan'],
-    correct: 'Tasa'),
-QuizCard(
-    image: 'assets/spoon.png',
-    english: 'Spoon',
-    options: ['Baso', 'Tinidor', 'Kutsara', 'Tasa'],
-    correct: 'Kutsara'),
+    QuizCard(
+        image: 'assets/moon.png',
+        english: 'Moon',
+        options: ['Bulan', 'Dagu-ob', 'Ulan', 'Adlaw'],
+        correct: 'Bulan'),
+    QuizCard(
+        image: 'assets/rain.png',
+        english: 'Rain',
+        options: ['Hangin', 'Ulan', 'Duta', 'Tubig'],
+        correct: 'Ulan'),
+    QuizCard(
+        image: 'assets/cloud.png',
+        english: 'Cloud',
+        options: ['Duta', 'Panganod', 'Pangpang', 'Pangpang'],
+        correct: 'Panganod'),
+    QuizCard(
+        image: 'assets/star.png',
+        english: 'Star',
+        options: ['Bulak', 'Kahoy', 'Bituon', 'Balay'],
+        correct: 'Bituon'),
+    QuizCard(
+        image: 'assets/wind.png',
+        english: 'Wind',
+        options: ['Hangin', 'Tubig', 'Kahoy', 'Ulan'],
+        correct: 'Hangin'),
+    QuizCard(
+        image: 'assets/tree.png',
+        english: 'Tree',
+        options: ['Kahoy', 'Duta', 'Bato', 'Tubig'],
+        correct: 'Kahoy'),
+    QuizCard(
+        image: 'assets/flower.png',
+        english: 'Flower',
+        options: ['Dahon', 'Bulak', 'Bunga', 'Kahoy'],
+        correct: 'Bulak'),
+    QuizCard(
+        image: 'assets/river.png',
+        english: 'River',
+        options: ['Bungtod', 'Langit', 'Suba', 'Dalan'],
+        correct: 'Suba'),
+    QuizCard(
+        image: 'assets/mountain.png',
+        english: 'Mountain',
+        options: ['Bukid', 'Tubig', 'Kahoy', 'Bituon'],
+        correct: 'Bukid'),
+    QuizCard(
+        image: 'assets/fish.png',
+        english: 'Fish',
+        options: ['Manok', 'Ido', 'Ipis', 'Isda'],
+        correct: 'Isda'),
+    QuizCard(
+        image: 'assets/bird.png',
+        english: 'Bird',
+        options: ['Pispis', 'Isda', 'Ido', 'Kanding'],
+        correct: 'Pispis'),
+    QuizCard(
+        image: 'assets/dog.png',
+        english: 'Dog',
+        options: ['Man-og', 'Kanding', 'Ido', 'Isda'],
+        correct: 'Ido'),
+    QuizCard(
+        image: 'assets/cat.png',
+        english: 'Cat',
+        options: ['Ido', 'Manok', 'Kuring', 'Kanding'],
+        correct: 'Kuring'),
+    QuizCard(
+        image: 'assets/house.png',
+        english: 'House',
+        options: ['Balay', 'Kwarto', 'Eskwelahan', 'Simba'],
+        correct: 'Balay'),
+    QuizCard(
+        image: 'assets/car.png',
+        english: 'Car',
+        options: ['Salakyan', 'Bangka', 'Motor', 'Traysikel'],
+        correct: 'Salakyan'),
+    QuizCard(
+        image: 'assets/book.png',
+        english: 'Book',
+        options: ['Lapis', 'Libro', 'Papel', 'Lamesa'],
+        correct: 'Libro'),
+    QuizCard(
+        image: 'assets/phone.png',
+        english: 'Phone',
+        options: ['Kompyuter', 'Radyo', 'Telepono', 'Telebisyon'],
+        correct: 'Telepono'),
+    QuizCard(
+        image: 'assets/clock.png',
+        english: 'Clock',
+        options: ['Orasan', 'Kandila', 'Bintana', 'Pinto'],
+        correct: 'Orasan'),
+    QuizCard(
+        image: 'assets/apple.png',
+        english: 'Apple',
+        options: ['Mansanas', 'Saging', 'Ubas', 'Mangga'],
+        correct: 'Mansanas'),
+    QuizCard(
+        image: 'assets/banana.png',
+        english: 'Banana',
+        options: ['Mansanas', 'Ubas', 'Papaya', 'Saging'],
+        correct: 'Saging'),
+    QuizCard(
+        image: 'assets/mango.png',
+        english: 'Mango',
+        options: ['Paho', 'Saging', 'Ubas', 'Lanzones'],
+        correct: 'Paho'),
+    QuizCard(
+        image: 'assets/grape.png',
+        english: 'Grape',
+        options: ['Ubas', 'Mangga', 'Saging', 'Mansanas'],
+        correct: 'Ubas'),
+    QuizCard(
+        image: 'assets/teacher.png',
+        english: 'Teacher',
+        options: ['Doktor', 'Pulis', 'Maestra', 'Manuglut'],
+        correct: 'Maestra'),
+    QuizCard(
+        image: 'assets/doctor.png',
+        english: 'Doctor',
+        options: ['Doktor', 'Maestra', 'Manugtahi', 'Pulis'],
+        correct: 'Doktor'),
+    QuizCard(
+        image: 'assets/police.png',
+        english: 'Police',
+        options: ['Sundalo', 'Pulis', 'Doktor', 'Tindera'],
+        correct: 'Pulis'),
+    QuizCard(
+        image: 'assets/fireman.png',
+        english: 'Fireman',
+        options: ['Pulis', 'Doktor', 'Bombero', 'Limpyo'],
+        correct: 'Bombero'),
+    QuizCard(
+        image: 'assets/sun.png',
+        english: 'Sun',
+        options: ['Adlaw', 'Bulan', 'Langit', 'Bituon'],
+        correct: 'Adlaw'),
+    QuizCard(
+        image: 'assets/road.png',
+        english: 'Road',
+        options: ['Suba', 'Dalan', 'Bukid', 'Baryo'],
+        correct: 'Dalan'),
+    QuizCard(
+        image: 'assets/leaf.png',
+        english: 'Leaf',
+        options: ['Bulak', 'Kahoy', 'Dahon', 'Bunga'],
+        correct: 'Dahon'),
+    QuizCard(
+        image: 'assets/beach.png',
+        english: 'Beach',
+        options: ['Suba', 'Baryo', 'Baybay', 'Bukid'],
+        correct: 'Baybay'),
+    QuizCard(
+        image: 'assets/hammer.png',
+        english: 'Hammer',
+        options: ['Kutsilyo', 'Lansang', 'Martilyo', 'Lamesa'],
+        correct: 'Martilyo'),
+    QuizCard(
+        image: 'assets/milk.png',
+        english: 'Milk',
+        options: ['Tubig', 'Gatas', 'Kape', 'Soda'],
+        correct: 'Gatas'),
+    QuizCard(
+        image: 'assets/shirt.png',
+        english: 'Shirt',
+        options: ['Pantalon', 'Sapatos', 'Bayo', 'Belo'],
+        correct: 'Bayo'),
+    QuizCard(
+        image: 'assets/fork.png',
+        english: 'Fork',
+        options: ['Kutsara', 'Tinidor', 'Kutsilyo', 'Plato'],
+        correct: 'Tinidor'),
+    QuizCard(
+        image: 'assets/knife.png',
+        english: 'Knife',
+        options: ['Tinidor', 'Basong', 'Kutsilyo', 'Kutsara'],
+        correct: 'Kutsilyo'),
+    QuizCard(
+        image: 'assets/chair.png',
+        english: 'Chair',
+        options: ['Katre', 'Lamesa', 'Bintana', 'Pulongkuan'],
+        correct: 'Pulongkuan'),
+    QuizCard(
+        image: 'assets/table.png',
+        english: 'Table',
+        options: ['Bintana', 'Pinto', 'Lamesa', 'Katre'],
+        correct: 'Lamesa'),
+    QuizCard(
+        image: 'assets/watch.png',
+        english: 'Watch',
+        options: ['Singsing', 'Kadena', 'Sapatos', 'Relo'],
+        correct: 'Relo'),
+    QuizCard(
+        image: 'assets/pen.png',
+        english: 'Pen',
+        options: ['Lapis', 'Bolpen', 'Papel', 'Kutsilyo'],
+        correct: 'Bolpen'),
+    QuizCard(
+        image: 'assets/paper.png',
+        english: 'Paper',
+        options: ['Bolpen', 'Papel', 'Mesa', 'Libro'],
+        correct: 'Papel'),
+    QuizCard(
+        image: 'assets/cup.png',
+        english: 'Mug',
+        options: ['Baso', 'Tinidor', 'Tasa', 'Pinggan'],
+        correct: 'Tasa'),
+    QuizCard(
+        image: 'assets/spoon.png',
+        english: 'Spoon',
+        options: ['Baso', 'Tinidor', 'Kutsara', 'Tasa'],
+        correct: 'Kutsara'),
   ];
-
 
   final List<QuizCard> mediumCards = [
     QuizCard(
-    image: 'assets/swim.png',
-    english: 'Swim',
-    options: ['Kaon', 'Langoy', 'Ambak', 'Dalagan'],
-    correct: 'Langoy'),
-QuizCard(
-    image: 'assets/run.png',
-    english: 'Run',
-    options: ['Inom', 'Sayaw', 'Dalagan', 'Langoy'],
-    correct: 'Dalagan'),
-QuizCard(
-    image: 'assets/sing.png',
-    english: 'Sing',
-    options: ['Ambak', 'Sayaw', 'Kanta', 'Tukar'],
-    correct: 'Kanta'),
-QuizCard(
-    image: 'assets/dance.png',
-    english: 'Dance',
-    options: ['Saot', 'Ambak', 'Hampang', 'Kanta'],
-    correct: 'Saot'),
-QuizCard(
-    image: 'assets/run.png',
-    english: 'Run',
-    options: ['Langoy', 'Dalagan', 'Ambak', 'Tindog'],
-    correct: 'Dalagan'),
-QuizCard(
-    image: 'assets/jump.png',
-    english: 'Jump',
-    options: ['Kaon', 'Lumpat', 'Sayaw', 'Tindog'],
-    correct: 'Lumpat'),
-QuizCard(
-    image: 'assets/read.png',
-    english: 'Read',
-    options: ['Tan-aw', 'Sulat', 'Pamati', 'Basa'],
-    correct: 'Basa'),
-QuizCard(
-    image: 'assets/write.png',
-    english: 'Write',
-    options: ['Pamati', 'Sulat', 'Tudlo', 'Basa'],
-    correct: 'Sulat'),
-QuizCard(
-    image: 'assets/cook.png',
-    english: 'Cook',
-    options: ['Inom', 'Luto', 'Kaon', 'Tanom'],
-    correct: 'Luto'),
+        image: 'assets/swim.png',
+        english: 'Swim',
+        options: ['Kaon', 'Langoy', 'Ambak', 'Dalagan'],
+        correct: 'Langoy'),
     QuizCard(
-    image: 'assets/milk.png',
-    english: 'Milk',
-    options: [ 'Tubig','Gatas', 'Kape', 'Soda'],
-    correct: 'Gatas'),
-QuizCard(
-    image: 'assets/shirt.png',
-    english: 'Shirt',
-    options: [ 'Pantalon', 'Sapatos', 'Bayo','Belo'],
-    correct: 'Bayo'),
-QuizCard(
-    image: 'assets/fork.png',
-    english: 'Fork',
-    options: ['Kutsara','Tinidor',  'Kutsilyo', 'Plato'],
-    correct: 'Tinidor'),
-QuizCard(
-    image: 'assets/knife.png',
-    english: 'Knife',
-    options: ['Tinidor', 'Basong','Kutsilyo',  'Kutsara'],
-    correct: 'Kutsilyo'),
-  QuizCard(
-      image: 'assets/justice.png',
-      english: 'Justice',
-      options: [ 'Kabuhi', 'Kagabhion','Hustisya', 'Kalipay'],
-      correct: 'Hustisya'),
-  QuizCard(
-      image: 'assets/hope.png',
-      english: 'Hope',
-      options: ['Paglaum', 'Kahadlok','Kasubo', 'Kabuhi'],
-      correct: 'Paglaum'),
-  QuizCard(
-      image: 'assets/faith.png',
-      english: 'Faith',
-      options: [ 'Pangamuyo', 'Kabuhi', 'Pagtuo','Kapasidad'],
-      correct: 'Pagtuo'),
-  QuizCard(
-      image: 'assets/courage.png',
-      english: 'Courage',
-      options: [ 'Kahadlok', 'Kaisog','Paglaum', 'Kalinong'],
-      correct: 'Kaisog'),
-  QuizCard(
-      image: 'assets/freedom.png',
-      english: 'Freedom',
-      options: ['Paglaum', 'Pagtuo', 'Kalayaan', 'Kahadlok'],
-      correct: 'Kalayaan'),
-  QuizCard(
-      image: 'assets/peace.png',
-      english: 'Peace',
-      options: ['Kalinong', 'Giyera', 'Kalisod', 'Kasakit'],
-      correct: 'Kalinong'),
-  QuizCard(
-      image: 'assets/love.png',
-      english: 'Love',
-      options: [ 'Kabuhi', 'Pagtuo', 'Gugma','Paglaum'],
-      correct: 'Gugma'),
-  QuizCard(
-      image: 'assets/truth.png',
-      english: 'Honesty',
-      options: ['Pagpasaylo','Pagkamatuod',  'Kalipay', 'Pagtuo'],
-      correct: 'Pagkamatuod'),
-  QuizCard(
-      image: 'assets/faith.png',
-      english: 'Belief',
-      options: ['Pagtoo', 'Paglaum', 'Pagbantay', 'Pagdula'],
-      correct: 'Pagtoo'),
-  QuizCard(
-      image: 'assets/love.png',
-      english: 'Heart',
-      options: ['Tagipusuon', 'Palangga', 'Paglaum', 'Pagtuo'],
-      correct: 'Tagipusuon'),
-  QuizCard(
-      image: 'assets/forgiveness.png',
-      english: 'Mercy',
-      options: [ 'Kaisog', 'Kahadlok', 'Kaluoy','Pagtuo'],
-      correct: 'Kaluoy'),
-  QuizCard(
-      image: 'assets/wisdom.png',
-      english: 'Wisdom',
-      options: ['Kabuhi', 'Paglaum', 'Kaalam', 'Pagkatuod'],
-      correct: 'Kaalam'),
-  QuizCard(
-      image: 'assets/truth.png',
-      english: 'Reality',
-      options: ['Kamatuoran', 'Handum', 'Paglaum', 'Kasubo'],
-      correct: 'Kamatuoran'),
-  QuizCard(
-      image: 'assets/courage.png',
-      english: 'Bravery',
-      options: ['Kaisog', 'Kaluoy', 'Pagtuo', 'Kalipay'],
-      correct: 'Kaisog'),
-  QuizCard(
-      image: 'assets/hope.png',
-      english: 'Dream',
-      options: ['Handum', 'Pagtuo', 'Paglaum', 'Kabuhi'],
-      correct: 'Handum'),
-  QuizCard(
-      image: 'assets/justice.png',
-      english: 'Right',
-      options: ['Husto', 'Sayop', 'Tama', 'Peke'],
-      correct: 'Husto'),
-  QuizCard(
-      image: 'assets/truth.png',
-      english: 'Truth',
-      options: [ 'Kabuhi', 'Pagtuo','Pagkamatuod', 'Paglaum'],
-      correct: 'Pahkamatuod'),
-  QuizCard(
-    image: 'assets/courage.png',
-    english: 'Courage',
-    options: ['Kaisog', 'Kusog', 'Kahadlok', 'Kalipay'],
-    correct: 'Kaisog'),
-QuizCard(
-    image: 'assets/sacrifice.png',
-    english: 'Sacrifice',
-    options: [ 'Pagtuo', 'Pagrespeto', 'Sakripisyo','Pagbaton'],
-    correct: 'Sakripisyo'),
-QuizCard(
-    image: 'assets/truth.png',
-    english: 'Truth',
-    options: ['Kamatuoran', 'Kabutigan', 'Kasadya', 'Kasubo'],
-    correct: 'Kamatuoran'),
-QuizCard(
-      image: 'assets/happiness.png',
-      english: 'Happiness',
-      options: [ 'Kasubo', 'Kasakit', 'Kalipay','Kaguol'],
-      correct: 'Kalipay'),
-  QuizCard(
-      image: 'assets/sad.png',
-      english: 'Sadness',
-      options: [ 'Kalipay','Kasubo', 'Kasadyahan', 'Paghidait'],
-      correct: 'Kasubo'),
-  QuizCard(
-      image: 'assets/angry.png',
-      english: 'Anger',
-      options: ['Kasingkasing', 'Kaugot', 'Kabug-at', 'Kahadlok'],
-      correct: 'Kaugot'),
-  QuizCard(
-      image: 'assets/fear.png',
-      english: 'Fear',
-      options: ['Pagtuo', 'Paglaum','Kahadlok',  'Kahupong'],
-      correct: 'Kahadlok'),
-  QuizCard(
-      image: 'assets/life.png',
-      english: 'Life',
-      options: ['Kamatayon', 'Kalibutan', 'Pagtuo','Kabuhi'],
-      correct: 'Kabuhi'),
-  QuizCard(
-      image: 'assets/death.png',
-      english: 'Death',
-      options: ['Kamatayon', 'Paglaum', 'Kabuhi', 'Paghidait'],
-      correct: 'Kamatayon'),
-      QuizCard(
-      image: 'assets/lies.png',
-      english: 'Lie',
-      options: ['Kamatuoran','Kabutigan', 'Paglaum', 'Katingalahan'],
-      correct: 'Kabutigan'),
+        image: 'assets/run.png',
+        english: 'Run',
+        options: ['Inom', 'Sayaw', 'Dalagan', 'Langoy'],
+        correct: 'Dalagan'),
+    QuizCard(
+        image: 'assets/sing.png',
+        english: 'Sing',
+        options: ['Ambak', 'Sayaw', 'Kanta', 'Tukar'],
+        correct: 'Kanta'),
+    QuizCard(
+        image: 'assets/dance.png',
+        english: 'Dance',
+        options: ['Saot', 'Ambak', 'Hampang', 'Kanta'],
+        correct: 'Saot'),
+    QuizCard(
+        image: 'assets/run.png',
+        english: 'Run',
+        options: ['Langoy', 'Dalagan', 'Ambak', 'Tindog'],
+        correct: 'Dalagan'),
+    QuizCard(
+        image: 'assets/jump.png',
+        english: 'Jump',
+        options: ['Kaon', 'Lumpat', 'Sayaw', 'Tindog'],
+        correct: 'Lumpat'),
+    QuizCard(
+        image: 'assets/read.png',
+        english: 'Read',
+        options: ['Tan-aw', 'Sulat', 'Pamati', 'Basa'],
+        correct: 'Basa'),
+    QuizCard(
+        image: 'assets/write.png',
+        english: 'Write',
+        options: ['Pamati', 'Sulat', 'Tudlo', 'Basa'],
+        correct: 'Sulat'),
+    QuizCard(
+        image: 'assets/cook.png',
+        english: 'Cook',
+        options: ['Inom', 'Luto', 'Kaon', 'Tanom'],
+        correct: 'Luto'),
+    QuizCard(
+        image: 'assets/milk.png',
+        english: 'Milk',
+        options: ['Tubig', 'Gatas', 'Kape', 'Soda'],
+        correct: 'Gatas'),
+    QuizCard(
+        image: 'assets/shirt.png',
+        english: 'Shirt',
+        options: ['Pantalon', 'Sapatos', 'Bayo', 'Belo'],
+        correct: 'Bayo'),
+    QuizCard(
+        image: 'assets/fork.png',
+        english: 'Fork',
+        options: ['Kutsara', 'Tinidor', 'Kutsilyo', 'Plato'],
+        correct: 'Tinidor'),
+    QuizCard(
+        image: 'assets/knife.png',
+        english: 'Knife',
+        options: ['Tinidor', 'Basong', 'Kutsilyo', 'Kutsara'],
+        correct: 'Kutsilyo'),
+    QuizCard(
+        image: 'assets/justice.png',
+        english: 'Justice',
+        options: ['Kabuhi', 'Kagabhion', 'Hustisya', 'Kalipay'],
+        correct: 'Hustisya'),
+    QuizCard(
+        image: 'assets/hope.png',
+        english: 'Hope',
+        options: ['Paglaum', 'Kahadlok', 'Kasubo', 'Kabuhi'],
+        correct: 'Paglaum'),
+    QuizCard(
+        image: 'assets/faith.png',
+        english: 'Faith',
+        options: ['Pangamuyo', 'Kabuhi', 'Pagtuo', 'Kapasidad'],
+        correct: 'Pagtuo'),
+    QuizCard(
+        image: 'assets/courage.png',
+        english: 'Courage',
+        options: ['Kahadlok', 'Kaisog', 'Paglaum', 'Kalinong'],
+        correct: 'Kaisog'),
+    QuizCard(
+        image: 'assets/freedom.png',
+        english: 'Freedom',
+        options: ['Paglaum', 'Pagtuo', 'Kalayaan', 'Kahadlok'],
+        correct: 'Kalayaan'),
+    QuizCard(
+        image: 'assets/peace.png',
+        english: 'Peace',
+        options: ['Kalinong', 'Giyera', 'Kalisod', 'Kasakit'],
+        correct: 'Kalinong'),
+    QuizCard(
+        image: 'assets/love.png',
+        english: 'Love',
+        options: ['Kabuhi', 'Pagtuo', 'Gugma', 'Paglaum'],
+        correct: 'Gugma'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Honesty',
+        options: ['Pagpasaylo', 'Pagkamatuod', 'Kalipay', 'Pagtuo'],
+        correct: 'Pagkamatuod'),
+    QuizCard(
+        image: 'assets/faith.png',
+        english: 'Belief',
+        options: ['Pagtoo', 'Paglaum', 'Pagbantay', 'Pagdula'],
+        correct: 'Pagtoo'),
+    QuizCard(
+        image: 'assets/love.png',
+        english: 'Heart',
+        options: ['Tagipusuon', 'Palangga', 'Paglaum', 'Pagtuo'],
+        correct: 'Tagipusuon'),
+    QuizCard(
+        image: 'assets/forgiveness.png',
+        english: 'Mercy',
+        options: ['Kaisog', 'Kahadlok', 'Kaluoy', 'Pagtuo'],
+        correct: 'Kaluoy'),
+    QuizCard(
+        image: 'assets/wisdom.png',
+        english: 'Wisdom',
+        options: ['Kabuhi', 'Paglaum', 'Kaalam', 'Pagkatuod'],
+        correct: 'Kaalam'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Reality',
+        options: ['Kamatuoran', 'Handum', 'Paglaum', 'Kasubo'],
+        correct: 'Kamatuoran'),
+    QuizCard(
+        image: 'assets/courage.png',
+        english: 'Bravery',
+        options: ['Kaisog', 'Kaluoy', 'Pagtuo', 'Kalipay'],
+        correct: 'Kaisog'),
+    QuizCard(
+        image: 'assets/hope.png',
+        english: 'Dream',
+        options: ['Handum', 'Pagtuo', 'Paglaum', 'Kabuhi'],
+        correct: 'Handum'),
+    QuizCard(
+        image: 'assets/justice.png',
+        english: 'Right',
+        options: ['Husto', 'Sayop', 'Tama', 'Peke'],
+        correct: 'Husto'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Truth',
+        options: ['Kabuhi', 'Pagtuo', 'Pagkamatuod', 'Paglaum'],
+        correct: 'Pahkamatuod'),
+    QuizCard(
+        image: 'assets/courage.png',
+        english: 'Courage',
+        options: ['Kaisog', 'Kusog', 'Kahadlok', 'Kalipay'],
+        correct: 'Kaisog'),
+    QuizCard(
+        image: 'assets/sacrifice.png',
+        english: 'Sacrifice',
+        options: ['Pagtuo', 'Pagrespeto', 'Sakripisyo', 'Pagbaton'],
+        correct: 'Sakripisyo'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Truth',
+        options: ['Kamatuoran', 'Kabutigan', 'Kasadya', 'Kasubo'],
+        correct: 'Kamatuoran'),
+    QuizCard(
+        image: 'assets/happiness.png',
+        english: 'Happiness',
+        options: ['Kasubo', 'Kasakit', 'Kalipay', 'Kaguol'],
+        correct: 'Kalipay'),
+    QuizCard(
+        image: 'assets/sad.png',
+        english: 'Sadness',
+        options: ['Kalipay', 'Kasubo', 'Kasadyahan', 'Paghidait'],
+        correct: 'Kasubo'),
+    QuizCard(
+        image: 'assets/angry.png',
+        english: 'Anger',
+        options: ['Kasingkasing', 'Kaugot', 'Kabug-at', 'Kahadlok'],
+        correct: 'Kaugot'),
+    QuizCard(
+        image: 'assets/fear.png',
+        english: 'Fear',
+        options: ['Pagtuo', 'Paglaum', 'Kahadlok', 'Kahupong'],
+        correct: 'Kahadlok'),
+    QuizCard(
+        image: 'assets/life.png',
+        english: 'Life',
+        options: ['Kamatayon', 'Kalibutan', 'Pagtuo', 'Kabuhi'],
+        correct: 'Kabuhi'),
+    QuizCard(
+        image: 'assets/death.png',
+        english: 'Death',
+        options: ['Kamatayon', 'Paglaum', 'Kabuhi', 'Paghidait'],
+        correct: 'Kamatayon'),
+    QuizCard(
+        image: 'assets/lies.png',
+        english: 'Lie',
+        options: ['Kamatuoran', 'Kabutigan', 'Paglaum', 'Katingalahan'],
+        correct: 'Kabutigan'),
   ];
 
-
   final List<QuizCard> hardCards = [
-QuizCard(
-    image: 'assets/courage.png',
-    english: 'Courage',
-    options: ['Kaisog', 'Kusog', 'Kahadlok', 'Kalipay'],
-    correct: 'Kaisog'),
-QuizCard(
-    image: 'assets/visitor.png',
-    english: 'Visitor',
-    options: [ 'Pagtuo', 'Pagrespeto', 'Bisita','Pagbaton'],
-    correct: 'Bisita'),
     QuizCard(
-      image: 'assets/faith.png',
-      english: 'Belief',
-      options: ['Pagtuo', 'Paglaum', 'Pagbantay', 'Pagdula'],
-      correct: 'Pagtuo'),
-  QuizCard(
-      image: 'assets/forgiveness.png',
-      english: 'Mercy',
-      options: [ 'Kaisog', 'Kahadlok', 'Kaluoy','Pagtuo'],
-      correct: 'Kaluoy'),
-QuizCard(
-    image: 'assets/promise.png',
-    english: 'Promise',
-    options: [ 'Handum', 'Panumdum', 'Promiso','Pagtuon'],
-    correct: 'Promiso'),
-QuizCard(
-    image: 'assets/patience.png',
-    english: 'Patience',
-    options: [ 'Paglaum', 'Palangga', 'Pagpugong','Pagtuo'],
-    correct: 'Pagpugong'),
-QuizCard(
-    image: 'assets/truth.png',
-    english: 'Trust',
-    options: ['Pagtuo','Pagsalig',  'Pagbaton', 'Palangga'],
-    correct: 'Pagsalig'),
-QuizCard(
-    image: 'assets/humility.png',
-    english: 'Humility',
-    options: [ 'Pagpasigarbo', 'Pagtuo','Pagpaubos', 'Pagbaton'],
-    correct: 'Pagpaubos'),
-QuizCard(
-    image: 'assets/honesty.png',
-    english: 'Honesty',
-    options: ['Pagkamatuod', 'Pagtuo', 'Pagbaton', 'Pagsalig'],
-    correct: 'Pagkamatuod'),
-QuizCard(
-    image: 'assets/forgiveness.png',
-    english: 'Forgiveness',
-    options: ['Paglaum', 'Palangga', 'Pagpaumod', 'Pagbaton'],
-    correct: 'Pagpaumod'),
-QuizCard(
-    image: 'assets/gratitude.png',
-    english: 'Gratitude',
-    options: ['Pagpasalamat', 'Palangga', 'Pagtuon', 'Pagpugong'],
-    correct: 'Pagpasalamat'),
-QuizCard(
-    image: 'assets/peace.png',
-    english: 'Peace',
-    options: ['Kalinong', 'Kagamo', 'Kasubo', 'Kahadlok'],
-    correct: 'Kalinong'),
-QuizCard(
-    image: 'assets/faith.png',
-    english: 'Faith',
-    options: [ 'Paglaum', 'Palangga', 'Pagtuo','Pagbaton'],
-    correct: 'Pagtuo'),
-QuizCard(
-    image: 'assets/hope.png',
-    english: 'Hope',
-    options: ['Paglaum', 'Pagtuo', 'Palangga', 'Pagbaton'],
-    correct: 'Paglaum'),
-QuizCard(
-    image: 'assets/strength.png',
-    english: 'Strength',
-    options: ['Kaisog', 'Pagtuon','Kusog',  'Pagpugong'],
-    correct: 'Kusog'),
-QuizCard(
-    image: 'assets/respect.png',
-    english: 'Respect',
-    options: [ 'Pagbaton', 'Palangga', 'Pagtuo','Pagrespeto'],
-    correct: 'Pagrespeto'),
-QuizCard(
-    image: 'assets/charity.png',
-    english: 'Charity',
-    options: ['Paghatag', 'Palangga', 'Pagpasaylo', 'Pagpugong'],
-    correct: 'Paghatag'),
-QuizCard(
-    image: 'assets/wisdom.png',
-    english: 'Wisdom',
-    options: ['Kaalam', 'Katarungan', 'Pagtuon', 'Kaisog'],
-    correct: 'Kaalam'),
-QuizCard(
-    image: 'assets/discipline.png',
-    english: 'Discipline',
-    options: ['Disiplina', 'Pagpugong', 'Pagbaton', 'Pagtuon'],
-    correct: 'Disiplina'),
-QuizCard(
-    image: 'assets/unity.png',
-    english: 'Communal Unity',
-    options: [ 'Kalinong', 'Bayanihan','Katarungan', 'Pagtuon'],
-    correct: 'Bayanihan'),
+        image: 'assets/courage.png',
+        english: 'Courage',
+        options: ['Kaisog', 'Kusog', 'Kahadlok', 'Kalipay'],
+        correct: 'Kaisog'),
     QuizCard(
-    image: 'assets/resilience.png',
-    english: 'Resilience',
-    options: ['Pagtuo', 'Pagpangabudlay', 'Paglaum', 'Kaisog'],
-    correct: 'Pagpangabudlay'),
-QuizCard(
-    image: 'assets/conscience.png',
-    english: 'Conscience',
-    options: ['Kalag', 'Kasingkasing', 'Konsensya', 'Hunahuna'],
-    correct: 'Konsensya'),
-QuizCard(
-    image: 'assets/ambition.png',
-    english: 'Ambition',
-    options: ['Tinguha', 'Ambisyon', 'Pangandoy', 'Paglaum'],
-    correct: 'Ambisyon'),
-QuizCard(
-    image: 'assets/betrayal.png',
-    english: 'Betrayal',
-    options: ['Pagtuo', 'Pagtraidor', 'Pagpangayo', 'Pagpasaylo'],
-    correct: 'Pagtraidor'),
-QuizCard(
-    image: 'assets/eternity.png',
-    english: 'Eternity',
-    options: ['Tinguha', 'Tadhana', 'Wala Katapusan', 'Kabuhi'],
-    correct: 'Wala Katapusan'),
-QuizCard(
-    image: 'assets/chaos.png',
-    english: 'Chaos',
-    options: ['Kasadya', 'Kagamo', 'Kahapsay', 'Kalinong'],
-    correct: 'Kagamo'),
-QuizCard(
-    image: 'assets/mystery.png',
-    english: 'Mystery',
-    options: ['Kalibutan', 'Paglaum', 'Misteryo', 'Tinguha'],
-    correct: 'Misteryo'),
-
-
-
-
-
-QuizCard(
-    image: 'assets/heritage.png',
-    english: 'Heritage',
-    options: ['Pagtuon','Panublion','Kultura', 'Paglaum'],
-    correct: 'Panublion'),
-QuizCard(
-    image: 'assets/success.png',
-    english: 'Success',
-    options: ['Kalampusan', 'Kadalag-an', 'Pagtuon', 'Paglaum'],
-    correct: 'Kadalag-an'),
-QuizCard(
-    image: 'assets/failure.png',
-    english: 'Failure',
-    options: ['Kadalag-an', 'Pagkapirde', 'Paglaum', 'Kalisod'],
-    correct: 'Pagkapirde'),
-QuizCard(
-    image: 'assets/forbidden.png',
-    english: 'Forbidden',
-    options: ['Ginadilian', 'Ginaprobahan', 'Ginabaton', 'Gintugutan'],
-    correct: 'Ginadilian'),
-QuizCard(
-    image: 'assets/friendship.png',
-    english: 'Friendship',
-    options: ['Pagtililipon', 'Pag-abyanay', 'Pagpalangga', 'Pag-ulikid'],
-    correct: 'Pag-abyanay'),
-QuizCard(
-    image: 'assets/earthquake.png',
-    english: 'Earthquake',
-    options: ['Linog', 'Hangin', 'Pagbaha', 'Ulan'],
-    correct: 'Linog'),
-QuizCard(
-    image: 'assets/wave.png',
-    english: 'Wave',
-    options: ['Baybay', 'Suba', 'Bulan','Balod',],
-    correct: 'Balod'),
-QuizCard(
-    image: 'assets/innovation.png',
-    english: 'Innovation',
-    options: ['Pagtuon','Pagbag-o','Pag-ayo', 'Panumduman'],
-    correct: 'Pagbag-o'),
-QuizCard(
-      image: 'assets/fog.png',
-      english: 'Fog',
-      options: ['Ambon', 'Habol', 'Tun-og', 'Asin'],
-      correct: 'Tun-og'),
-
+        image: 'assets/visitor.png',
+        english: 'Visitor',
+        options: ['Pagtuo', 'Pagrespeto', 'Bisita', 'Pagbaton'],
+        correct: 'Bisita'),
+    QuizCard(
+        image: 'assets/faith.png',
+        english: 'Belief',
+        options: ['Pagtuo', 'Paglaum', 'Pagbantay', 'Pagdula'],
+        correct: 'Pagtuo'),
+    QuizCard(
+        image: 'assets/forgiveness.png',
+        english: 'Mercy',
+        options: ['Kaisog', 'Kahadlok', 'Kaluoy', 'Pagtuo'],
+        correct: 'Kaluoy'),
+    QuizCard(
+        image: 'assets/promise.png',
+        english: 'Promise',
+        options: ['Handum', 'Panumdum', 'Promiso', 'Pagtuon'],
+        correct: 'Promiso'),
+    QuizCard(
+        image: 'assets/patience.png',
+        english: 'Patience',
+        options: ['Paglaum', 'Palangga', 'Pagpugong', 'Pagtuo'],
+        correct: 'Pagpugong'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Trust',
+        options: ['Pagtuo', 'Pagsalig', 'Pagbaton', 'Palangga'],
+        correct: 'Pagsalig'),
+    QuizCard(
+        image: 'assets/humility.png',
+        english: 'Humility',
+        options: ['Pagpasigarbo', 'Pagtuo', 'Pagpaubos', 'Pagbaton'],
+        correct: 'Pagpaubos'),
+    QuizCard(
+        image: 'assets/truth.png',
+        english: 'Honesty',
+        options: ['Pagkamatuod', 'Pagtuo', 'Pagbaton', 'Pagsalig'],
+        correct: 'Pagkamatuod'),
+    QuizCard(
+        image: 'assets/forgiveness.png',
+        english: 'Forgiveness',
+        options: ['Paglaum', 'Palangga', 'Pagpaumod', 'Pagbaton'],
+        correct: 'Pagpaumod'),
+    QuizCard(
+        image: 'assets/gratitude.png',
+        english: 'Gratitude',
+        options: ['Pagpasalamat', 'Palangga', 'Pagtuon', 'Pagpugong'],
+        correct: 'Pagpasalamat'),
+    QuizCard(
+        image: 'assets/peace.png',
+        english: 'Peace',
+        options: ['Kalinong', 'Kagamo', 'Kasubo', 'Kahadlok'],
+        correct: 'Kalinong'),
+    QuizCard(
+        image: 'assets/faith.png',
+        english: 'Faith',
+        options: ['Paglaum', 'Palangga', 'Pagtuo', 'Pagbaton'],
+        correct: 'Pagtuo'),
+    QuizCard(
+        image: 'assets/hope.png',
+        english: 'Hope',
+        options: ['Paglaum', 'Pagtuo', 'Palangga', 'Pagbaton'],
+        correct: 'Paglaum'),
+    QuizCard(
+        image: 'assets/strength.png',
+        english: 'Strength',
+        options: ['Kaisog', 'Pagtuon', 'Kusog', 'Pagpugong'],
+        correct: 'Kusog'),
+    QuizCard(
+        image: 'assets/respect.png',
+        english: 'Respect',
+        options: ['Pagbaton', 'Palangga', 'Pagtuo', 'Pagrespeto'],
+        correct: 'Pagrespeto'),
+    QuizCard(
+        image: 'assets/charity.png',
+        english: 'Charity',
+        options: ['Paghatag', 'Palangga', 'Pagpasaylo', 'Pagpugong'],
+        correct: 'Paghatag'),
+    QuizCard(
+        image: 'assets/wisdom.png',
+        english: 'Wisdom',
+        options: ['Kaalam', 'Katarungan', 'Pagtuon', 'Kaisog'],
+        correct: 'Kaalam'),
+    QuizCard(
+        image: 'assets/discipline.png',
+        english: 'Discipline',
+        options: ['Disiplina', 'Pagpugong', 'Pagbaton', 'Pagtuon'],
+        correct: 'Disiplina'),
+    QuizCard(
+        image: 'assets/unity.png',
+        english: 'Communal Unity',
+        options: ['Kalinong', 'Bayanihan', 'Katarungan', 'Pagtuon'],
+        correct: 'Bayanihan'),
+    QuizCard(
+        image: 'assets/resilience.png',
+        english: 'Resilience',
+        options: ['Pagtuo', 'Pagpangabudlay', 'Paglaum', 'Kaisog'],
+        correct: 'Pagpangabudlay'),
+    QuizCard(
+        image: 'assets/conscience.png',
+        english: 'Conscience',
+        options: ['Kalag', 'Kasingkasing', 'Konsensya', 'Hunahuna'],
+        correct: 'Konsensya'),
+    QuizCard(
+        image: 'assets/ambition.png',
+        english: 'Ambition',
+        options: ['Tinguha', 'Ambisyon', 'Pangandoy', 'Paglaum'],
+        correct: 'Ambisyon'),
+    QuizCard(
+        image: 'assets/betrayal.png',
+        english: 'Betrayal',
+        options: ['Pagtuo', 'Pagtraidor', 'Pagpangayo', 'Pagpasaylo'],
+        correct: 'Pagtraidor'),
+    QuizCard(
+        image: 'assets/eternity.png',
+        english: 'Eternity',
+        options: ['Tinguha', 'Tadhana', 'Wala Katapusan', 'Kabuhi'],
+        correct: 'Wala Katapusan'),
+    QuizCard(
+        image: 'assets/chaos.png',
+        english: 'Chaos',
+        options: ['Kasadya', 'Kagamo', 'Kahapsay', 'Kalinong'],
+        correct: 'Kagamo'),
+    QuizCard(
+        image: 'assets/mystery.png',
+        english: 'Mystery',
+        options: ['Kalibutan', 'Paglaum', 'Misteryo', 'Tinguha'],
+        correct: 'Misteryo'),
+    QuizCard(
+        image: 'assets/heritage.png',
+        english: 'Heritage',
+        options: ['Pagtuon', 'Panublion', 'Kultura', 'Paglaum'],
+        correct: 'Panublion'),
+    QuizCard(
+        image: 'assets/success.png',
+        english: 'Success',
+        options: ['Kalampusan', 'Kadalag-an', 'Pagtuon', 'Paglaum'],
+        correct: 'Kadalag-an'),
+    QuizCard(
+        image: 'assets/failure.png',
+        english: 'Failure',
+        options: ['Kadalag-an', 'Pagkapirde', 'Paglaum', 'Kalisod'],
+        correct: 'Pagkapirde'),
+    QuizCard(
+        image: 'assets/forbidden.png',
+        english: 'Forbidden',
+        options: ['Ginadilian', 'Ginaprobahan', 'Ginabaton', 'Gintugutan'],
+        correct: 'Ginadilian'),
+    QuizCard(
+        image: 'assets/friendship.png',
+        english: 'Friendship',
+        options: ['Pagtililipon', 'Pag-abyanay', 'Pagpalangga', 'Pag-ulikid'],
+        correct: 'Pag-abyanay'),
+    QuizCard(
+        image: 'assets/earthquake.png',
+        english: 'Earthquake',
+        options: ['Linog', 'Hangin', 'Pagbaha', 'Ulan'],
+        correct: 'Linog'),
+    QuizCard(
+        image: 'assets/wave.png',
+        english: 'Wave',
+        options: [
+          'Baybay',
+          'Suba',
+          'Bulan',
+          'Balod',
+        ],
+        correct: 'Balod'),
+    QuizCard(
+        image: 'assets/innovation.png',
+        english: 'Innovation',
+        options: ['Pagtuon', 'Pagbag-o', 'Pag-ayo', 'Panumduman'],
+        correct: 'Pagbag-o'),
+    QuizCard(
+        image: 'assets/fog.png',
+        english: 'Fog',
+        options: ['Ambon', 'Habol', 'Tun-og', 'Asin'],
+        correct: 'Tun-og'),
   ];
 
   bool _showCountdown = false;
@@ -650,7 +649,6 @@ QuizCard(
     questionDuration =
         widget.perQuestionDuration ?? _durationForDifficulty(widget.difficulty);
 
-    
     cards.shuffle();
 
     _timerController = AnimationController(
@@ -668,6 +666,10 @@ QuizCard(
         if (mounted) setState(() {});
       });
     _timerController.forward(from: 0);
+
+    if (widget.difficulty == QuizDifficulty.easy) {
+      _allResults.clear();
+    }
   }
 
   @override
@@ -689,7 +691,6 @@ QuizCard(
     }
   }
 
-  
   List<QuizCard> _pickRandom(List<QuizCard> source, int count) {
     final random = Random();
     final result = <QuizCard>[];
@@ -698,7 +699,6 @@ QuizCard(
     final takeCount = count > shuffled.length ? shuffled.length : count;
 
     for (int i = 0; i < takeCount; i++) {
-      
       final options = List<String>.from(shuffled[i].options)..shuffle(random);
       result.add(QuizCard(
         image: shuffled[i].image,
@@ -731,6 +731,25 @@ QuizCard(
       if (cards[currentIndex].options[index] == cards[currentIndex].correct) {
         _score++;
       }
+
+      String difficultyLabel = '';
+      if (widget.difficulty == QuizDifficulty.easy) {
+        difficultyLabel = 'Easy';
+      } else if (widget.difficulty == QuizDifficulty.intermediate) {
+        difficultyLabel = 'Medium';
+      } else if (widget.difficulty == QuizDifficulty.hard) {
+        difficultyLabel = 'Hard';
+      }
+
+      _allResults.add(ResultDetails(
+        phrase: cards[currentIndex].english,
+        userAnswer: cards[currentIndex].options[index],
+        correctAnswer: cards[currentIndex].correct,
+        isCorrect:
+            cards[currentIndex].options[index] == cards[currentIndex].correct,
+        difficulty: difficultyLabel, // Add difficulty label
+      ));
+
       _timerController.stop();
     });
   }
@@ -788,8 +807,7 @@ QuizCard(
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (_) =>
-                  TimedQuizPage(difficulty: QuizDifficulty.hard)),
+              builder: (_) => TimedQuizPage(difficulty: QuizDifficulty.hard)),
         );
       });
     } else if (widget.difficulty == QuizDifficulty.hard) {
@@ -809,6 +827,7 @@ QuizCard(
           mediumTotal: 15,
           hardScore: _hardScore,
           hardTotal: 10,
+          results: _allResults,
         ),
       ),
     );
@@ -857,8 +876,8 @@ QuizCard(
                       padding: const EdgeInsets.only(right: 16),
                       child: Text(
                         '${currentIndex + 1} / ${cards.length}',
-                        style:
-                            const TextStyle(color: Colors.white70, fontSize: 16),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 16),
                       ),
                     ),
                   ],
@@ -920,7 +939,8 @@ QuizCard(
                           width: 160,
                           height: 60,
                           child: ElevatedButton(
-                            onPressed: answered ? null : () => checkAnswer(index),
+                            onPressed:
+                                answered ? null : () => checkAnswer(index),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: buttonColor,
                               shape: RoundedRectangleBorder(
@@ -952,8 +972,8 @@ QuizCard(
                         value: _timerController.value,
                         strokeWidth: 6,
                         backgroundColor: Colors.white24,
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.greenAccent),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.greenAccent),
                       ),
                       Text(
                         '${((1 - _timerController.value) * questionDuration.inSeconds).ceil()}',
@@ -1002,7 +1022,6 @@ QuizCard(
   }
 }
 
-
 class AnimatedGradientBackground extends StatefulWidget {
   const AnimatedGradientBackground({super.key});
 
@@ -1011,8 +1030,8 @@ class AnimatedGradientBackground extends StatefulWidget {
       _AnimatedGradientBackgroundState();
 }
 
-class _AnimatedGradientBackgroundState
-    extends State<AnimatedGradientBackground> with TickerProviderStateMixin {
+class _AnimatedGradientBackgroundState extends State<AnimatedGradientBackground>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _color1;
   late Animation<Color?> _color2;
@@ -1025,12 +1044,15 @@ class _AnimatedGradientBackgroundState
         AnimationController(vsync: this, duration: const Duration(seconds: 6))
           ..repeat(reverse: true);
 
-    _color1 = ColorTween(begin: const Color(0xFF0D47A1), end: const Color(0xFF1565C0))
-        .animate(_controller);
-    _color2 = ColorTween(begin: const Color(0xFF1976D2), end: const Color(0xFF1E88E5))
-        .animate(_controller);
-    _color3 = ColorTween(begin: const Color(0xFF0B3D91), end: const Color(0xFF0D47A1))
-        .animate(_controller);
+    _color1 =
+        ColorTween(begin: const Color(0xFF0D47A1), end: const Color(0xFF1565C0))
+            .animate(_controller);
+    _color2 =
+        ColorTween(begin: const Color(0xFF1976D2), end: const Color(0xFF1E88E5))
+            .animate(_controller);
+    _color3 =
+        ColorTween(begin: const Color(0xFF0B3D91), end: const Color(0xFF0D47A1))
+            .animate(_controller);
   }
 
   @override
@@ -1047,7 +1069,12 @@ class _AnimatedGradientBackgroundState
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [_color1.value!, _color2.value!, _color3.value!, Colors.black],
+              colors: [
+                _color1.value!,
+                _color2.value!,
+                _color3.value!,
+                Colors.black
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

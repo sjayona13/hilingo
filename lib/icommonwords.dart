@@ -15,7 +15,8 @@ class Question {
   final List<String> options;
   final String correct;
 
-  Question({required this.phrase, required this.options, required this.correct});
+  Question(
+      {required this.phrase, required this.options, required this.correct});
 }
 
 class _QuizPageState extends State<Icommonwords> {
@@ -27,55 +28,177 @@ class _QuizPageState extends State<Icommonwords> {
   late ConfettiController _confettiController;
 
   final List<Question> _allQuestions = [
-    Question(phrase: 'Hello', options: ['Kamusta', 'Salamat', 'Indi'], correct: 'Kamusta'),
-    Question(phrase: 'Thank you', options: ['Palihog', 'Salamat', 'Kamusta'], correct: 'Salamat'),
-    Question(phrase: 'Please', options: ['Palihog', 'Salamat', 'Pasensya'], correct: 'Palihog'),
+    Question(
+        phrase: 'Hello',
+        options: ['Kamusta', 'Salamat', 'Indi'],
+        correct: 'Kamusta'),
+    Question(
+        phrase: 'Thank you',
+        options: ['Palihog', 'Salamat', 'Kamusta'],
+        correct: 'Salamat'),
+    Question(
+        phrase: 'Please',
+        options: ['Palihog', 'Salamat', 'Pasensya'],
+        correct: 'Palihog'),
     Question(phrase: 'Yes', options: ['Indi', 'Oo', 'Siguro'], correct: 'Oo'),
     Question(phrase: 'No', options: ['Oo', 'Siguro', 'Indi'], correct: 'Indi'),
-    Question(phrase: 'Good morning', options: ['Maayong aga', 'Maayong hapon', 'Maayong gab-i'], correct: 'Maayong aga'),
-    Question(phrase: 'Good afternoon', options: ['Maayong aga', 'Maayong hapon', 'Maayong udto'], correct: 'Maayong hapon'),
-    Question(phrase: 'Good evening', options: ['Maayong gab-i', 'Maayong aga', 'Maayong adlaw'], correct: 'Maayong gab-i'),
-    Question(phrase: 'How are you?', options: ['Kamusta ka?', 'Ano na?', 'May ara ka?'], correct: 'Kamusta ka?'),
-    Question(phrase: 'What is your name?', options: ['Sino imo ngalan?', 'Tag-a diin ka?', 'Pila edad mo?'], correct: 'Sino imo ngalan?'),
-    Question(phrase: 'My name is John.', options: ['Ako si John.', 'Ako ya si John.', 'Si John ako.'], correct: 'Ako si John.'),
-    Question(phrase: 'Where are you going?', options: ['Diin ka makadto?', 'San‑o ka pa?', 'Diin ka gikan?'], correct: 'Diin ka makadto?'),
-    Question(phrase: 'I am going home.', options: ['Pauli na ako.', 'Kadto ako eskwelahan.', 'Lakaw ko mall.'], correct: 'Pauli na ako.'),
-    Question(phrase: 'I am hungry.', options: ['Gutom na ako.', 'Uhaw ako.', 'Kapoy na ako.'], correct: 'Gutom na ako.'),
-    Question(phrase: 'I am tired.', options: ['Kapoy na ako.', 'Gutom ako.', 'Uhaw ko.'], correct: 'Kapoy na ako.'),
-    Question(phrase: 'I love you.', options: ['Palangga ta ikaw.', 'Ginahigugma ta ikaw.', 'Ginahambalan ta ikaw.'], correct: 'Palangga ta ikaw.'),
-    Question(phrase: 'Goodbye', options: ['Babayi', 'Halong', 'Palihog'], correct: 'Halong'),
-    Question(phrase: 'Take care', options: ['Halong', 'Kamusta', 'Salamat'], correct: 'Halong'),
-    Question(phrase: 'Come here', options: ['Dali diri', 'Kadto didto', 'Palihog diri'], correct: 'Dali diri'),
-    Question(phrase: 'Sit down', options: ['Pungko', 'Tindog', 'Dali diri'], correct: 'Pungko'),
-    Question(phrase: 'Stand up', options: ['Tindog', 'Pungko', 'Dali'], correct: 'Tindog'),
-    Question(phrase: 'Stop', options: ['Unta', 'Lakaw', 'Dali'], correct: 'Unta'),
-    Question(phrase: 'Wait', options: ['Hulat', 'Lakaw', 'Pungko'], correct: 'Hulat'),
-    Question(phrase: 'Eat', options: ['Kaon', 'Inom', 'Tulog'], correct: 'Kaon'),
-    Question(phrase: 'Drink', options: ['Inom', 'Kaon', 'Tulog'], correct: 'Inom'),
-    Question(phrase: 'Sleep', options: ['Tulog', 'Kaon', 'Hibalo'], correct: 'Tulog'),
-    Question(phrase: 'Go', options: ['Kadto', 'Dali', 'Pungko'], correct: 'Kadto'),
-    Question(phrase: 'Come', options: ['Dali', 'Lakaw', 'Tindog'], correct: 'Dali'),
-    Question(phrase: 'Help', options: ['Bulig', 'Kaon', 'Tulog'], correct: 'Bulig'),
-    Question(phrase: 'Hot', options: ['Mainit', 'Matugnaw', 'Maulan'], correct: 'Mainit'),
-    Question(phrase: 'Cold', options: ['Matugnaw', 'Mainit', 'Malipayon'], correct: 'Matugnaw'),
-    Question(phrase: 'Happy', options: ['Malipayon', 'Masubo', 'Masakit'], correct: 'Malipayon'),
-    Question(phrase: 'Sad', options: ['Masubo', 'Malipayon', 'Mainit'], correct: 'Masubo'),
-    Question(phrase: 'Beautiful', options: ['Gwapa', 'Pangit', 'Dako'], correct: 'Gwapa'),
-    Question(phrase: 'Ugly', options: ['Pangit', 'Gwapa', 'Gamay'], correct: 'Pangit'),
-    Question(phrase: 'Big', options: ['Dako', 'Gamay', 'Gwapa'], correct: 'Dako'),
-    Question(phrase: 'Small', options: ['Gamay', 'Dako', 'Pangit'], correct: 'Gamay'),
-    Question(phrase: 'Fast', options: ['Dasig', 'Hinay', 'Mainit'], correct: 'Dasig'),
-    Question(phrase: 'Slow', options: ['Hinay', 'Dasig', 'Tulog'], correct: 'Hinay'),
-    Question(phrase: 'Friend', options: ['Abyan', 'Kaaway', 'Palangga'], correct: 'Abyan'),
-    Question(phrase: 'Enemy', options: ['Kaaway', 'Abyan', 'Halong'], correct: 'Kaaway'),
-    Question(phrase: 'Child', options: ['Bata', 'Tigulang', 'Nanay'], correct: 'Bata'),
-    Question(phrase: 'Mother', options: ['Nanay', 'Tatay', 'Bata'], correct: 'Nanay'),
-    Question(phrase: 'Father', options: ['Tatay', 'Nanay', 'Bata'], correct: 'Tatay'),
+    Question(
+        phrase: 'Good morning',
+        options: ['Maayong aga', 'Maayong hapon', 'Maayong gab-i'],
+        correct: 'Maayong aga'),
+    Question(
+        phrase: 'Good afternoon',
+        options: ['Maayong aga', 'Maayong hapon', 'Maayong udto'],
+        correct: 'Maayong hapon'),
+    Question(
+        phrase: 'Good evening',
+        options: ['Maayong gab-i', 'Maayong aga', 'Maayong adlaw'],
+        correct: 'Maayong gab-i'),
+    Question(
+        phrase: 'How are you?',
+        options: ['Kamusta ka?', 'Ano na?', 'May ara ka?'],
+        correct: 'Kamusta ka?'),
+    Question(
+        phrase: 'What is your name?',
+        options: ['Sino imo ngalan?', 'Tag-a diin ka?', 'Pila edad mo?'],
+        correct: 'Sino imo ngalan?'),
+    Question(
+        phrase: 'My name is John.',
+        options: ['Ako si John.', 'Ako ya si John.', 'Si John ako.'],
+        correct: 'Ako si John.'),
+    Question(
+        phrase: 'Where are you going?',
+        options: ['Diin ka makadto?', 'San‑o ka pa?', 'Diin ka gikan?'],
+        correct: 'Diin ka makadto?'),
+    Question(
+        phrase: 'I am going home.',
+        options: ['Pauli na ako.', 'Kadto ako eskwelahan.', 'Lakaw ko mall.'],
+        correct: 'Pauli na ako.'),
+    Question(
+        phrase: 'I am hungry.',
+        options: ['Gutom na ako.', 'Uhaw ako.', 'Kapoy na ako.'],
+        correct: 'Gutom na ako.'),
+    Question(
+        phrase: 'I am tired.',
+        options: ['Kapoy na ako.', 'Gutom ako.', 'Uhaw ko.'],
+        correct: 'Kapoy na ako.'),
+    Question(
+        phrase: 'I love you.',
+        options: [
+          'Palangga ta ikaw.',
+          'Ginahigugma ta ikaw.',
+          'Ginahambalan ta ikaw.'
+        ],
+        correct: 'Palangga ta ikaw.'),
+    Question(
+        phrase: 'Goodbye',
+        options: ['Babayi', 'Halong', 'Palihog'],
+        correct: 'Halong'),
+    Question(
+        phrase: 'Take care',
+        options: ['Halong', 'Kamusta', 'Salamat'],
+        correct: 'Halong'),
+    Question(
+        phrase: 'Come here',
+        options: ['Dali diri', 'Kadto didto', 'Palihog diri'],
+        correct: 'Dali diri'),
+    Question(
+        phrase: 'Sit down',
+        options: ['Pungko', 'Tindog', 'Dali diri'],
+        correct: 'Pungko'),
+    Question(
+        phrase: 'Stand up',
+        options: ['Tindog', 'Pungko', 'Dali'],
+        correct: 'Tindog'),
+    Question(
+        phrase: 'Stop', options: ['Unta', 'Lakaw', 'Dali'], correct: 'Unta'),
+    Question(
+        phrase: 'Wait',
+        options: ['Hulat', 'Lakaw', 'Pungko'],
+        correct: 'Hulat'),
+    Question(
+        phrase: 'Eat', options: ['Kaon', 'Inom', 'Tulog'], correct: 'Kaon'),
+    Question(
+        phrase: 'Drink', options: ['Inom', 'Kaon', 'Tulog'], correct: 'Inom'),
+    Question(
+        phrase: 'Sleep',
+        options: ['Tulog', 'Kaon', 'Hibalo'],
+        correct: 'Tulog'),
+    Question(
+        phrase: 'Go', options: ['Kadto', 'Dali', 'Pungko'], correct: 'Kadto'),
+    Question(
+        phrase: 'Come', options: ['Dali', 'Lakaw', 'Tindog'], correct: 'Dali'),
+    Question(
+        phrase: 'Help', options: ['Bulig', 'Kaon', 'Tulog'], correct: 'Bulig'),
+    Question(
+        phrase: 'Hot',
+        options: ['Mainit', 'Matugnaw', 'Maulan'],
+        correct: 'Mainit'),
+    Question(
+        phrase: 'Cold',
+        options: ['Matugnaw', 'Mainit', 'Malipayon'],
+        correct: 'Matugnaw'),
+    Question(
+        phrase: 'Happy',
+        options: ['Malipayon', 'Masubo', 'Masakit'],
+        correct: 'Malipayon'),
+    Question(
+        phrase: 'Sad',
+        options: ['Masubo', 'Malipayon', 'Mainit'],
+        correct: 'Masubo'),
+    Question(
+        phrase: 'Beautiful',
+        options: ['Gwapa', 'Pangit', 'Dako'],
+        correct: 'Gwapa'),
+    Question(
+        phrase: 'Ugly',
+        options: ['Pangit', 'Gwapa', 'Gamay'],
+        correct: 'Pangit'),
+    Question(
+        phrase: 'Big', options: ['Dako', 'Gamay', 'Gwapa'], correct: 'Dako'),
+    Question(
+        phrase: 'Small',
+        options: ['Gamay', 'Dako', 'Pangit'],
+        correct: 'Gamay'),
+    Question(
+        phrase: 'Fast',
+        options: ['Dasig', 'Hinay', 'Mainit'],
+        correct: 'Dasig'),
+    Question(
+        phrase: 'Slow', options: ['Hinay', 'Dasig', 'Tulog'], correct: 'Hinay'),
+    Question(
+        phrase: 'Friend',
+        options: ['Abyan', 'Kaaway', 'Palangga'],
+        correct: 'Abyan'),
+    Question(
+        phrase: 'Enemy',
+        options: ['Kaaway', 'Abyan', 'Halong'],
+        correct: 'Kaaway'),
+    Question(
+        phrase: 'Child',
+        options: ['Bata', 'Tigulang', 'Nanay'],
+        correct: 'Bata'),
+    Question(
+        phrase: 'Mother',
+        options: ['Nanay', 'Tatay', 'Bata'],
+        correct: 'Nanay'),
+    Question(
+        phrase: 'Father',
+        options: ['Tatay', 'Nanay', 'Bata'],
+        correct: 'Tatay'),
     Question(phrase: 'Dog', options: ['Ido', 'Ilong', 'Ihaw'], correct: 'Ido'),
-    Question(phrase: 'Cat', options: ['Kuring', 'Ihaw', 'Ido'], correct: 'Kuring'),
-    Question(phrase: 'Fish', options: ['Isda', 'Ihaw', 'Ilong'], correct: 'Isda'),
-    Question(phrase: 'Bird', options: ['Langgam', 'Isda', 'Ido'], correct: 'Langgam'),
-    Question(phrase: 'Food', options: ['Pagkaon', 'Tubig', 'Hangin'], correct: 'Pagkaon'),
+    Question(
+        phrase: 'Cat', options: ['Kuring', 'Ihaw', 'Ido'], correct: 'Kuring'),
+    Question(
+        phrase: 'Fish', options: ['Isda', 'Ihaw', 'Ilong'], correct: 'Isda'),
+    Question(
+        phrase: 'Bird',
+        options: ['Langgam', 'Isda', 'Ido'],
+        correct: 'Langgam'),
+    Question(
+        phrase: 'Food',
+        options: ['Pagkaon', 'Tubig', 'Hangin'],
+        correct: 'Pagkaon'),
   ];
 
   late List<Question> _questions;
@@ -83,7 +206,8 @@ class _QuizPageState extends State<Icommonwords> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
     _loadNewSet();
   }
 
@@ -123,8 +247,8 @@ class _QuizPageState extends State<Icommonwords> {
           onTap: () {
             _confettiController.stop();
             Navigator.of(context).pop();
-            Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (_) => const Icommonwords()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => const Icommonwords()));
           },
           child: Material(
             color: Colors.black54,
@@ -135,7 +259,11 @@ class _QuizPageState extends State<Icommonwords> {
                   confettiController: _confettiController,
                   blastDirectionality: BlastDirectionality.explosive,
                   shouldLoop: false,
-                  colors: const [Color(0xFF2A7BE6), Colors.lightBlue, Colors.cyan],
+                  colors: const [
+                    Color(0xFF2A7BE6),
+                    Colors.lightBlue,
+                    Colors.cyan
+                  ],
                   numberOfParticles: 30,
                 ),
                 Container(
@@ -183,12 +311,11 @@ class _QuizPageState extends State<Icommonwords> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-  icon: const Icon(Icons.arrow_back, color: Colors.black),
-  onPressed: () {
-    Navigator.pop(context);  
-  },
-),
-
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16, top: 12),
@@ -234,7 +361,8 @@ class _QuizPageState extends State<Icommonwords> {
                     ),
                     const SizedBox(width: 16),
                     Container(
-                      width: 153, height: 115,
+                      width: 153,
+                      height: 115,
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         border: Border.all(color: const Color(0xFF878282)),
@@ -242,10 +370,13 @@ class _QuizPageState extends State<Icommonwords> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        question.phrase, textAlign: TextAlign.center,
+                        question.phrase,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontFamily: 'Kumbh', fontWeight: FontWeight.w400,
-                          fontSize: 16, color: Color(0xFF878282),
+                          fontFamily: 'Kumbh',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Color(0xFF878282),
                         ),
                       ),
                     ),
@@ -258,49 +389,68 @@ class _QuizPageState extends State<Icommonwords> {
                   Color textColor = const Color(0xFF878282);
                   if (_answered) {
                     if (option == question.correct) {
-                      borderColor = Colors.green; textColor = Colors.green;
+                      borderColor = Colors.green;
+                      textColor = Colors.green;
                     } else if (_selectedIndex == index) {
-                      borderColor = Colors.red; textColor = Colors.red;
+                      borderColor = Colors.red;
+                      textColor = Colors.red;
                     }
                   }
                   return Container(
-                    width: 258, height: 46, margin: const EdgeInsets.only(bottom: 12),
+                    width: 258,
+                    height: 46,
+                    margin: const EdgeInsets.only(bottom: 12),
                     child: OutlinedButton(
-                      onPressed: _answered ? null : () {
-                        setState(() {
-                          _selectedIndex = index; _answered = true;
-                          if (option == question.correct) _score++;
-                        });
-                      },
+                      onPressed: _answered
+                          ? null
+                          : () {
+                              setState(() {
+                                _selectedIndex = index;
+                                _answered = true;
+                                if (option == question.correct) _score++;
+                              });
+                            },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: borderColor),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: Text(option,
-                        style: TextStyle(color: textColor, fontFamily: 'Kumbh',
-                          fontWeight: FontWeight.w400, fontSize: 16),
+                      child: Text(
+                        option,
+                        style: TextStyle(
+                            color: textColor,
+                            fontFamily: 'Kumbh',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16),
                       ),
                     ),
                   );
                 }),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _answered ? _nextQuestion : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2A7BE6),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Kumbh',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            ),
-          ),
-          Positioned(
-            left: 66, top: 643,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width - 132, height: 50,
-              child: ElevatedButton(
-                onPressed: _answered ? _nextQuestion : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2A7BE6),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('Continue',
-                  style: TextStyle(color: Colors.white,
-                    fontFamily: 'Kumbh', fontWeight: FontWeight.w600, fontSize: 18),
-                ),
-              ),
             ),
           ),
         ],
