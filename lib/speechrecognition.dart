@@ -23,6 +23,8 @@ class _SpeechPageState extends State<SpeechPage> {
   String _statusMessage = 'Tap and hold the microphone to start speaking.';
 
   Map<String, dynamic> _dictionary = {};
+  final Trie _engToHilTrie = Trie();
+  final Trie _hilToEngTrie = Trie();
   bool _dictionaryLoaded = false;
 
   @override
@@ -55,6 +57,9 @@ class _SpeechPageState extends State<SpeechPage> {
             engToHil[normKey] = normValue;
             // distinct reverse mapping
             hilToEng[normValue] = normKey;
+
+            _engToHilTrie.insert(normKey, normValue);
+            _hilToEngTrie.insert(normValue, normKey);
           }
         });
       }
@@ -68,6 +73,9 @@ class _SpeechPageState extends State<SpeechPage> {
           if (normKey.isNotEmpty && normValue.isNotEmpty) {
             hilToEng[normKey] = normValue;
             engToHil[normValue] = normKey;
+
+            _hilToEngTrie.insert(normKey, normValue);
+            _engToHilTrie.insert(normValue, normKey);
           }
         });
       }
@@ -147,22 +155,19 @@ class _SpeechPageState extends State<SpeechPage> {
     });
 
     await _speech.listen(
-      listenFor: const Duration(seconds: 10),
-      pauseFor: const Duration(seconds: 3),
+      listenFor: const Duration(seconds: 60),
+      pauseFor: const Duration(seconds: 5),
+      partialResults: true,
       localeId: locale,
+      listenMode: stt.ListenMode.dictation,
       onResult: (result) async {
         setState(() {
           _spokenText = result.recognizedWords;
+          if (_spokenText.trim().isNotEmpty) {
+            _translatedText = _translateFromDictionary(_spokenText);
+            _statusMessage = result.finalResult ? 'Translation complete.' : 'Translating...';
+          }
         });
-
-        if (result.finalResult && _spokenText.isNotEmpty) {
-          setState(() => _statusMessage = 'Translating...');
-          final translation = _translateFromDictionary(_spokenText);
-          setState(() {
-            _translatedText = translation;
-            _statusMessage = 'Translation complete.';
-          });
-        }
       },
     );
   }
@@ -207,6 +212,30 @@ class _SpeechPageState extends State<SpeechPage> {
     return v1[s2.length];
   }
 
+  // === LAYER 2: PHRASE CHUNKING (TRIE OPTIMIZED) ===
+  List<String> _extractPhraseChunks(String input, Trie primaryTrie) {
+    List<String> words = input.split(RegExp(r'\s+'));
+    List<String> translatedParts = [];
+    int i = 0;
+
+    while (i < words.length) {
+      var result = primaryTrie.searchLongestPrefix(words, i);
+      int matchedLength = result[0] as int;
+      String? translated = result[1] as String?;
+
+      if (translated != null && matchedLength > 0) {
+        // Mark chunk so word processor doesn't break it later
+        translatedParts.add("[[CHUNK:$translated]]");
+        i += matchedLength;
+      } else {
+        translatedParts.add(words[i]); // Leave as raw word
+        i++;
+      }
+    }
+    return translatedParts;
+  }
+
+  // === MULTI-LAYER TRANSLATION ENGINE ===
   String _translateFromDictionary(String input) {
     if (!_dictionaryLoaded) return "Dictionary not loaded yet.";
 
@@ -214,159 +243,197 @@ class _SpeechPageState extends State<SpeechPage> {
     final engToHil = _dictionary['eng'] as Map<String, dynamic>;
     final hilToEng = _dictionary['hil'] as Map<String, dynamic>;
 
-    // 1. Try whole-sentence match first (Optimization)
-    if (engToHil.containsKey(lowerInput)) return engToHil[lowerInput];
-    if (hilToEng.containsKey(lowerInput)) return hilToEng[lowerInput];
+    // ------------------------------------------------------------------------
+    // LAYER 1: EXACT OR FUZZY SENTENCE MATCH (Instant Perfect Translation)
+    // ------------------------------------------------------------------------
+    if (engToHil.containsKey(lowerInput)) {
+      leftLanguage = "English"; rightLanguage = "Hiligaynon";
+      return engToHil[lowerInput];
+    }
+    if (hilToEng.containsKey(lowerInput)) {
+      leftLanguage = "Hiligaynon"; rightLanguage = "English";
+      return hilToEng[lowerInput];
+    }
 
-    // 1.5 Fuzzy Match Whole Sentence (Simulated ML)
-    // If exact match fails, check if we have a "very close" sentence in dictionary
-    // Threshold: 2 edits or 20% of length, whichever is higher
     String? fuzzyMatchKey;
     String? fuzzyMatchTranslation;
     int bestDist = 1000;
 
-    // Check English Keys
     engToHil.forEach((key, value) {
       int dist = _levenshteinDistance(lowerInput, key);
       if (dist < bestDist && dist <= (key.length * 0.2).ceil() + 1) {
-        bestDist = dist;
-        fuzzyMatchKey = key;
-        fuzzyMatchTranslation = value;
+        bestDist = dist; fuzzyMatchKey = key; fuzzyMatchTranslation = value;
       }
     });
 
-    // Check Hiligaynon Keys (if no good English match found yet)
     if (fuzzyMatchKey == null) {
       hilToEng.forEach((key, value) {
         int dist = _levenshteinDistance(lowerInput, key);
         if (dist < bestDist && dist <= (key.length * 0.2).ceil() + 1) {
-          bestDist = dist;
-          fuzzyMatchKey = key;
-          fuzzyMatchTranslation = value;
+          bestDist = dist; fuzzyMatchKey = key; fuzzyMatchTranslation = value;
         }
       });
     }
 
     if (fuzzyMatchTranslation != null) {
-      debugPrint(
-          "🤖 Fuzzy Match: '$lowerInput' -> '$fuzzyMatchKey' ($bestDist edits)");
-      setState(() {
-        _statusMessage = 'Auto-detected (Smart Match): $fuzzyMatchKey';
-      });
+      debugPrint("🤖 Layer 1 Fuzzy Match: '$lowerInput' -> '$fuzzyMatchKey'");
+      setState(() => _statusMessage = 'Auto-detected (Smart Match): $fuzzyMatchKey');
       return fuzzyMatchTranslation!;
     }
 
+    // Language Detection for remaining layers
     bool likelyEnglish = false;
     bool likelyHiligaynon = false;
-
-    // Detection logic
     for (String word in lowerInput.split(RegExp(r'\s+'))) {
       if (engToHil.containsKey(word)) likelyEnglish = true;
       if (hilToEng.containsKey(word)) likelyHiligaynon = true;
     }
 
-    Map<String, dynamic> fromMap;
-    Map<String, dynamic> toMap;
+    Map<String, dynamic> fromMap = engToHil;
+    Map<String, dynamic> toMap = hilToEng;
+    Trie fromTrie = _engToHilTrie;
 
-    // Prioritize detected language
     if (likelyEnglish && !likelyHiligaynon) {
-      fromMap = engToHil;
-      toMap = hilToEng;
-      leftLanguage = "English";
-      rightLanguage = "Hiligaynon";
+      fromMap = engToHil; toMap = hilToEng;
+      fromTrie = _engToHilTrie;
+      leftLanguage = "English"; rightLanguage = "Hiligaynon";
     } else if (likelyHiligaynon && !likelyEnglish) {
-      fromMap = hilToEng;
-      toMap = engToHil;
-      leftLanguage = "Hiligaynon";
-      rightLanguage = "English";
-    } else {
-      // Default / Mixed
-      fromMap = engToHil;
-      toMap = hilToEng;
+      fromMap = hilToEng; toMap = engToHil;
+      fromTrie = _hilToEngTrie;
+      leftLanguage = "Hiligaynon"; rightLanguage = "English";
     }
 
-    List<String> words = lowerInput.split(RegExp(r'\s+'));
-    List<String> translatedParts = [];
+    // ------------------------------------------------------------------------
+    // LAYER 2: PHRASE CHUNKING (TRIE OPTIMIZED)
+    // ------------------------------------------------------------------------
+    List<String> chunkedList = _extractPhraseChunks(lowerInput, fromTrie);
 
-    int i = 0;
-    while (i < words.length) {
-      String? translated;
-      int matchedLength = 0;
+    // ------------------------------------------------------------------------
+    // LAYER 3: WORD FALLBACK + GRAMMAR RULES
+    // ------------------------------------------------------------------------
+    List<String> finalTranslatedParts = [];
 
-      // 2. Greedy Match: Try longest possible phrase starting at i
-      int maxLen = words.length - i;
+    for (String block in chunkedList) {
+      if (block.startsWith("[[CHUNK:") && block.endsWith("]]")) {
+        // It's a preserved phrase chunk from Layer 2! Strip the tags and add it.
+        finalTranslatedParts.add(block.substring(8, block.length - 2));
+      } else {
+        // It's a leftover single word. Try direct translate, fallback translate, or fuzzy micro-match.
+        String currentWord = block;
+        String? wordTranslation;
 
-      for (int len = maxLen; len >= 1; len--) {
-        String phrase = words.sublist(i, i + len).join(" ");
-        if (fromMap.containsKey(phrase)) {
-          translated = fromMap[phrase];
-          matchedLength = len;
-          break; // Found largest match, break inner loop
-        }
-      }
-
-      // 3. Fallback: Try reverse map if primary map failed
-      if (translated == null) {
-        for (int len = maxLen; len >= 1; len--) {
-          String phrase = words.sublist(i, i + len).join(" ");
-          if (toMap.containsKey(phrase)) {
-            translated = toMap[phrase];
-            matchedLength = len;
-            break;
-          }
-        }
-      }
-
-      // 4. Word-Level Fuzzy Fallback (Micro-ML)
-      // If still no translation for a SINGLE word, try to find a close dictionary word
-      if (translated == null && maxLen >= 1) {
-        String currentWord = words[i];
-        // Only do fuzzy search if word is long enough (>3 chars) to avoid false positives on 'a', 'to', etc.
-        if (currentWord.length > 3) {
-          String? bestWordMatch;
+        // Direct Word Match
+        if (fromMap.containsKey(currentWord)) {
+          wordTranslation = fromMap[currentWord];
+        } else if (toMap.containsKey(currentWord)) {
+          wordTranslation = toMap[currentWord];
+        } else if (currentWord.length > 3) {
+          // Word Level Fuzzy (Micro-ML)
           int lowestWordDist = 100;
-
-          // Scan current source map
           fromMap.forEach((key, value) {
-            // Heuristic: key must be single word to replace single word
             if (!key.contains(' ')) {
               int dist = _levenshteinDistance(currentWord, key);
               if (dist < lowestWordDist && dist <= 2) {
-                // Allow max 2 edits
-                lowestWordDist = dist;
-                bestWordMatch = value;
+                lowestWordDist = dist; wordTranslation = value;
               }
             }
           });
-
-          if (bestWordMatch != null) {
-            translated = bestWordMatch;
-            matchedLength = 1; // It was a 1-word substitution
-          }
         }
-      }
 
-      if (translated != null) {
-        translatedParts.add(translated);
-        i += matchedLength;
-      } else {
-        translatedParts.add(words[i]); // No translation found, keep original
-        i++;
+        finalTranslatedParts.add(wordTranslation ?? currentWord);
       }
     }
 
-    String output = translatedParts.join(" ");
+    // Apply the Hybrid Grammar Rules
+    finalTranslatedParts = _applyGrammarRules(finalTranslatedParts, rightLanguage);
+
+    String output = finalTranslatedParts.join(" ");
     output = output.isNotEmpty
         ? output[0].toUpperCase() + output.substring(1)
         : "No translation found.";
 
-    if (fuzzyMatchKey == null) {
-      setState(() {
-        _statusMessage = 'Auto-detected: $leftLanguage → $rightLanguage';
-      });
-    }
+    setState(() => _statusMessage = 'Auto-detected: $leftLanguage → $rightLanguage');
 
     return output;
+  }
+
+  // === HYBRID GRAMMAR RULES ENGINE ===
+  List<String> _applyGrammarRules(List<String> words, String targetLanguage) {
+    if (words.isEmpty) return words;
+    List<String> result = List.from(words);
+
+    if (targetLanguage == "English") {
+      // Hiligaynon to English Grammar Fixes (VSO to SVO + Adjective positioning)
+      for (int i = 0; i < result.length - 1; i++) {
+        String w1 = result[i].toLowerCase();
+        String w2 = result[i + 1].toLowerCase();
+
+        // Rule 1: Fix VSO (Verb-Subject) -> SVO (Subject-Verb)
+        // Hiligaynon puts verbs first: "Kaon ako" -> "Eat I" -> Convert to "I eat"
+        List<String> pronouns = ['i', 'you', 'he', 'she', 'it', 'we', 'they'];
+        List<String> commonVerbs = [
+          'eat', 'drink', 'walk', 'run', 'sleep', 'jump', 'talk', 'sing', 'dance',
+          'write', 'read', 'see', 'look', 'go', 'come', 'want', 'like'
+        ];
+        
+        if (commonVerbs.contains(w1) && pronouns.contains(w2)) {
+          // Swap them
+          String temp = result[i];
+          result[i] = result[i + 1];
+          result[i + 1] = temp;
+          continue;
+        }
+
+        // Rule 2: Possessive Pronouns (Noun-Possessive -> Possessive-Noun)
+        // Hiligaynon: "Balay ko" -> "House my" -> Convert to "My house"
+        List<String> possessives = ['my', 'your', 'his', 'her', 'its', 'our', 'their'];
+        if (!possessives.contains(w1) && possessives.contains(w2)) {
+          String temp = result[i];
+          result[i] = result[i + 1];
+          result[i + 1] = temp;
+          continue;
+        }
+
+        // Rule 3: Strip dangling Filipino ligatures accidentally translated literally
+        if (w1 == "nga" || w1 == "ang") {
+          result[i] = ""; // Remove it, English doesn't use these linkers this way
+        }
+      }
+    } else if (targetLanguage == "Hiligaynon") {
+      // English to Hiligaynon Grammar Fixes (SVO to VSO + Linkers)
+      for (int i = 0; i < result.length - 1; i++) {
+        String w1 = result[i].toLowerCase();
+        String w2 = result[i + 1].toLowerCase();
+
+        // Rule 1: Fix SVO (Subject-Verb) -> VSO (Verb-Subject)
+        List<String> hilPronouns = ['ako', 'ikaw', 'ka', 'siya', 'kami', 'kita', 'sila'];
+        List<String> hilVerbs = [
+          'kaon', 'inom', 'lakat', 'dalagan', 'tulog', 'lumpat', 'hambal', 'kanta',
+          'saot', 'sulat', 'basa', 'kita', 'tan-aw', 'kadto', 'kari', 'gusto', 'palangga'
+        ];
+
+        // If Pronoun is followed by Verb, swap them (SVO -> VSO)
+        if (hilPronouns.contains(w1) && hilVerbs.contains(w2)) {
+          String temp = result[i];
+          result[i] = result[i + 1];
+          result[i + 1] = temp;
+          continue;
+        }
+        
+        // Rule 2: Adjective-Noun linking
+        // English: "Beautiful house" -> Hiligaynon: "Gwapa nga balay"
+        List<String> hilAdjectives = ['gwapa', 'gwapo', 'dako', 'gamay', 'ta-as', 'lip-ot', 'mainit', 'matugnaw', 'manami', 'law-ay'];
+        if (hilAdjectives.contains(w1) && !['nga', 'ang', 'sang'].contains(w2)) {
+          // Insert 'nga' if we have an adjective directly before a noun
+          // Let's just append it to the adjective string to avoid array shifting complexities
+          result[i] = "${result[i]} nga"; 
+        }
+      }
+    }
+
+    // Clean up empty strings from removals
+    result.removeWhere((item) => item.isEmpty);
+    return result;
   }
 
   @override
@@ -586,3 +653,50 @@ class _SpeechPageState extends State<SpeechPage> {
     );
   }
 }
+
+class TrieNode {
+  final Map<String, TrieNode> children = {};
+  bool isEndOfPhrase = false;
+  String? translation;
+}
+
+class Trie {
+  final TrieNode root = TrieNode();
+
+  void insert(String phrase, String translation) {
+    if (phrase.trim().isEmpty) return;
+    List<String> words = phrase.toLowerCase().split(RegExp(r'\s+'));
+    TrieNode current = root;
+    for (String word in words) {
+      if (!current.children.containsKey(word)) {
+        current.children[word] = TrieNode();
+      }
+      current = current.children[word]!;
+    }
+    current.isEndOfPhrase = true;
+    current.translation = translation;
+  }
+
+  // Returns [matchedLength, translation] or [0, null]
+  List<dynamic> searchLongestPrefix(List<String> words, int startIndex) {
+    TrieNode current = root;
+    int longestMatchLength = 0;
+    String? bestTranslation;
+    int currentLength = 0;
+
+    for (int i = startIndex; i < words.length; i++) {
+      String word = words[i].toLowerCase();
+      if (!current.children.containsKey(word)) {
+        break; // Stop if prefix path breaks
+      }
+      current = current.children[word]!;
+      currentLength++;
+      if (current.isEndOfPhrase) {
+        longestMatchLength = currentLength;
+        bestTranslation = current.translation;
+      }
+    }
+    return [longestMatchLength, bestTranslation];
+  }
+}
+

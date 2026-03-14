@@ -50,12 +50,13 @@ class _SplashScreenState extends State<SplashScreen>
     _logoScaleAnimation =
         CurvedAnimation(parent: _logoController, curve: Curves.easeOutBack);
 
-    
     Future.delayed(const Duration(seconds: 4), () {
+      if (!mounted) return;
       setState(() => showLogo = true);
       _logoController.forward();
 
       Future.delayed(const Duration(seconds: 3), () {
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
@@ -88,7 +89,9 @@ class _SplashScreenState extends State<SplashScreen>
       
       artboard.addController(rive.SimpleAnimation('Timeline 1', autoplay: true));
 
-      setState(() => _riveArtboard = artboard);
+      if (mounted) {
+        setState(() => _riveArtboard = artboard);
+      }
     } catch (e) {
       print("❌ Error loading Rive file: $e");
     }
